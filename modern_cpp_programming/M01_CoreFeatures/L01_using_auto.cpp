@@ -1,4 +1,6 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
+// Code was tested with g++ in C++20
+
 #include <iostream>
 #include <vector>
 
@@ -21,7 +23,7 @@ int main()
 
     //Form #3: auto <name> = <lambda function>
     auto lower = [](char const word) {return tolower(word); };
-    auto power = [](auto const a) {return a*a};
+    auto power = [](auto const a) {return a*a;};
 
     // REMEMBER:
     // Do not forget to initalize the variable when using auto
@@ -29,6 +31,10 @@ int main()
     // It promotes good OOP and mean less concern of the types
     // Auto does not work with moveable, const or valatile types
     // Do not try to use auto for multi-word types
+
+    // Also, a lamba with autos is called "generic lambda"
+    auto diff = [] (auto const a, auto const b){return a - b;};
+    // It will be applied to if the operator- is allowed
 
     return 0;
 }
