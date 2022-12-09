@@ -51,6 +51,20 @@ int main()
         default:
         break;
     }
-    
+
+    /*
+     * CONSIDERATIONS:
+     * Unscoped enums:
+     *  - They export enums to the sorrounding scope which can lead to name
+     *    clashes and it won't be possible to use the fully qualified name.
+     *  - Values of enumerators turn (implicitly) into int. This can mix
+     *    enumerations by their meaning.
+     * Scoped enums:
+     *  - Allow to use a fully qualified name.
+     *  - The underlying type can be specified.
+     *  - The conversion to int is no longer made.
+     *  - They are restricted namespaces, refer to the switch case.
+     */
+
     return 0;
 }
