@@ -5,7 +5,7 @@
 #include <iostream>
 
 // --------------- CLASS DEFINITIONS:
-// Simple array implementation to ilustrate for each with custom types:
+// 1) Simple array implementation to ilustrate for each with custom types:
 template <typename Ex, size_t const Size>
 class type_example
 {
@@ -42,7 +42,7 @@ public:
         return;
     }
 };
-// Define the iterator for the simple array implementation:
+// 2) Define the iterator for the simple array implementation:
 template <typename Ex, typename Sp, size_t const Size>
 class type_example_iterator
 {
@@ -72,14 +72,56 @@ public:
         ++*aux;
         return aux;
     }
-
 private:
     size_t ind;
     Sp& coll;
 };
 
+// 3) Define alias templates for mutable and constant iterators.
+template <typename Ex, size_t const Size>
+    using type_example_it = type_example_iterator <Ex, type_example<Ex, Size>, Size>;
+
+template <typename Ex, size_t const Size>
+    using type_example_cte_it = type_example_iterator <Ex, type_example<Ex, Size> const, Size>;
+
+// 4) Create methods for 'begin()' and 'end()' for both templates
+template <typename Ex, size_t const Size>
+    inline type_example_it <Ex, Size> begin (type_example<Ex, Size>& coll)
+    {
+        return type_example_it<Ex, Size> (coll, 0);
+    }
+
+template <typename Ex, size_t const Size>
+    inline type_example_it <Ex, Size> end (type_example<Ex, Size>& coll)
+    {
+        return type_example_it<Ex, Size> (coll, coll.GetSize());
+    }
+
+template <typename Ex, size_t const Size>
+    inline type_example_cte_it <Ex, Size> begin (type_example<Ex, Size>& coll)
+    {
+        return type_example_cte_it<Ex, Size> (coll, 0);
+    }
+
+template <typename Ex, size_t const Size>
+    inline type_example_cte_it <Ex, Size> end (type_example<Ex, Size>& coll)
+    {
+        return type_example_cte_it<Ex, Size> (coll, coll.GetSize());
+    }
+
+// 5) Display elements of the array.
+template <typename Ex, const size_t Size>
+void display_array (type_example<Ex, Size> const & array_example)
+{
+    for(auto && a : array_example)
+        std::cout << e << std::endl;
+}
+
 int main()
 {
+    std::cout << "Module 01 - Lesson 10" << std::endl;
+    std::cout << "Using 'for each' with custom Types... " << std::endl;
+    
     /*
      * For creating for each that can use custom types, you need to:
      *   - Create the iterators (mutable and constant).
@@ -87,6 +129,9 @@ int main()
      *   - It must implement 'operator++' (both prefix and postfix version).
      *   - It must implement 'operator!=', for inequality comparation.
      *   - Provide 'begin()' and 'end()' methods.
+     *  
+     * Please refer to class and templates definition to review the steps.
      */
+    
     return 0;
 }
