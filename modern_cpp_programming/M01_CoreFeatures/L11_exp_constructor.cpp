@@ -154,16 +154,21 @@ int main()
     // SHOWCASE: Results for the explicit class modified...
     std::cout << std::endl << "Example #5: Implicit conversion for a class (text_buffer_explicit): " << std::endl;
     std::cout << "\t For 'et1: ";
-    text_buffer_implicit et1;
+    text_buffer_explicit et1;
     std::cout << "\t For 'et2(20)': ";
-    text_buffer_implicit et2(20);
+    text_buffer_explicit et2(20);
     std::cout << "\t For 'et3(word_ptr.get())': ";
-    text_buffer_implicit et3(word_ptr.get());
-    std::cout << "\t For 'et4='a'': ";
-    text_buffer_implicit et4 = 'a';
-    std::cout << "\t For 'et5 = Stars::Three':  ";
-    text_buffer_implicit et5 = Stars::Three;
-
+    text_buffer_explicit et3(word_ptr.get());
+    std::cout << "\t For 'et4 = text_buffer_explicit('x')': ";
+    text_buffer_explicit et4 = text_buffer_explicit('x');
+    std::cout << "\t For 'et5 = static_cast<text_buffer_explicit>(static_cast)<text_buffer_explicit>(Stars::Three)':  ";
+    text_buffer_explicit et5 = static_cast<text_buffer_explicit>(Stars::Three);
+    std::cout << "\t For 'et6 = text_buffer_explicit{ \"a\" }':  ";
+    text_buffer_explicit et6 = text_buffer_explicit{ "a" };
+    /*
+    * text_buffer_explicit et7{'b'};
+    * text_buffer_explicit et8('c'); //Still possible but wrong
+    */
     return 0;
 }
 
