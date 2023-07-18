@@ -10,6 +10,13 @@
  * #define directive. They only exist before the compilation.
  * 
  * NOTE:Precompilation with clang uses: clang -E <c_code>.c
+ * 
+ * ADVANTAGES: Easy replacement. Better structure of the code. No repetition of blocks. They
+ * bring readability. Code generation.
+ * 
+ * DISADVANTAGES: After preprocessing part of the code will be lost. If a macro
+ * can be written as a C function, it is better to use it as a function. Can be a
+ * debug killer, mainly with old compilers.
 */
 
 // Macro used as a constant definition
