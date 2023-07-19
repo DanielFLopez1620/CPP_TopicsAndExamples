@@ -40,6 +40,7 @@ int main( int argc, char** argv)
     printf("\n\nE3: Iterating array...\n");
     int nums[3] = {1, 2 , 3};
     int* ite = &nums[0];
+    // It is also possible to use --> int* ite = nums;
     for(;;)
     {
         printf("%d\n", *ite);
