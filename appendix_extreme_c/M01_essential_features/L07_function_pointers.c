@@ -8,6 +8,8 @@
  * pointer addresing a variable, the function pointers address a function. For declaration
  * is mandatory to make the null, also, don not forget to specify the number of params and 
  * its type.
+ * 
+ * You can add alias to these pointers, so it improves readability.
 */
 
 typedef int bool_t;
