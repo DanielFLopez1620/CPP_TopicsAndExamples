@@ -1,5 +1,7 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
-// Code was tested with clang
+// Code was tested with gcc
+
+#include "L02_c_project.h"
 
 /**
  * HEADER FILES: Those with .h extension. It contains enumarations, macros, prototypes, 
@@ -8,16 +10,11 @@
  * 
  * SOUCER FILES: Those with .c extension. It focus on the development of the variables, 
  * functions and structures so they are defined and search to achieve a purpose.
+ * 
+ * TIP: For compilation is better to avoid multiple files in one compilation.
+ * 
+ * NOTE: Having more of one definitions for a declaration will lead to an error.
 */
-
-// Example 1: Function declaration, it should be declared in a .h file.
-int sum(int*, int);
-
-int main(int argc, char **argv)
-{
-     
-    return 0;
-}
 
 /**
  * Calculates the sum of all the data given
@@ -35,4 +32,23 @@ int sum(int * data, int size)
         total += data[i];
     }
     return total;
+}
+
+/**
+ * Function that will evaluate the sum (FEW, VALID, MANY, TOO_MANY)
+ * 
+ * @param sum Sum of the data previously manipulated.
+ * 
+ * @return Type of the sum.
+*/
+sum_type_t type_sum(int sum)
+{
+    if(sum < 10)
+        return FEW;
+    else if(sum < 20)
+        return VALID;
+    else if(sum < 30)
+        return MANY;
+    else
+        return TOO_MANY;
 }
