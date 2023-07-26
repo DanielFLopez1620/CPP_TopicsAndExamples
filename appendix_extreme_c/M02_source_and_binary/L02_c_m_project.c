@@ -19,11 +19,56 @@
  * - ASSEMBLY: Here it's need to transform the code into machine-level instructions, usually to
  *             an object file, which can be a synonum of binary. The command is:
  *                        as <s_code>.s -o <final_file>.o
- *             But there is a better option
+ *             But there is a better option that includes the above:
  *                        gcc -c <file.c>
- * -> 98/70
+ *             Here you can add a destiny file, but sometimes it's not recommended. But you can do:
+ *                        gcc -c <c_file>.c -o <file>.o
  * 
-*/
+ *  - LINKING: It refers to the combination ob the relocatable objects. But it depends on the arch
+ *             of the processor, although it is possible to make the traslation if the
+ *             assembly language is known and the assempbler tool is available.
+ *             The default linker in Unix is 'ld', but you cannot simply link two files, you have
+ *             to consider the dependencies of the file, so this a work for gcc and clang:
+ *             gcc <file1>.o <file1>.o
+ *             The default output will be 'a.out'
+ * 
+ *  - PREPROCESSOR: It has a parser that works for sustitutions of certain key words, and it 
+ *                  allows different options, for example, CPP (C Pre-Processor):
+ *                           cpp <file.c>
+ *                  Also, do not pass, .i file to preprocessing as it is supposed to be already 
+ *                  preprocessed.
+ *  - COMPILER: Accepts the traslation of the preprocessor, which is passed to assembly instructions. 
+ *              This can be difficult becuase it needs to be accurate and work with the present
+ *              architecture. The compiler can be divided in frontend and backend.
+ * 
+ *              * Abstract Syntax Tree: The frontend part should parse the traslation and create an
+ *                intermediate data structure, this is achieved by checking the C gramar and storing 
+ *                it in a tree. It can be showed with:
+ *                            clang -Xclang -ast-dump -fsyntax-only <c_file>.c
+ *                         
+ *  - ASSEMBLER: In Unix it is called by using 'as' utility. And remember two operating systems, maybe
+ *               do not produce the same object file.
+ * 
+ *  - LINKER: Which result in the final product of a C Project, the extension can be .out or .exe for 
+ *            executable files, .a or .lib for static libraries, or .so or .dll for dynamic
+ *            libraries. Remember, it gathers all the symbols in a single file, but make sure to pass
+ *            all the dependencies/definitions to make a valid object file.
+ * 
+ *  - OTHER ASPECTS: If you are interested in watching the symbols of an object file, you can run:
+ *                         nm <obj_file>.o
+ *                   Which print the names of the objects (or functions) present in the file. Another
+ *                   similar function is 'readelf' utility:
+ *                         readelf -s <obj_file>.o
+ *                   This put the symbols it a table with it´s size, visual and name.
+ *                   
+ *                    If you are interested in disassembly a machine code, you are searching for
+ *                    'objdump' tool:
+ *                         objdump -d <obj_file>.o
+ * 
+ *  NOTE OF C++: As the compilation process is needed it differs because of different compiler tools,
+ *  for instance, the change of gcc to g++
+*/  
+
 
 int main(int argc, char** argv)
 {
