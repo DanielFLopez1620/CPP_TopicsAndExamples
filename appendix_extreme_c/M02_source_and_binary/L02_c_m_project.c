@@ -72,9 +72,16 @@
 
 int main(int argc, char** argv)
 {
+    /**
+     * For practicing the content of the module, compile and execute the commands mentioned so you
+     * can explore the process with a C project.
+    */
+
+   // Array definition
     int data[5] = {2, 4, 8, 1, 10};
+
+    // Calling functions present in other file
     int sum_all = sum(data, 5);
     sum_type_t data_type = type_sum(sum);
-
     return 0;
 }
