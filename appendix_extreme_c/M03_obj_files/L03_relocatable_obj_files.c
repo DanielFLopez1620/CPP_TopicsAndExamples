@@ -15,7 +15,14 @@
  *  
  * 
  * EXECUTABLE OBJECT FILES: The final product of the C project, which can link 
- * different relocatable object files.
+ * different relocatable object files. When using 'readelf' on this files, you could be able
+ * to see that the type is DYN (Shared objet file), the headers section, the 'INTERP.' segments
+ * (used to load and execute the file), and finally they can have a section where it is covered
+ * the TEXT (machine level instructions), DATA (global variables and data structures) and
+ * dynamic linking (info needed to be loaded at execution).
+ * 
+ * So, this can give us the idea that linking is actually to collect sections of relocatable
+ * files, and create a bigger section, which will determine the final addresses (absolutes).
  * 
  * NOTE: If you forget about compilation the command is showed below, just remember to be 
  *       in the correct directory:
