@@ -90,10 +90,67 @@
  *     - HEAP SEGMENT: Adjustable region of memory, focused on arrays and objects. But it
  *     would need an API.
  * 
- *     - MEMORY MAPPING: 
- *     
- *     
+ *     - MEMORY MAPPING: Just remember that '&' in a terminal command means "send it to background",
+ *     it returns a PID (Process ID), which you can use to kill it. It allows to inspect the
+ *     memory of a process.
+ *       
+ *     A memory mapping is a dedicated region which is mapped to a specific segment as part of a
+ *     process. Usually, with a PID, you can find more about the process in the /proc/<PID> directory
+ *     with the command:
  * 
+ *         ls -l /proc/<PID>
+ * 
+ *     If we let run in the background the executable of the E05_mapping.c we can see:  
+ *     
+ *     dr-x------  2 root root 0 Aug  7 21:59 fd
+ *     dr-x------  2 root root 0 Aug  7 22:03 fdinfo
+ *     -rw-r--r--  1 root root 0 Aug  7 22:03 gid_map
+ *     -r--------  1 root root 0 Aug  7 22:03 io
+ *     -r--r--r--  1 root root 0 Aug  7 22:03 limits
+ *     dr-x------  2 root root 0 Aug  7 22:03 map_files
+ *     -r--r--r--  1 root root 0 Aug  7 22:03 maps
+ *     -rw-------  1 root root 0 Aug  7 22:03 mem
+ *     ....
+ * 
+ *     And we can access (or watch the content of some of them), of course with cat:
+ * 
+ *     cat /proc/<PID>/maps
+ * 
+ *     What I obtain is:
+ * 
+ *     55ca8bfbd000-55ca8bfbe000 r--p 00000000 08:10 107123                     /home/user/Documents/CPP_TopicsAndExamples/map.out
+ *     55ca8bfbe000-55ca8bfbf000 r-xp 00001000 08:10 107123                     /home/user/Documents/CPP_TopicsAndExamples/map.out
+ *     ...
+ *     7fcf2c7e8000-7fcf2c7e9000 rw-p 00000000 00:00 0 
+ *     7ffd5eaef000-7ffd5eb11000 rw-p 00000000 00:00 0                          [stack]
+ *     7ffd5eb42000-7ffd5eb46000 r--p 00000000 00:00 0                          [vvar]
+ *     7ffd5eb46000-7ffd5eb47000 r-xp 00000000 00:00 0                          [vdso]
+ *     
+ *     So, let's list the meaning of some of them:
+ *     
+ *     - Adress range: Start and end of the mapped range.
+ *     - Permissions: R(read), w(modified) or x(executed), or s(shared) and p(private)
+ *     - Offset: Positions it starts after a file or segment.
+ *     - Device: Which or what contains the file (if attached to one).
+ *     - Inode: Number of the file in the system (related with ext4 structure)
+ *     - Description: Also known as the path, can be empty or can even specify the purpose
+ *       of the segment (stack, for example).
+ * 
+ * 
+ *   - STACK SEGMENT: Its content is usually changing, to watch those moves you will need
+ *   a debugger (like gdb) to read the memory throug the process. The most common exception
+ *   of it is "Stack Overflow" which mean it is full (and you may also recognize the word
+ *   from a forum).
+ * 
+ *   The work of the stack is FILO (First In, Last Out) or LIFO (Last In, First Out). So,
+ *   when using variables it is located on top and has to pop to see its content again, this
+ *   also applies to local definitions.
+ * 
+ *   Function can be stacked but by the "stack frame", which put the function of top of the 
+ *   segment to return after the execution. Here, you will need to make sure to avoid saturation
+ *   of variables and prevent infinite recursion. 
+ * 
+ * NOTE: A debbugger attaches to a process and allows to process and identify the memory content.
  */    
 
 int main(int argc, char *argv)
