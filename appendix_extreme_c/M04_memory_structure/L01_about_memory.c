@@ -148,7 +148,28 @@
  * 
  *   Function can be stacked but by the "stack frame", which put the function of top of the 
  *   segment to return after the execution. Here, you will need to make sure to avoid saturation
- *   of variables and prevent infinite recursion. 
+ *   of variables and prevent infinite recursion.
+ *   
+ *   - HEAP SEGMENT: It can be checked by finding some regions in the memory mapping. We can check
+ *   it with some manually allocations, for example, with the file E06_memory_s_and_h. After the 
+ *   compilation you can check the map respective of the process:
+ * 
+ *   cat /proc/<PID>/maps 
+ * 
+ *   When running locally, the log is:
+ *   ...
+ *   558ff3c0e000-558ff3c2f000 rw-p 00000000 00:00 0                          [heap]
+ *   ...
+ * 
+ *   So this heap, is the space reserved for the allocation of 1 KB. But it can grow as
+ *   it's commonly used by arrays and streams. Be aware that you will need pointers
+ *   to access it (they are literally the key of memory management)
+ * 
+ *   The key concept is malloc which allows to allocate a number of bytes by specifying them.
+ * 
+ *   Although not everything will be accessible, there are some part that are unreacheable (
+ *   memory leaks) which is fatal. Preventing this can be achieved by using the command 'free'
+ *   with the pointers .
  * 
  * NOTE: A debbugger attaches to a process and allows to process and identify the memory content.
  */    
