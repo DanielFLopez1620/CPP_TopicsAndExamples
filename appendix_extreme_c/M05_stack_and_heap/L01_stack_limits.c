@@ -19,7 +19,7 @@
 
 int main(int argc, char** argv)
 {
-    printf("This program may crash....\n");
+    printf("This program may crash, because we will test the stack limits....\n");
     printf("Do not forget to read the lesson.");
 
     char str[10];
