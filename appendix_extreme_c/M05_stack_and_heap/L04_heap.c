@@ -1,5 +1,5 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
-// Code was tested with gcc (only for UNIX system)
+// Code was tested with gcc and clang(only for UNIX system)
 
 #include <stdio.h>
 
@@ -25,6 +25,8 @@
  * ALLOCATION AND DEALLOCATION: You would need to manually make the process, by using 
  * functions or API (library for memory allocation). The functions are present in 
  * 'stdlib.h'. Some of then are 'malloc', 'calloc', 'realloc' and 'free'.
+ * 
+ * NOTE: The equivalents in C++ for 'malloc' and 'free' are 'new' and 'delete'. 
 */
 
 #include <stdlib.h> // For using heap memory functions.
