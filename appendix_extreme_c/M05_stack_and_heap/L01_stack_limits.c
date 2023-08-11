@@ -1,5 +1,5 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
-// Code was tested with gcc
+// Code was tested with gcc (this program will crash for learning purposes)
 
 #include <string.h> // For implementing char arrays or "words"
 #include <stdio.h>

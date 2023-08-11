@@ -1,5 +1,5 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
-// Code was tested with gcc
+// Code was tested with gcc (this program may crash for learning purposes)
 
 /**
  * BEST PRACTICES OF STACK:
@@ -8,10 +8,18 @@
  * the allocation and deallocation is automatic because its nature (FILO or stack and 
  * pop).
  * 
- * - 
+ * - Do not try to access by pointer to local variables, as they will 'die' when the 
+ * context is completed, it could produce an error called 'return-local-addr'.
  * 
+ * - Stack memory has a limited size, so do not abuse of it.
  * 
- * - 
+ * - The segment grows backward, as forward means that something was pushed.
+ * 
+ * - It has automatic memory managment (allocation and deallocation). 
+ * 
+ * NOTE: Some warnings can become errors, so you can specify them as erreros with the
+ * flag -Werror in gcc, and you can make it more specific, for example, with 
+ * -Werror=return-local-addr
 */
 
 
