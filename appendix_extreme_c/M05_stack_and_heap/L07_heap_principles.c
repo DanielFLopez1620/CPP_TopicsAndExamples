@@ -1,5 +1,5 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
-// Code was tested with gcc (This code is intended to fails)
+// Code was tested with gcc
 
 #include <stdio.h>
 
@@ -17,7 +17,9 @@
  * Also, remember, much or many is not better, if you free space twice or more, it will create a
  * corruption issue.
  * 
- * RAII is another technique which come from Resource Acquisiton Is Initialization....
+ * RAII is another technique which come from Resource Acquisiton Is Initialization, which implies
+ * to link the lifetime of the allocation to the object's lifetime. But it can only be
+ * used in C++ because you can know about the destruction of an objt.
  * 
  * Note: C had a garbage collector, you can know more of it here: https://www.hboehm.info/gc/
 */
