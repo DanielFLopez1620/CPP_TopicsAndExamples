@@ -43,8 +43,82 @@
 #include <stdlib.h> // For allocation functions in heap
 #include <string.h> // For string functions like strcmp
 
+void custom_fill(int* matrix, int num_rows, int num_cols);
+void display_matrix(int* matrix, int num_rows, int num_cols);
+void flat_dis_matrix(int* matrix, int num_rows, int num_cols);
+int sum_matrix(int* matrix, int num_rows, int num_cols);
+int sum_matrix(int* matrix, int num_rows, int num_cols);
+
+
+
 int main(int argc, char **argv)
 {
-    //-->195
+    // Let's try a cache-friendly code
+    printf("This is a cache-friendly attempt code:\n");
+
     return 0;
+}
+
+/**
+ * Function to fill a integer matrix with a sequence.
+ * 
+ * @param matrix Integer pointer to the matrix.
+ * @param num_rows Integer number of the quantity of rows.
+ * @param num_cols Integer number of the quantity of rows.
+*/
+void custom_fill(int* matrix, int num_rows, int num_cols)
+{
+    int ind = 1;
+    for(int i = 0; i < num_rows; i++)
+    {
+        for(int j = 0; j < num_cols; j++)
+        {
+            *(matrix + i * num_cols + j)= ind + j;
+        }
+        ind += num_cols;
+    }
+}
+
+/**
+ * Function to display/print a matrix by using a pointer.
+ * 
+ * @param matrix Integer pointer to the desired matrix.
+ * @param num_rows Integer number of the quantity of rows.
+ * @param num_cols Integer number of the quantity of rows.
+*/
+void display_matrix(int* matrix, int num_rows, int num_cols)
+{
+    int ind;
+    printf("Info in matrix pointer:\n");
+    for (int i = 0; i < num_rows; i++)
+    {
+        printf("| ");
+        for (int j = 0; j < num_cols; j++)
+        {
+            printf("%d |", *(matrix + i * num_cols + j));
+        }
+        printf("\n");
+    }
+}
+
+/**
+ * Sum of all values in a matrix by using a pointer.
+ * 
+ * @param matrix Integer pointer to the desired matrix.
+ * @param num_rows Integer number of the quantity of rows.
+ * @param num_cols Integer number of the quantity of rows.
+ * 
+ * @return The result of adding all the values in the matrix
+*/
+int sum_matrix(int* matrix, int num_rows, int num_cols)
+{
+    int sum = 0;
+    for(int i = 0; i < num_rows; i ++)
+    {
+        for(int j = 0; j < num_cols; j ++)
+        {
+            sum += *(matrix + i * num_cols + j);
+        }
+    }
+    return sum;
 }
