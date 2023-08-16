@@ -38,6 +38,10 @@
  *      proximity is a value needed near the previous address (of the block) added, the reason
  *      follows the 'principle of locality' (neighborhood) and this can be exploted to create 
  *      more efficient algorithms.
+ * 
+ * 
+ * NOTE: To verify the time comsuption, you can use time:
+ *       time ./<file.out> <params>
 */
 
 #include <stdlib.h> // For allocation functions in heap
@@ -45,9 +49,9 @@
 
 void custom_fill(int* matrix, int num_rows, int num_cols);
 void display_matrix(int* matrix, int num_rows, int num_cols);
-void flat_dis_matrix(int* matrix, int num_rows, int num_cols);
+void dis_opt_matrix(int* matrix, int num_rows, int num_cols);
 int sum_matrix(int* matrix, int num_rows, int num_cols);
-int sum_matrix(int* matrix, int num_rows, int num_cols);
+int sum_opt_matrix(int* matrix, int num_rows, int num_cols);
 
 
 
@@ -55,6 +59,41 @@ int main(int argc, char **argv)
 {
     // Let's try a cache-friendly code
     printf("This is a cache-friendly attempt code:\n");
+
+    if (argc < 4)
+    {
+        printf("Usage: %s [printf | sum_matrix | sum_opt_matrix] ");
+        printf("[number-of-rows] [number-of-cols]\n", argv[0]);
+    }
+
+    char* operation = argv[1];
+    int num_rows = atol(argv[2]);
+    int num_cols = atol(argv[3]);
+
+    int* matrix = (int*) malloc(num_rows * num_cols * sizeof(int));
+    
+    custom_fill(matrix, num_rows, num_cols);
+
+    if (strcmp(operation, "print") == 0)
+    {
+        display_matrix(matrix, num_rows, num_cols);
+        dis_opt_matrix(matrix, num_rows, num_cols);
+    }
+    else if (strcmp(operation, "sum_matrix") == 0)
+    {
+        int sum = sum_matrix(matrix, num_rows, num_cols);
+        printf("Matrix sum type 1: %d\n", sum);
+    }
+    else if(strcmp(operation,"sum_opt_matrix"))
+    {
+        int sum = sum_opt_matrix(matrix, num_rows, num_cols);
+        printf("Matrix sum type 2: %d\n", sum);
+    }
+    else
+    {
+        printf("ERROR: Invalid options\n");
+        exit(1);
+    }
 
     return 0;
 }
@@ -80,7 +119,7 @@ void custom_fill(int* matrix, int num_rows, int num_cols)
 }
 
 /**
- * Function to display/print a matrix by using a pointer.
+ * Function to display/print a matrix (matrix form) by using a pointer.
  * 
  * @param matrix Integer pointer to the desired matrix.
  * @param num_rows Integer number of the quantity of rows.
@@ -99,6 +138,24 @@ void display_matrix(int* matrix, int num_rows, int num_cols)
         }
         printf("\n");
     }
+}
+
+/**
+ * Function to display/print a matrix (flat form) by using a pointer.
+ * 
+ * @param matrix Integer pointer to the desired matrix.
+ * @param num_rows Integer number of the quantity of rows.
+ * @param num_cols Integer number of the quantity of rows.
+*/
+void dis_opt_matrix(int* matrix, int num_rows, int num_cols)
+{
+    printf("Another display of the matrix is:\n");
+    printf("{");
+    for (int i = 0; i < (num_rows * num_cols); i++)
+    {
+        printf(" %d,", *(matrix + i));
+    }
+    printf("}\n");
 }
 
 /**
@@ -121,4 +178,25 @@ int sum_matrix(int* matrix, int num_rows, int num_cols)
         }
     }
     return sum;
+}
+
+/**
+ * Sum of all values in a matrix by using a pointer (in a different way).
+ * 
+ * @param matrix Integer pointer to the desired matrix.
+ * @param num_rows Integer number of the quantity of rows.
+ * @param num_cols Integer number of the quantity of rows.
+ * 
+ * @return The result of adding all the values in the matrix
+*/
+int sum_opt_matrix(int* matrix, int num_rows, int num_cols)
+{
+    int sum = 0;
+    for(int j = 0; j < num_cols; j++)
+    {
+        for(int i = 0; i < num_rows; i++)
+        {
+            sum += *(matrix + i * num_cols + j);
+        }
+    }
 }
