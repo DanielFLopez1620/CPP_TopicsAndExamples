@@ -45,8 +45,25 @@
  * Now, time for clarification an object and an instance are the same thing, but it doesn't mean the same with 
  * reference. This last one means that a pointer has the memory adress of the object. And here, in C, the objects
  * doesn't have name but the reference has one, do you remember about Stack and Heap? (Including its differences
- * with the memory allocation and managment".
+ * with the memory allocation and managment).
  * 
+ * Existance precedes essence? And why did we just through a philoshipcal question? Both are good questions. Just 
+ * think about it, we first live and exist and then we create our essence, which (surprisingly) relates
+ * with the OOP paradigm for prototyping an empty object which then evolves. But it isn't the unique approach, even
+ * not the only philosophical one, the one based on an image/idea which is can be interpreted that every object (like)
+ * in religion is based on a template. Here, we just saw that our point of view can be applied to the  development of 
+ * algorithms and structures, and shows the armony with the human thinking.
+ * 
+ * Another importan step with OOP is the destruction, everything which has a beginning must come to an end, and this
+ * apply to objects, as you destroy one it should be impossible to acces to it (or it'll infringe the integrity of the
+ * code). Also, you can modify an object (if is mutable) before its destruction, as you can made it by modifying the attribute or
+ * creating/deleting an attribute.
+ * 
+ * Finally, let's say objects have behaviors, yes different performances according to its definition (like you and your
+ * family), which ideally are according to the domain and purpose and it can change the state of itself or other
+ * objects.
+ * 
+ * We can resume this lesson with: "An object is a group of attributes and functionalities that belong to a domain".
 */
 
 #include <string.h>
@@ -64,6 +81,8 @@ int main(int argc, char **argv)
     printf("\tEmployee Surname: %s\n", employee_surname);
     printf("\tEmployee Age: %d\n", employee_age);
     printf("\tEmployee Salary: %f\n", employee_salary);
+
+    printf("If you ask, why C is not an OOP languages, continue reading...\n:)\n");
 
     return 0;
 }
