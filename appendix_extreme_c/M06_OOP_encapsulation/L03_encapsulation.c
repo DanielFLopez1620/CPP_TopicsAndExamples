@@ -12,12 +12,24 @@
  * runtime, as in your OOP description you can find and report error in the explicit groups.
  * 
  * In C, you an use custom datatypes to encapsulate your data, the info inside the object is known as
- * 'attribute' and the type is know as 'class'. 
+ * 'attribute' and the type is know as 'class'. Other important considerations are that 'attributes' convey
+ * 'values' and 'methods' convay 'behaviors'. Here, we will need to use the implicity as ANSI C doesn't
+ * allow to write class, and for this we need to know:
  * 
- * NOTE: Remember that with structs, you access to the attributes with dot '.'. If it is a pointer to a
+ * - Usage of structures to keep the attributes (attribut structure).
+ * - For behaviors we use 'behavior function' which are outside the attribute structure.
+ * - Behavior functions must accept an structure pointer (for reading/modification purposes).
+ * - Naming should relate with the class for behavior functions
+ * - The file must have a declaration header which contains the behavior functions.
+ * 
+ * To see the previous advices in practices, check the file L03_c_object.h.
+ * 
+ * NOTE 1: Remember that with structs, you access to the attributes with dot '.'. If it is a pointer to a
  * structure, you use '->'.
  * 
- * //219
+ * NOTE 2: When we are talking about C++, methods are called 'member functions' and attributes are called
+ * 'data members'
+ *
 */
 
 
@@ -40,11 +52,15 @@ int main(int argc, char **argv)
     printf("Coordinate 2: %d, %d", coor2_x, coor2_y);
 
     // A better usage of encapsulation, with custom type.
+    printf("E2: Encapsulation try with variables...");
     coordinate_t pos1, pos2;  // Object definition
     pos1.x = 1;
     pos2.x = 6;
     pos1.y = 2;
     pos2.y = 0;
+    printf("Coordinate 1: %d,%d", pos1.x, pos1.y);
+    printf("Coordinate 2: %d, %d", pos2.x, pos2.y);
 
+    printf("E2");
     return 0;
 }
