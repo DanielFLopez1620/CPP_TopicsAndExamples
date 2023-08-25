@@ -22,7 +22,8 @@
  * - Naming should relate with the class for behavior functions
  * - The file must have a declaration header which contains the behavior functions.
  * 
- * To see the previous advices in practices, check the file L03_c_object.h.
+ * To see the previous advices in practices, check the file L03_c_object.h. You can even check the
+ * comparation with the C++ implementation.
  * 
  * NOTE 1: Remember that with structs, you access to the attributes with dot '.'. If it is a pointer to a
  * structure, you use '->'.
@@ -32,6 +33,8 @@
  *
 */
 
+// Custom implementation for an encapsulation in C (Example 3)
+#include "L03_c_object.h"
 
 // Custom type for example 2, as encapsulation showcase.
 typedef struct 
@@ -61,6 +64,14 @@ int main(int argc, char **argv)
     printf("Coordinate 1: %d,%d", pos1.x, pos1.y);
     printf("Coordinate 2: %d, %d", pos2.x, pos2.y);
 
-    printf("E2");
+    // Using encapsulation in C
+    account_t your_wallet;
+    account_t* your_account = &your_wallet;
+    account_construct(your_account, "Dan");
+    account_deposit(your_account, 10);
+    account_destruct(your_account);
+
+    printf("You can get more info with:\n");
+    printf("\t- Semi Oriente OOP Project: https://curl.haxx.se/libcurl/c/allfuncs.html\n");
     return 0;
 }

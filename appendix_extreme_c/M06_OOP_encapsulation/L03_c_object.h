@@ -15,7 +15,7 @@ typedef struct
 // Prototypes declaration for behavior functions
 void account_construct(account_t*, const char*);
 void account_destruct(account_t*);
-void account_deposit(account_t*);
-void account_withdraw(account_t*);
+void account_deposit(account_t*, double);
+void account_withdraw(account_t*, double);
 
 #endif
