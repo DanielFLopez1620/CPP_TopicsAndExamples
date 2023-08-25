@@ -23,7 +23,10 @@
  * - The file must have a declaration header which contains the behavior functions.
  * 
  * To see the previous advices in practices, check the file L03_c_object.h. You can even check the
- * comparation with the C++ implementation.
+ * comparation with the C++ implementation. Focus your attentation in the implementation:
+ * 
+ * - C: func(obj, a, b ...);
+ * - C++: obj.func(a,b ...);
  * 
  * NOTE 1: Remember that with structs, you access to the attributes with dot '.'. If it is a pointer to a
  * structure, you use '->'.
