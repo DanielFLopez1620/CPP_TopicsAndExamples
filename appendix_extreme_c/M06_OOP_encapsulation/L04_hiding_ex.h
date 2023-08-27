@@ -8,12 +8,14 @@
 
 struct simple_pos_t;
 
-struct simple_post_t* simple_pos_malloc();
+struct simple_pos_t* simple_pos_malloc();
 
-void pos_init(struct simple_post_t*);
-void pos_des(struct simple_post_t*);
+void pos_init(struct simple_pos_t*);
+void pos_des(struct simple_pos_t*);
 
-int pos_update_x(struct simple_post_t*, int);
-int pos_update_y(struct simple_post_t*, int);
+int pos_update_x(struct simple_pos_t*, int);
+int pos_update_y(struct simple_pos_t*, int);
+
+void pos_print(struct simple_pos_t*);
 
 #endif
