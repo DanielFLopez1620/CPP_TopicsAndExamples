@@ -1,23 +1,23 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
-#ifndef CLOCK_C_H
-#define CLOCK_C_H
+#ifndef my_clock_C_H
+#define my_clock_C_H
 
-struct clock_t;
+struct my_clock_t;
 
 // Memory Allocator
-struct clock_t* clock_new();
+struct my_clock_t* my_clock_new();
 
 // Constructor
-void clock_ctor(struct clock_t*);
+void my_clock_ctor(struct my_clock_t*);
 
 // Destructor
-void clock_dtor(struct clock_t*);
+void my_clock_dtor(struct my_clock_t*);
 
 // Behavior functions
-void clock_give_time(struct clock_t*);
-double clock_status(struct clock_t*);
-void clock_recharge(struct clock_t*);
+void my_clock_give_time(struct my_clock_t*);
+double my_clock_status(struct my_clock_t*);
+void my_clock_recharge(struct my_clock_t*);
 
 #endif
