@@ -12,6 +12,12 @@
  * You can check the files of the objects battery and my_clock, to get an idea of the implementation
  * of composition in C. For compilation you will need:
  * 
+ *   gcc -c L02_clock.c -o clock.o
+ *   gcc -c L02_battery.c -o battery.o
+ *   gcc -c L02_composition.c -o main.o
+ *   gcc clock.o battery.o main.o -o exe_com.out
+ *   ./exe_com.out
+ * 
  * NOTE: Two objects that are not of the same type, must not know the other's implementation
  * details, as the information hiding.
 */
@@ -32,6 +38,7 @@ int main(int argc, char **argv)
     {
         my_clock_give_time(my_clock);
         my_clock_status(my_clock);
+        printf("\n");
     }
 
     my_clock_dtor(my_clock);
