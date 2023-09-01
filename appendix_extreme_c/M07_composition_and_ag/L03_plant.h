@@ -12,13 +12,14 @@ struct fruit_t;
 struct plant_t* plant_new();
 
 // Constructor
-void plant_ctor(struct plant_t*, const char*);
+void plant_ctor(struct plant_t*, const int);
 
 // Destructor
 void plant_dtor(struct plant_t*);
 
 // Behavior functions
 void plant_appear_fruit(struct plant_t*, struct fruit_t*);
+void plant_nutrient_fruit(struct plant_t*);
 void plant_leave_fruit(struct plant_t*);
 
 #endif
