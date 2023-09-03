@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 typedef int bool_t;
+struct plant_t;
 
 typedef enum
 {
@@ -17,16 +18,49 @@ typedef struct
     fstatus_t status;
 } fruit_t;
 
+/**
+ * Manually allocator for a fruit object.
+ * 
+ * @return Pointer to the fruit object allocated
+*/
 fruit_t* fruit_new()
 {
     return (fruit_t*) malloc(sizeof(fruit_t));
 }
 
+/**
+ * Constructor of a fruit object.
+ * 
+ * @param fruit Pointer to the fruit object you want to construct
+*/
 fruit_t fruit_ctor(fruit_t* fruit)
 {
     fruit->status = SPROUT;
 }
 
+/**
+ * Destructor of a fruit object
+ * 
+ * @param fruit Pointer to the fruit object you want to destroy
+*/
 fruit_t fruit_dtor(fruit_t* fruit) {}
 
-bool_t plant_has_fruits
+/**
+ * Behavior function to get a grown fruit.
+ * 
+ * @param Pointer to the fruit of interest.
+*/
+void fruit_grow(fruit_t* fruit)
+{
+    fruit->status = GROWN;
+}
+
+/**
+ * Behavior function to get a bad fruit after some time.
+ * 
+ * @param Pointer to the fruit of interest.
+*/
+void fruit_bye(fruit_t* fruit)
+{
+    fruit->status = DEAD;
+}

@@ -8,6 +8,8 @@
 #include "L03_fruit.h"
 
 // Attribute structure
+typedef int bool_t;
+
 typedef struct
 {
     int ID;
@@ -39,7 +41,7 @@ void plant_ctor(plant_t* plant, const int ID)
 /**
  * Destructor of a plant object.
  * 
- * @param plant Pointer to the plant object you want to construct
+ * @param plant Pointer to the plant object you want to destroy
 */
 void plant_dtor(plant_t* plant)
 {
@@ -65,7 +67,7 @@ void plant_appear_fruit(plant_t* plant, struct fruit_t* fruit)
 */
 void plant_nutrient_fruit(plant_t* plant)
 {
-    fruit_nutrient(plant->fruit);
+    fruit_grow(plant->fruit);
 }
 
 /**
@@ -75,5 +77,18 @@ void plant_nutrient_fruit(plant_t* plant)
 */
 void plant_leave_fruit(plant_t* plant)
 {
+    fruit_bye(plant->fruit);
     plant->fruit = NULL;
+}
+
+/**
+ * Behavior function to validate if a plant has a fruit currently.
+ * 
+ * @param plat Pointer to the plant object of your interest.
+ * 
+ * @return 1 if has a fruit, 0 otherwise.
+*/
+bool_t plant_has_fruits(plant_t* plant)
+{
+    return (plant->fruit != NULL ? 1 : 0);
 }

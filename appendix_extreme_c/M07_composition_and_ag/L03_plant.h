@@ -5,6 +5,7 @@
 #define PLANT_C_H
 
 // Type Definitions
+typedef int bool_t;
 struct plant_t;
 struct fruit_t;
 
@@ -21,5 +22,6 @@ void plant_dtor(struct plant_t*);
 void plant_appear_fruit(struct plant_t*, struct fruit_t*);
 void plant_nutrient_fruit(struct plant_t*);
 void plant_leave_fruit(struct plant_t*);
+bool_t plant_has_fruits(struct fruit_t*);
 
 #endif
