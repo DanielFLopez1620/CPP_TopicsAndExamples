@@ -2,6 +2,7 @@
 // Code was tested with gcc
 
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef int bool_t;
 struct plant_t;
@@ -36,6 +37,7 @@ fruit_t* fruit_new()
 fruit_t fruit_ctor(fruit_t* fruit)
 {
     fruit->status = SPROUT;
+    print("Fruit has appeared\n");
 }
 
 /**
@@ -53,6 +55,7 @@ fruit_t fruit_dtor(fruit_t* fruit) {}
 void fruit_grow(fruit_t* fruit)
 {
     fruit->status = GROWN;
+    print("Fruit has grown\n");
 }
 
 /**
@@ -63,4 +66,5 @@ void fruit_grow(fruit_t* fruit)
 void fruit_bye(fruit_t* fruit)
 {
     fruit->status = DEAD;
+    print("Fruit is bad right now\n");
 }
