@@ -8,7 +8,7 @@
 typedef struct
 {
     char species[20];
-    char diet[10];
+    char diet[20];
 } animal_t;
 
 #endif
