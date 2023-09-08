@@ -49,5 +49,8 @@ int main(int argc, char** argv)
 
     printf("Beak type: %d\n", bird_get_beak_type(bird));
 
+    bird_dtor(bird);
+    free(bird);
+
     return 0;
 }
