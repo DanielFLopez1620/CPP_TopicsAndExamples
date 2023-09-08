@@ -5,7 +5,17 @@
 
 /**
  * APPROACH 1: It generates the inheritance by using private definition of the attribute structure, so the 
- * child can access to the parent attributes only by asking it with the public interface of the parent.
+ * child can access to the parent attributes only by asking it with the public interface of the parent. So, I
+ * encourage you to check the example and see the implementation by using two header files to create the draft
+ * of the object and then create a private attribute structure.
+ * 
+ * You can compile and run the code, with:
+ * 
+ * gcc -c type1_animal.c -o animal.o
+ * gcc -c type1_bird.c -o bird.o
+ * gcc -c inheritance_type1.c -o main.o
+ * gcc animal.o bird.o main.o -o inh_type1.out
+ * ./inh_type1.out
  * 
  * NOTE: In the definition of nested structures, it is important to declare the father structure first,
  * otherwise you lose the possibility of using the fahthers behavior functions.
