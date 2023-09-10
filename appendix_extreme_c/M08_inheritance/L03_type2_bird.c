@@ -76,3 +76,26 @@ unsigned int bird_get_beak_type(bird_t* bird)
 {
     return bird->beak_type;
 }
+
+/**
+ * Getter of the species of an animal (bird), delivered via pointer to char array.
+ * 
+ * @param bird Pointer to the animal of interest
+ * @param buffer Pointer to load the species obtained.
+*/
+void bird_get_species(bird_t* bird, char* buffer)
+{
+    animal_get_species(bird->animal, buffer);
+}
+
+
+/**
+ * Getter of the diet of an animal (bird), delivered via pointer to char array.
+ * 
+ * @param bird Pointer to the animal of interest
+ * @param buffer Pointer to load the diet obtained.
+*/
+void bird_get_diet(bird_t* bird, char* buffer)
+{
+    animal_get_diet(bird->animal, buffer);
+}

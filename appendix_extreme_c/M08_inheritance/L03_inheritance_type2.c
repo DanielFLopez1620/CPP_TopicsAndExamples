@@ -10,7 +10,12 @@
  * behavior functions in order to interact with the attributes of the parent.
  * 
  * Do not forget to pass and check the codes, you can run them by:
- * ...
+ * 
+ * gcc -c type2_animal.c -o animal.o
+ * gcc -c type2_bird.c -o bird.o
+ * gcc -c inheritance_type2.c -o main.o
+ * gcc animal.o bird.o main.o -o inh_typ2.out
+ * ./inh_type2.out
  * 
  * NOTE: Each approach hast its own advantages and disadvantages, they are covered in the next lesson.
 */
@@ -26,10 +31,10 @@ int main(int argc, char **argv)
 
     char buffer[20];
 
-    bird_get_species(animal, buffer);
+    bird_get_species(bird, buffer);
     printf("Species: %s\n", buffer);
 
-    bird_get_diet(animal, buffer);
+    bird_get_diet(bird, buffer);
     printf("Diet: %s\n", buffer);
 
     printf("Wingspan: %d\n", bird_get_wingspan(bird));
