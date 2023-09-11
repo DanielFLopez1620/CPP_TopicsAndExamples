@@ -18,3 +18,26 @@
  * - OVVERRIDE: To write (under the same name) the parent's implementation with a different behavior in the
  *   child.
 */
+
+// Import public interfaces
+#include "L05_poly_animal.h"
+#include "L05_poly_dog.h"
+
+int main(int argc, char **argv)
+{
+    struct animal_t* animal = animal_new();
+    struct dog_t* dog = dog_new();
+
+    animal_ctor(animal, "generic", 2);
+    dog_ctor(dog);
+
+    animal_walk(animal);
+    animal_walk((struct animal_t*)dog);
+
+    animal_dtor(animal);
+    dog_dtor(dog);
+
+    free(dog);
+    free(animal);
+    return 0;
+}
