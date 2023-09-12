@@ -15,9 +15,22 @@
  * can keep the same logic and reduce the number of changes, this refers with two key concepts:
  * 
  * - ABSTRACTION:  To have an idea or and unimplemented behavior function that will be defined in the future.
- * - OVVERRIDE: To write (under the same name) the parent's implementation with a different behavior in the
+ * - OVERRIDE: To write (under the same name) the parent's implementation with a different behavior in the
  *   child.
+ * 
+ * Take into account, that for using polymorphsim you will have to create a overrided implementation, and to
+ * have a pointer to a variable that will allow the usage of the implementation. So do not forget to check
+ * the examples of polymorphism. You can compile them with:
+ * 
+ *    gcc L05_poly_animal.c -o animal.o
+ *    gcc -c L05_poly_animal.c -o animal.o
+ *    gcc -c L05_poly_dog.c -o dog.o
+ *    gcc -c L05_polymorphism.c -o main.o
+ *    gcc animal.o dog.o main.o -o poly.out
+ * .  /poly.out
 */
+
+#include <stdlib.h>
 
 // Import public interfaces
 #include "L05_poly_animal.h"
