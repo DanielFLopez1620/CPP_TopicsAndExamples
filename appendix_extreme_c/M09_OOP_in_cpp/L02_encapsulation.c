@@ -5,11 +5,18 @@
 
 /**
  * You should remember that we can generate an encapsulation in C by using structures and
- * pointers, to refresh you mind, check the code here:
+ * pointers, to refresh you mind, check the code here (in the c version) and also check
+ * the code in the cpp version, so you get a better understanding of this implementations.
+ * 
+ * Even you can try to compare the assembly code, and you could see they are pretty similar.
+ * 
+ *  gcc -S <file.c> -o <file.s>
+ *  g++ -S <file.cpp> -o <file.s>
 */
 
 #include <math.h>
 
+// Structure
 typedef struct 
 {
     float x;
@@ -18,6 +25,7 @@ typedef struct
     int num;
 } my_point_t;
 
+// Prototypes
 float point_norm(my_point_t* point);
 
 int main(int argc, char const *argv[])
