@@ -30,6 +30,10 @@
  * As you may suppose, B was not a huge success, as it has type problems (only worked with WORD) and had problems
  * where the machines weren't able to process the same word lenght. The next generation was NB (New B, which is an example of
  * the enginering creativity), but is still had some feartures missing.
+ * 
+ * B worked only with words (typeless, or well single-typed) so implementation were not so natural and then
+ * the algorithms weren't efficient, another problems were that no floating operations were supported and the memory managmente 
+ * was also inefficient. So they needed a solution, in the future, the answer will be 'C'.
 */
 
 int main(int argc, char const *argv[])
