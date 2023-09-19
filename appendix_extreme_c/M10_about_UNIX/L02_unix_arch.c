@@ -33,7 +33,8 @@
  * use them in Unix system but each Unix-compliant system can has some differences in its static and dynamic libraries. As a
  * standard, Unix has this UNIX compliant systems and UNIX-like systems (Linux).
  * 
- * CURIOSITY: printf is not part of C, it is part of the SUS standard contained in the C standard library.
+ * CURIOSITY: printf is not part of C, it is part of the SUS (Simple Unix Specification) standard contained in the 
+ * C standard library.
  * 
  * The SUS standart (V4), has a list of APIs related to:
  * - System Interfaces: Function that should be used in any C program.
@@ -46,7 +47,36 @@
  * "All headers must be found in /usr/include or /usr/local/include".
  * 
  * And for the usage, exist the C Standar Library or libc that is a set of functions together with 
- * the implementation of the exposed functions (by respecting SUS).
+ * the implementation of the exposed functions (by respecting SUS). But, after the creating of many
+ * Unix-like OS, appear a subset of SUS called Portable Operating System Interface (POSIX), now Linux Distros
+ * are POSIX-compliant.
+ * 
+ * Another possibility is to interact with the kernel with libc (just in case, if you want to create your
+ * Unix, your will need to create your own libc after having the kernel ready). A key for this is having 
+ * a compilation pipeline and a linking mechanism so it can expose the interace. For using the kernel functionalities,
+ * it is used the 'system calls'.
+ * 
+ * One interesting header is 'unistd.h' which can call SUS exposed interaces, like 'sleep(<time>)' command, but
+ * what is behing those common functions you use (pirntf, malloc...). First, we have to know that
+ * exist a pgrogram that traces when a program is running, and second that the 'syscalls' are triggered, we can
+ * check this by compiling the code and checking the triggers:
+ * 
+ *  gcc <file.c> -lc -o <file.out>
+ *  truss ./<file.out> # Only in FreeBSD
+ * 
+ * Here 'truss' is used to traces sys calls, its equivalent in Linux is 'strace'. And here you can check
+ * the call and the links generated in the process (or with th executable). You an think of syscalls as function
+ * calls, as they have an indicator and have a list of arguments. If you asked, the -lc option in the previous
+ * command is for linking in FreeBSD.
+ * 
+ * TIP: You can use 'man' command on terminal to access the manual of a command or even trigger/syscall.
+ * 
+ * Now, let's talk about the Kernel, as you already know, it is used for managing the hardware. But the 'kernel
+ * processes' are very different from the 'user processes' you know. In one hand, a kernel process is first
+ * executed and loaded, the hardware can run only a single of them, it is created by copying the kernel
+ * image into the memory by the boot loader and it handles system calls. On the other hand, a user process doesn't
+ * have priviliges, needs a kernel process runing, many of them can be executed at the same time and they call the 
+ * syscalls.
 */
 
 int main(int argc, char** argv)
@@ -56,6 +86,7 @@ int main(int argc, char** argv)
     printf("\thttps://www.linfo.org/unix_philosophy.html\n");
     printf("\thttps://en.wikipedia.org/wiki/Unix_philosophy\n");
     printf("\thttp://www.unix.org/version4/GS5_APIs.pdf\n");
+    printf("\thttps://pubs.opengroup.org/onlinepubs/9699919799/\n");
 
     return 0;
 }
