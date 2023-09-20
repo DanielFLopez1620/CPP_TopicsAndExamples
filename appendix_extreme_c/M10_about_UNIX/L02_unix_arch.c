@@ -77,6 +77,25 @@
  * image into the memory by the boot loader and it handles system calls. On the other hand, a user process doesn't
  * have priviliges, needs a kernel process runing, many of them can be executed at the same time and they call the 
  * syscalls.
+ * 
+ * The previous means that there are two execution modes: Kernel land or space (for kernel processes) and the user
+ * land or user space, and they need to be isolated, so one tool for achieving this was 'syscalls'. Now, let's look
+ * at the kernel task in Unix:
+ * 
+ *  - PROCESS MANAGEMENT: Allocation memory, loading instructions and other process related to sys calls.
+ *  - INTER-PROCESS COMMUNICATION (IPC): Cover data exshange with memories, pipes and domains.
+ *  - SCHEDULING: Management of the CPU cores and balances the task there.
+ *  - MEMORY MANAGEMENT:  Without memory, the processes would be lost.
+ *  - STARTUP: Load image kernel, and then start kernel process, then user processes using PID (Proccess Identifier)
+ *  - DEVICE MANAGEMENT: It includes ports, USB devices, adapters...
+ * 
+ * Finally, we have the HARDWARE, the purpose of the interaction for using different utilities. The hardware is threated
+ * as a number of devices attached which can be 'mandatory' (CPU & memory) or 'peripheral'. The Memory Management and the 
+ * Scheduler units are responsible for the mandatory decices. But the others are exposed 'device files' in the folder /dev. 
+ * 
+ *     ls -al /dev
+ * 
+ * This allows you to even have 'virtual devices'
 */
 
 int main(int argc, char** argv)
