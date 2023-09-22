@@ -23,6 +23,8 @@
  * 
  * Do not forget to compile this code and use 'strace' with it to check the sys calls.
  * 
+ * NOTE: Did you know that assembly language can be used with C statements in a C source file?
+ * NOTE 2: Do not try to implement syscalls without knowing other parts you need to implement.
 */
 
 // Definition required to use parts of the GNU C Library (glibc)
