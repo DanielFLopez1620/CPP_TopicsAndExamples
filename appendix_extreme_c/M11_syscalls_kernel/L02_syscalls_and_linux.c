@@ -1,5 +1,5 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
-// Code was tested with gcc
+// Code wasn't tested
 
 // NOTE: Do not try to run this file as it is experimental and may change you config.
 // RISK OF SYS CORRUPTION
@@ -38,7 +38,40 @@
  * After this, you an generate a test, create a file and a folder: mkdir hello_workd/sys_hello_world.c, and
  * try with the code down here, in this file.
  * 
+ * This code implements a macro for a syscall (with 4 args), but for implementing or know this call, you
+ * will need to add it to the arch path: arch/x86/entry/syscalss/syscall_64.tbl
  * 
+ *  999   64   hello_world    __x64_sys_hello_world
+ * 
+ * Here the '__x64' is used to indicate that the call is only for x64 systems. Now, for creating the kernel
+ * you will need to create a Makefile (in the directory you have been using) with the next content for:
+ 
+ *    obj-y := sys_hello_world.o
+ * 
+ * Then, the kernel path should be changed, from this:
+ *  
+ *    core-y += kernel/certs/mm/fs/ipc/security/crypto/block
+ * 
+ * To:
+ * 
+ *    core-y += kernel/certs/mm/fs/hello_world/ipc/security/crypto/block
+ * 
+ * With this done, you could build your kernel (remember, only if you are in an experimental environment that you
+ * do not need working after trying this), for that you run:
+ * 
+ *     make localmodconfig
+ *     make -j4
+ *     sudo make modules_install install
+ *     uname -r
+ *     sudo reboot
+ *     # After reboot
+ *     uname -r 
+ * 
+ * If it works well, you should be able to  run and test the call:
+ * 
+ *     gcc L02_experimental_test.c -o sys_test.out
+ *     dmesg
+ *     strace ./sys_test.out
  * 
 */
 
