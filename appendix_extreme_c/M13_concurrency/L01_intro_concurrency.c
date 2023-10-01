@@ -1,6 +1,8 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+#include <stdio.h>
+
 /**
  * CONCURRENCY: Having multiple parts of a code running "simultaneously". It means that you
  * can have different task running at the same time, for example, the act of writting in 
@@ -24,5 +26,14 @@
  * the moment one finishes using the CPU (or a time quantum is completed), another task is send. Finally, it must
  * be able to recover the CPU control in case of preemptive task or scheduling.
  * 
- * 
+ * But ... What is a task? It is an abstract concept of a process that needs to be done. They are categorized
+ * according to its importance and added to a wait list, you they will get a turn with the processor. But the task
+ * can be divided in two groups (process or thread). But before that keep in mind that switching 
+ * between task is not predictable, so you will have to assume the probability of having a certain context...
 */
+
+int main(int argc, char **argv)
+{
+    printf("This section's comments are an intro to CONCURRENCY.\n");
+    return 0;
+}
