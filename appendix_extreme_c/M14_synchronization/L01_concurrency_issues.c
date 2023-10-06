@@ -14,8 +14,10 @@
  *    It is based on the concept that always a interleaving can happen, and it becomes and issue when some 
  *    constraints are not kept. This will lead to 'race condition' systems which means that the constraints
  *    can be missed at some point. 
- *    The real problem here is that it can generate data corruptions and vulnerate the 'data integrity'.
- *  - Post Synscorization issues: Attempt of resolution from the previous one.
+ *    The real problem here is that it can generate data corruptions and vulnerate the 'data integrity'. Check
+ *    the code L02_keeping_constraints to watch some pseudo examples.
+ * 
+ *  - POST SYNSCORIZATION ISSUES: Attempt of resolution from the previous one.
 */
 
 int main(int argc, char* *argv[])
