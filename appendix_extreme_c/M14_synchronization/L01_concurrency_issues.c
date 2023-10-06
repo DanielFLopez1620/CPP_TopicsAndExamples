@@ -21,7 +21,32 @@
 int main(int argc, char* *argv[])
 {
     // Pseudo code for crash generation with interleaving in C
-
+    printf("P1: Watch the pseudo code here to understand a little about interleavings...\ns");
+    /**
+     * Concurrent System 
+     * {
+     *  Shared State 
+     *  {
+     *      char *ptr = NULL; 
+     *  }
+     * 
+     *  Task A
+     *  {
+     *      ptr = (char*) malloc(12 * sizeof(char));
+     *      strcpy(ptr, "Trying!");
+     *      printf("%s\n", ptr);
+     *  }
+     * 
+     *  Task B
+     *  {
+     *      free(ptr);
+     *      ptr = NULL;
+     *  }
+     * }
+    */
+    printf("<PSEUDOCODE>\n");
+    printf("The problem is that the pointer can crash if it is freed when its value is NULL or before \
+    the assign\n\n");
     // M
     return 0;
 }
