@@ -17,7 +17,17 @@
  *    The real problem here is that it can generate data corruptions and vulnerate the 'data integrity'. Check
  *    the code L02_keeping_constraints to watch some pseudo examples.
  * 
- *  - POST SYNSCORIZATION ISSUES: Attempt of resolution from the previous one.
+ *  - POST SYNSCORIZATION ISSUES: Attempt of resolution from the previous one mentioned. They are related with:
+ *    *  New intrinsic issues: Related with race conditions and data races after applying a control mechanism. 
+ *       You should always keep in mind that the control may add new interleavings.
+ *    *  Starvation: Occurs when a shared resource is not available for a long time for a task, which blocks it.
+ *    *  Deadlock: When everyone is waiting and no one is doing somthing, for example, generated with infite
+ *       loops that blocks the shared resources or lock an object.
+ *    *  Priority inversion: When a low priority task blocks the access of a high priority task of the shared
+ *       resources, so the original priorities are changed.
+ * 
+ *   From the previous one, the most common one is a deadlock, and you will need synchronization tecniques. So go
+ *   and check them out in the file "L03_synchronization_tec.c"
 */
 
 int main(int argc, char* *argv[])
