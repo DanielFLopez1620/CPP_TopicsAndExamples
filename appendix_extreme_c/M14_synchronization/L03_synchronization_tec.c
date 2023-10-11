@@ -25,7 +25,10 @@
  *   adresses are stored, which also reduces the time spen with the main memory. This even exists when there are multiple 
  *   cores. But when this happen, what must one prevent? Because there would be cases when there is an update in the cache 
  *   but not in memory and then a shared resource problem will appear.
- *   However, for this reason, the 'memory coherence protocol'  
+ *   However, for this reason, the 'memory coherence protocol' which means that all task running on different cPU cores
+ *   will see the same local value.
+ *   Another point to mention here is that sometimes 'memory barries' could be needed to make sure that all updates of 
+ *   a shared resources are seen by the tasks. And this can be implememted with mutex.
  *   
  * 
  * - 
@@ -154,6 +157,61 @@ int main(int argc, char const *argv[])
     printf("        b = b + 2;\n");
     printf("        con = b;\n");
     printf("        unlock(s)\n");    
+    printf("    }\n");
+    printf("}\n\n");
+
+    printf("Example 7: Considering CPU and memory:\n");
+    printf("System\n");
+    printf("{\n");
+    printf("    Shared State\n");
+    printf("    {\n");
+    printf("        int done = 0;\n");
+    printf("    }\n");
+    printf("    Task A\n");
+    printf("    {\n");
+    printf("        printf(\"A\");\n");
+    printf("        done = 1;\n");
+    printf("        MemoryBarrier();\n"); // Not official implementation
+    printf("        notify(B);\n");
+    printf("    }\n");
+    printf("    Task B\n");
+    printf("    {\n");
+    printf("        do\n");
+    printf("        {\n");
+    printf("            MemoryBarrier();\n"); // Not official implementation
+    printf("            sleep(done);\n");
+    printf("        } while(!done);\n");    
+    printf("        printf(\"B\");\n");  
+    printf("    }\n");
+    printf("}\n\n");
+
+    printf("Example 8: Considering CPU and memory:\n");
+    printf("System\n");
+    printf("{\n");
+    printf("    Shared State\n");
+    printf("    {\n");
+    printf("        int done = 0;\n");
+    printf("        M = mutex();\n");
+    printf("    }\n");
+    printf("    Task A\n");
+    printf("    {\n");
+    printf("        printf(\"A\");\n");
+    printf("        Lock(M);\n");
+    printf("        done = 1;\n");
+    printf("        Unlock(M);\n");
+    printf("        notify(B);\n");
+    printf("    }\n");
+    printf("    Task B\n");
+    printf("    {\n");
+    printf("        Lock(M)\n");
+    printf("        while(!done);\n");    
+    printf("        {\n");
+    printf("            Unlock(M);\n"); 
+    printf("            Sleep();\n"); // Atomic case 
+    printf("            Lock(M);\n");
+    printf("        }\n");
+    printf("        UnLock(M)\n");
+    printf("        printf(\"B\");\n");  
     printf("    }\n");
     printf("}\n\n");
     
