@@ -36,6 +36,24 @@
  *   some techniques:
  * 
  *   - FILE SYSTEM: Leave something in memory, so simple. 
- *   - MEMORY-MAPPED FILE: Some regions cna be used by a certain number of processes to share info (read/modify).
- *   - NEWTWORK: 
+ *   - MEMORY-MAPPED FILE: Some regions can be used by a certain number of processes to share info (read/modify).
+ *   - NEWTWORK: For process that are in different computers.
+ *   - SIGNALS: A way to communicate between processes or to share small states.
+ *   - SHARED MEMORY: A region that is shared by multple processes and can be used by all of them.
+ *   - PIPES: One-way communitacion, one publish and the other hears and subscribe.
+ *   - SOCKETS: Information over a full-duplex channel which is fast.
+ *   - MESSAGE QUEUE: Messages maintained in the kernel so the process only access there.
+ *   - ENV VARIABLES: Varialbles kept in the OS and can be accessed by process within the system.
+ * 
+ * * MULTITHREADING: Using threads to perform parallel task and a thread is always owned by a process. They
+ *   can use the previous techniques mentioned with the advantage of having  access to the same memory region.
+ *   Which means they have their own Stack and here the shared states can be kept, also a address can be passed
+ *   to other thread which it can use to get access.
 */
+
+int main(int argc, char const *argv[])
+{
+    printf("Read the comments of this codes to get to know more about concurrency\n");
+    printf("You will discover about multi-processing and multithreading!\n");
+    return 0;
+}
