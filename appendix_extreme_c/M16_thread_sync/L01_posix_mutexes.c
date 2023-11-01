@@ -66,7 +66,11 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-
+/**
+ * Generic contect of a thread for a simple increment of a shared resource.
+ * 
+ * @param arg Generic pointer, must point to the shared resource of interest.
+*/
 void* first_thread_content(void* arg)
 {
     int* shared_resource = (int*)arg;
@@ -84,6 +88,11 @@ void* first_thread_content(void* arg)
     return NULL;
 }
 
+/**
+ * Generic contect of a thread for double the value of a shared resource.
+ * 
+ * @param arg Generic pointer, must point to the shared resource of interest.
+*/
 void* second_thread_content(void* arg)
 {
     int* shared_resource = (int*)arg;
