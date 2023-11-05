@@ -62,6 +62,12 @@ int main(int argc, char **argv)
 
 // FUNCTION DEFINTIONS
 
+/**
+ * Generic content of a thread that increments the shared resources in one.
+ * 
+ * @param arg Generic pointer to the shared resource
+ * 
+*/
 void* first_thread_content(void* arg)
 {
     // Point to shared var
@@ -79,6 +85,13 @@ void* first_thread_content(void* arg)
     return NULL;
 }
 
+
+/**
+ * Generic content of a thread that doubles the shared resource value.
+ * 
+ * @param arg Generic pointer to the shared resource.
+ * 
+*/
 void* second_thread_content(void* arg)
 {
     // Point to shared var
