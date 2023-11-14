@@ -10,10 +10,20 @@
  * prevent memory leaks.
  * 
  * When using threads and heap, the key point it to prevent dangling pointers. Here in the code below
- * you can watch an example of WHAT CAN GO WRONG if no mechanism are implemented.
+ * you can watch an example of WHAT CAN GO WRONG if no mechanism are implemented. You can compile this
+ * code with:
+ * 
+ *      gcc L08_thread_and_heap.c -o heap.out -lpthread
  * 
  * NOTE: When using threads, the deallocation should be also secure to prevent the pointers to become
  * dangling. A proposal is presented below.
+ * 
+ * NOTE 2: Global variables have a longer life, but it can be problematic.
+ * 
+ * Do not forget to check more on threads, as this was a shallow introduction and there are more topics
+ * related with mutex, variable conditions, rw_locks, spin locks, semaphores and others. Even more about 
+ * cache and some problems related to it when writing multithreaded situations, for example, by using
+ * 'volatile', those variables that are not supposed to be optimized via cahing.
 */
 
 #include <stdlib.h>
@@ -55,34 +65,42 @@ int main(int argc, char **argv)
     printf("Check this code inside to understand using threads safetly with the Heap.\n");
 
     shared_resource = NULL;
-
+    
+    // Initialize barrier and set the number of threads allowed
     pthread_barrier_init(&alloc_barrier, NULL, 3);
     pthread_barrier_init(&fill_barrier, NULL, 3);
     pthread_barrier_init(&done_barrier, NULL, 2);
 
+    // Declare threads for programs
     pthread_t malloc_thread;
     pthread_t fill_thread_1;
     pthread_t fill_thread_2;
     pthread_t print_thread;
     pthread_t dealloc_thread;
 
+    // Create a thread attribute for implemeting a detached thread
     pthread_attr_t attribute;
     pthread_attr_init(&attribute);
     int res = pthread_attr_setdetachstate(&attribute, PTHREAD_CREATE_DETACHED);
     CHECK_RESULT(res); // Using macro to log errors
 
+    // Run thread for allocation
     res = pthread_create(&malloc_thread, &attribute, thread_malloc, NULL);
     CHECK_RESULT(res); // Using macro to log errors
 
+    // Run thread for filling array (version 1)
     res = pthread_create(&fill_thread_1, &attribute, thread_fill, &TRUE);
     CHECK_RESULT(res); // Using macro to log errors
 
+    // Run thread for filling array (version 2)
     res = pthread_create(&fill_thread_2, &attribute, thread_fill, &FALSE);
     CHECK_RESULT(res); // Using macro to log errors
 
+    // Run trhead for printing
     res = pthread_create(&print_thread, &attribute, thread_print_body, NULL);
     CHECK_RESULT(res); // Using macro to log errors
 
+    // Run deallaction thread
     res = pthread_create(&dealloc_thread, &attribute, thread_dealloc, NULL);
     CHECK_RESULT(res);
 
