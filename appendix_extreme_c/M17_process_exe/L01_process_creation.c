@@ -30,6 +30,8 @@
  * 
  * NOTE: In newer versions, the 'init' process has been replaced with 'systemd daemon' or 'systemd', to learn
  * about this change you can check here: https://www.tecmint.com/systemd-replaces-init-in-linux.
+ * 
+ * NOTE 2: If youc reate many processes at once, it can result in a interleaving, check the example 2 below.
 */
 
 #include <unistd.h>
@@ -40,7 +42,7 @@ int main(int argc, char const *argv[])
     printf("\t- https://github.com/openunix/cygwin/blob/master/winsup/cygwin/fork.cc\n");
     printf("\t- http://man7.org/linux/man-pages/man2/fork.2.html\n");
     
-    printf("\nExample: Creating a process:\n");
+    printf("\nExample 1 : Creating a process:\n");
     printf("Parent ID: %d\n", getpid());
     __pid_t ret = fork();
     if(ret)
@@ -53,5 +55,27 @@ int main(int argc, char const *argv[])
     }
     printf("Type CTRL+C to continue, this was intented to see the process with 'pstree'...\n");
     while (1);
+
+    printf("\nExample 2: Too many process, can generate interleavings...\n");
+
+    __pid_t ret = fork();
+
+    if (ret)
+    {
+        for (size_t i = 0; i < 5; i++ )
+        {
+            pritnf("Child with ret = true\n");
+            usleep(1);
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < 5; i++)
+
+        {
+            printf("Child with ret = false\n");
+            usleep(1);
+        }
+    }
     return 0;
 }
