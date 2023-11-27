@@ -6,6 +6,13 @@
 /**
  * As you have seen, data race is a problem and you should take care in your code when
  * using threads.
+ * 
+ * The code below create a shared counter, and then it fork the process. But it secures to
+ * pass the file descriptor. However, this code is vulnerable to interleavings.
+ * 
+ * You can compile and run it many times to check the problem:
+ *      gcc L06_data_race_again.c -lrt -o dra.out
+ *      ./dra.out
 */
 
 #include <stdint.h>
@@ -22,7 +29,7 @@
 
 int shared_fd = -1;
 
-int32_t* con = -1;
+int32_t* con = NULL;
 
 // Function prototypes
 void init_shared_resource();
@@ -83,7 +90,7 @@ int main(int argc, char **argv)
     // Closing the shared memory is also needed for both process.
     if(close(shared_fd) < 0)
     {
-        fprintf(stderr, "ERROR: Failed to close shared memory: %s\n");
+        fprintf(stderr, "ERROR: Failed to close shared memory: %s\n", strerror(errno));
         return 1;
     }
 
@@ -110,6 +117,7 @@ void init_shared_resource()
         fprintf(stderr, "ERROR: Cannot create shared memory: %s\n", strerror(errno));
         exit(1);
     }
+    fprintf(stdout, "Shared memory created: %d\n",shared_fd);
 }
 
 /**
@@ -128,6 +136,8 @@ void shutdown_shared_resource()
 */
 void counter_process()
 {
+    // The reason fo rusing usleep calls is that we need to force the scheduler to
+    // take back the CPU core. So, this allows us to see the effect of interleavings.
     usleep(1);
     int32_t temporal = *con;
     usleep(1);
