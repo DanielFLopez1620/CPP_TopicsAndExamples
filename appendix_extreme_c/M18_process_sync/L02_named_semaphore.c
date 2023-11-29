@@ -48,6 +48,8 @@ int main(int argc, char **argv)
 {
     // Initialize shared resource 
     init_shared_resource();
+
+    // Initialize semaphore
     init_sem();
 
     // Allocated and truncated shared memory
@@ -102,7 +104,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // Only the parent needs to unlink the shared resource 
+    // Only the parent needs to unlink the shared resource, and the same applies to the semaphore. 
     if(pid)
     {
         shutdown_shared_resource();
