@@ -5,7 +5,10 @@
 
 /**
  * When using shared resources and mutex, you do not need to fork processes, also mutexes can be
- * used to end different processes.
+ * used to end different processes. So, check and read the code below to see the usage of a mutex.
+ * 
+ * NOTE: When using 'pthread_mutex_lock' and 'pthread_mutex_unlock', it is recommended to check the
+ * returned value.
 */
 
 #include <pthread.h>
@@ -31,6 +34,37 @@ pthread_mutex_t* mt = NULL;
 
 void init_shr();
 void shutdown_resource();
+void init_mutex();
+void shut_mutex();
+int check_cancelation();
+void cancel();
+void signal_handler(int);
+
+int main(int argc, char **argv)
+{
+    // Signal definition to handle Keyboard Interrupt (Ctrl + C)
+    signal(SIGINT, signal_handler);
+
+    // Initialize resources and control mechanism
+    init_shr();
+    init_mutex();
+
+    // Log progress before cancelation
+    while(!check_cancelation())
+    {
+        fprintf(stdout, "Still working...\n");
+        sleep(1);
+    }
+
+    fprintf(stdout, "Cancel signal was received...\n");
+
+    // Shutdown and close resources and control mechanism
+    shutdown_resource();
+    shut_mutex();
+
+    return 0;
+}
+
 
 void init_shr()
 {
@@ -64,7 +98,7 @@ void init_shr()
     // If it wasn't possible, sends error.
     else
     {
-        frpintf(stderr, "ERROR: Memory object creation failed: %s\n", strerror(errno));
+        fprintf(stderr, "ERROR: Memory object creation failed: %s\n", strerror(errno));
         exit(1);
     }
 
@@ -123,7 +157,6 @@ void shutdown_resource()
     }
 }
 
-void init_mutex();
 void init_mutex()
 {
     // Open shared object in read/write mode to check if it exists
@@ -203,4 +236,84 @@ void init_mutex()
             exit(1);
         }
     }
+}
+
+/**
+ * Close the control mechanism (mutex) depending on the ownership and shared memory
+ * 
+ * @exception Launches warn if mutex isn't destroyed (in case of ownership)
+ * @exception Launches error and close if unmapping wasn't achieved
+ * @exception Launches error and close if file descriptor couldn't be closed
+ * @exception Launches error and close if unlinkig failed (in case of ownership)
+*/
+void shut_mutex()
+{
+    sleep(1);
+    // If it is the owner, destroy the mutex.
+    if(mt_owner)
+    {
+        int status = -1;
+        if((status = pthread_mutex_destroy(mt)))
+        {
+            printf(stderr, "WARN: Mutex couldn't be destroyed: %s\n", strerror(errno));
+        }
+    }
+
+    // Unmap memory region 
+    if(munmap(mt, sizeof(pthread_mutex_t)) < 0)
+    {
+        fprintf(stderr, "ERROR: Unmapping wasn't possible: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    // Close the mutex shared memory file descriptor
+    if(close(mt_shm_fd) < 0)
+    {
+        fprintf(stderr, "ERROR: Couldn't close mutex: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    // Only if it is the owner, unlink the shared memory
+    if(mt_owner)
+    {
+        if(shm_unlink(MT_SHM) < 0)
+        {
+            fprintf(stderr, "ERROR: Unlinking mutex wasn't achieved: %s\n", strerror(errno));
+            exit(1);
+        }
+    }
+}
+
+/**
+ * Check if the cancelation flag was raised, by implementing a secure way with mutex.
+ * 
+ * @return The value of the cancel flag
+*/
+int check_cancelation()
+{
+    pthread_mutex_lock(mt);
+    int temp = *cancel_flag_ptr;
+    pthread_mutex_unlock(mt);
+    return temp;
+}
+
+/**
+ * Launches in a secure way (by using mutex locks) the update of the cancel flag.
+*/
+void cancel()
+{
+    pthread_mutex_lock(mt);
+    *cancel_flag_ptr = 1;
+    pthread_mutex_unlock(mt);
+}
+
+/**
+ * Handles an interrupt by printing the number of SIGINT received
+ * 
+ * @param sig Integer signal received in case of interruption
+*/
+void signal_handler(int sig)
+{
+    fprintf(stdout, "Integer value detected: %d\n", sig);
+    cancel();
 }
