@@ -40,12 +40,14 @@ int32_t* con = NULL;
 // Pointer ot mutex implemented
 pthread_mutex_t* mt = NULL;
 
+// FUNCTION PROTOTYPES
 void init_mutex();
 void kill_mutex();
 void init_shared_resource();
 void shutdown_shared_resource();
 void counter_process();
 
+// MAIN
 int main(int argc, char **argv)
 {
     // Initialize shared resource 
@@ -118,6 +120,19 @@ int main(int argc, char **argv)
     return 0;
 }
 
+// FUNCTION DEFINITIONS
+
+/**
+ * Initialize control mechanism (mutex), and create the shared memory open
+ * 
+ * @exception Launches error message and exits if shared memory isn't created.
+ * @exception Launches error message and exits if truncation of shared memory isn't achieved.
+ * @exception Launches error message and exits if mapping the region wasn't possible.
+ * @exception Launches error message and exits if the setting of attributes for mutex isn't possible.
+ * @exception Launches error message and exits if the initialization of attributes for mutex isn't achieved.
+ * @exception Launches error message and exits if the initialization of the mutex goes wrong.
+ * @exception Launches error message and exits if the destruction of the mutex attributes fails.
+*/
 void init_mutex()
 {
     mutex_sh = shm_open("/mutex0", O_CREAT | O_RDWR, 0600);
@@ -171,6 +186,14 @@ void init_mutex()
     }
 }
 
+/**
+ * Shutdown control mechanism (mutex) and close shared memory.
+ * 
+ * @exception Launches an error and exits if the mutex cannot be destroyed.
+ * @exception Launches an error and exits if the unmapping failed.
+ * @exception Launches an error and exits if closing the shared file descriptor fails.
+ * @exception Launches an error and exits if unlinking the shared memory isn't possible.
+*/
 void kill_mutex()
 {
     int kll = -1;
@@ -228,6 +251,9 @@ void shutdown_shared_resource()
     }
 }
 
+/**
+ * Simple counter with delays and mutex control mechanism implementaition.
+*/
 void counter_process()
 {
     usleep(1);

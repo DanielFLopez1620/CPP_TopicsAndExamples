@@ -7,10 +7,16 @@
  * When using shared resources and mutex, you do not need to fork processes, also mutexes can be
  * used to end different processes. So, check and read the code below to see the usage of a mutex.
  * 
+ * You can compile and run the code with the next command:
+ * 
+ *      gcc L04_named_mutex_2.c -lpthread -lrt -o nm2.out
+ *      ./nm2.out
+ * 
  * NOTE: When using 'pthread_mutex_lock' and 'pthread_mutex_unlock', it is recommended to check the
  * returned value.
 */
 
+// Header files
 #include <pthread.h>
 #include <string.h>
 #include <errno.h>
@@ -20,18 +26,21 @@
 #include <sys/mman.h>
 #include <sys/wait.h>
 
+// Definition of shared memory names
 #define MT_SHM "/mutex0"
 #define SHM "/shm0"
 
-int cancel_flag = -1;
-int cancel_flag_owner = 0;
+// Cancel flag implementations
+int cancel_flag = -1; // Flag for checking cancelations (or interrupts)
+int cancel_flag_owner = 0; // Check if the process is the owner of the shared memory object
 int* cancel_flag_ptr = NULL;
 
-int mt_shm_fd = -1;
-int mt_owner = 0;
-
+// Mutex implementation description
+int mt_shm_fd = -1; // Mutex shared memory file descriptor
+int mt_owner = 0; // Check if the mutex is the owner of the shared memory object
 pthread_mutex_t* mt = NULL;
 
+// FUNCTION PROTOTYPES
 void init_shr();
 void shutdown_resource();
 void init_mutex();
@@ -40,6 +49,7 @@ int check_cancelation();
 void cancel();
 void signal_handler(int);
 
+// MAIN
 int main(int argc, char **argv)
 {
     // Signal definition to handle Keyboard Interrupt (Ctrl + C)
@@ -65,7 +75,17 @@ int main(int argc, char **argv)
     return 0;
 }
 
+// FUNCTION DEFINITIONS
 
+
+/**
+ * Init shared resource (checks if it is available or if the creation is needed).
+ * 
+ * @exception Launches a warn if the shared memory object isn't available.
+ * @exception Launches an error and exits if the shared memory object wasn't created.
+ * @exception Launches an error and exits if the truncation fails.
+ * @exception Launches an error and exits if the mapping wasn't achieved
+*/
 void init_shr()
 {
     // Try to open shared resources (with only the flag for read/write)
@@ -129,6 +149,13 @@ void init_shr()
     }
 }
 
+/**
+ * Shutdown shared resources (including cases of ownership)
+ * 
+ * @exception Launches an error and exits if the unmapping fails.
+ * @exception Launches an error and exits if the closing operation of the shared memory goes wrong.
+ * @exception Launches an error and exits if the unlink operation isn't achieved.
+*/
 void shutdown_resource()
 {
     // Unmap the shared memory by using the pointer of the mapped region
@@ -157,6 +184,18 @@ void shutdown_resource()
     }
 }
 
+/**
+ * Initialization of the mutex contorl mechanism, and validates if the shared memory object is available or
+ * needs to be created.
+ * 
+ * @exception Launches a warn if the shared memory isn't available.
+ * @exception Launches an error and exits if the shared memory region isn't created.
+ * @exception Launches an error and exits if the shared memory wasn't truncated.
+ * @exception Launches an error and exits if the shared memory mapping fails.
+ * @exception Launches an error and exits if the mutex attributes init and set isn't achieved.
+ * @exception Launches an error and exits if the mutex initialization fails.
+ * @exception Launches an error and exits if the mutex attribute destruction wasn't possible.
+*/
 void init_mutex()
 {
     // Open shared object in read/write mode to check if it exists
@@ -242,9 +281,9 @@ void init_mutex()
  * Close the control mechanism (mutex) depending on the ownership and shared memory
  * 
  * @exception Launches warn if mutex isn't destroyed (in case of ownership)
- * @exception Launches error and close if unmapping wasn't achieved
- * @exception Launches error and close if file descriptor couldn't be closed
- * @exception Launches error and close if unlinkig failed (in case of ownership)
+ * @exception Launches error and closes if unmapping wasn't achieved
+ * @exception Launches error and closes if file descriptor couldn't be closed
+ * @exception Launches error and closes if unlinkig failed (in case of ownership)
 */
 void shut_mutex()
 {
