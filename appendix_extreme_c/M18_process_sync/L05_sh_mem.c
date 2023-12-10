@@ -49,6 +49,75 @@ void sh_mem_ctor(sh_mem_t* shm, const char* name, size_t size)
     else if (errno == ENOENT)
     {
         printf("WARN: Shared memory %s doesn't exist, trying creation...\n", shm->name);
-        
+        shm->shm_fd = shm_open(shm->name, O_CREAT | O_RDWR, 0600);
+        if(shm->shm_fd >= 0)
+        {
+            if(owner_process_set)
+            {
+                owner_process = 1;
+                owner_process_set = 1;
+            }
+            printf("The shared memory %s was created.\n", shm->name);
+            if(ftruncate(shm->shm_fd, shm->size) < 0)
+            {
+                fprintf(stderr, "ERROR: Couldn't truncate region %s: %s\n", shm->name, strerror(errno));
+                exit(1);
+            }
+        }
+        else
+        {
+            fprintf(stderr, "ERROR: Shared memory %s wasn't created: %s\n", shm->name, strerror(errno));
+            exit(1);
+        }
     }
+    else
+    {
+        fprintf(stderr, "ERROR: Couldn't create shared memory %s: %s\n", shm->name, strerror(errno));
+        exit(1);
+    }
+
+    shm->map_ptr = mmap(0, shm->size, PROT_READ | PROT_WRITE, MAP_SHARED, shm->shm_fd, 0);
+    if(shm->map_ptr == MAP_FAILED)
+    {
+        fprintf(stderr, "ERROR: Couldn't map region %s: %s\n", shm->name, strerror(errno));
+        exit(1);
+    }
+    shm->ptr = (char*) shm->map_ptr;
+}
+
+void shm_mem_dtor(sh_mem_t* shm)
+{
+    if (munmap(shm->map_ptr, shm->size) < 0)
+    {
+        fprintf(stderr, "ERROR: Couldn't unmap region %s: %s\n", shm->name, strerror(errno));
+        exit(1);
+    }
+    printf("Unmapping achieved for region: %s\n", shm->name);
+
+    if(close(shm->shm_fd) < 0)
+    {
+        fprintf(stderr, "ERROR: Couldn't close shared memory region %s: %s\n", shm->name, strerror(errno));
+        exit(1);
+    }
+    printf("The shared memory %s was closed succesfully", shm->name);
+
+    if(owner_process)
+    {
+        if(shm_unlink(shm->name) < 0)
+        {
+            fprintf("ERROR: Unlinking %s wasn't achieved: %s\n", shm->name, strerror(errno));
+            exit(1);
+        }
+        printf("The memory region %s was unlinked and deleted\n", shm->name);
+    }
+}
+
+char* sh_mem_getptr(sh_mem_t* shm)
+{
+    return shm->ptr;
+}
+
+__int32_t ssh_mem_isowner(sh_mem_t* shm)
+{
+    return owner_process;
 }
