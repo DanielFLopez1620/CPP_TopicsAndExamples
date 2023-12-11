@@ -21,17 +21,41 @@ typedef struct
     size_t size; // Size of the region
 } sh_mem_t;
 
+/**
+ * Generate a new shared memory object allocation 
+ * 
+ * @return Direction in memory to the allocated object.
+*/
 sh_mem_t* sh_mem_new()
 {
     return (sh_mem_t*) malloc(sizeof(sh_mem_t));
 }
 
+/**
+ * Delete and free pointer of the object and inner pointers.
+ * 
+ * @param shm Pointer to the shared memory object structure.
+*/
 void sh_mem_delete(sh_mem_t* shm)
 {
     free(shm->name);
     free(shm);
 }
 
+/**
+ * Constructor of a shared memory object
+ * 
+ * @param shm  Pointer to the shared memory object structure.
+ * @param name  Name of the shared memory region
+ * @param size  Size in bytes of the shared memory object
+ * 
+ * @return Pointer to the mapped shared memory region.
+ * 
+ * @exception Launches a warn if the shared memory object isn't available.
+ * @exception Launches an error and exits if the shared memory isn't available and couldn't be created.
+ * @exception Launches an error and exits if the region couldn't be truncated after creation.
+ * @exception Launches an error and exits if it wasn't possible to map the region
+*/
 void sh_mem_ctor(sh_mem_t* shm, const char* name, size_t size)
 {
     shm->size = size;
@@ -85,6 +109,15 @@ void sh_mem_ctor(sh_mem_t* shm, const char* name, size_t size)
     shm->ptr = (char*) shm->map_ptr;
 }
 
+/**
+ * Destructor of shared memory object
+ * 
+ * @param shm Pointer to the shared memory object
+ * 
+ * @exception Launches an error and exits if the memory region cannot be unmapped.
+ * @exception Launches an error and exits if the couldn't close the sahred memory region.
+ * @exception Launches an error and extis if the unlinking process (in case of ownership) fails.
+*/
 void shm_mem_dtor(sh_mem_t* shm)
 {
     if (munmap(shm->map_ptr, shm->size) < 0)
@@ -112,11 +145,25 @@ void shm_mem_dtor(sh_mem_t* shm)
     }
 }
 
+/**
+ * Getter of the pointer of the shared memory region.
+ * 
+ * @param shm Pointer to the shared memory object.
+ * 
+ * @return Pointer to the memory region.
+*/
 char* sh_mem_getptr(sh_mem_t* shm)
 {
     return shm->ptr;
 }
 
+/**
+ * Getter of the ownership of the shared memory object.
+ * 
+ * @param shm Pointer to the shared memory object
+ * 
+ * @return True (1) if it is owner of the region, False (0) otherwise.
+*/
 __int32_t ssh_mem_isowner(sh_mem_t* shm)
 {
     return owner_process;
