@@ -14,5 +14,5 @@ void sh_mem_ctor(struct sh_mem_t*,
 void sh_mem_dtor(struct sh_mem_t*);
 
 char* sh_mem_getptr(struct sh_mem_t*);
-int32_t sh_mem_isowner(struct sh_mem_t*);
-void sh_mem_setowner(struct sh_mem_t*, int32_t is_owner); 
+__int32_t sh_mem_isowner(struct sh_mem_t*);
+void sh_mem_setowner(struct sh_mem_t*, __int32_t is_owner); 
