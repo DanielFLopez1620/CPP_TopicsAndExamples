@@ -3,8 +3,10 @@
 
 #include <pthread.h>
 
+// Struct and types definition
 struct sh_mutex_t;
 
+// Prototypes
 struct sh_mutex_t* sh_mutex_new();
 void sh_mutex_delete(struct sh_mutex_t*);
 
