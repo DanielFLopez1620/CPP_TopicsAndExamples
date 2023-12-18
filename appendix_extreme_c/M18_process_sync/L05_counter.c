@@ -1,6 +1,8 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+#include <stdlib.h>
+
 #include "L05_sh_mem.h"
 
 // Attribute definition for shared counter
@@ -52,7 +54,7 @@ void shared_counter_ctor(shared_counter_t* shc, const char* name)
  * 
  * @param shc Pointer of the shared counter object of interest.
 */
-void shared_counter_dtor(shared_shared_counter_t* shc)
+void shared_counter_dtor(shared_counter_t* shc)
 {
     sh_mem_dtor(shc->shm);
 }
@@ -89,7 +91,7 @@ void shared_counter_setvalue_ifowner(shared_counter_t* shc, __int32_t value)
  * 
  * @return Integer value of the counter (32 bits)
 */
-__int32_t shared_counter_getvalue(struct shared_counter_t*)
+__int32_t shared_counter_getvalue(shared_counter_t* shc)
 {
     return *(shc->ptr);
 }

@@ -1,6 +1,10 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
 #include "L05_sh_mem.h"
 
 // Attributes definition
@@ -17,7 +21,7 @@ typedef struct
 */
 sh_mutex_t* sh_mutex_new()
 {
-    sh_mutex_t shx = (sh_mutex_t*)malloc(sizeof(sh_mutex_t));
+    sh_mutex_t* shx = (sh_mutex_t*)malloc(sizeof(sh_mutex_t));
     shx->shm = sh_mem_new();
     return shx;
 }
@@ -58,7 +62,7 @@ void sh_mutex_ctor(sh_mutex_t* shx, const char* name)
             fprintf(stderr, "ERROR: Could initialize the mutex %s: %s\n", name, strerror(status));
             exit(1);
         }
-        if((status = pthread_mutexattr_setshared(&mutex_attr, PTHREAD_PROCESS_SHARED)))
+        if((status = pthread_mutexattr_setpshared(&mutex_attr, PTHREAD_PROCESS_SHARED)))
         {
             fprintf(stderr, "ERROR: Failed to set mutex process (%s) as shared: %s\n", name, strerror(status));
             exit(1);

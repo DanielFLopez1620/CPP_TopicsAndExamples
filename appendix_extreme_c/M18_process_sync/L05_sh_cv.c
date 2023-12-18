@@ -1,6 +1,11 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <pthread.h>
 #include "L05_sh_mutex.h"
 #include "L05_sh_mem.h"
 
@@ -75,7 +80,7 @@ void sh_cv_ctor(sh_cv_t* shcv, const char* name)
 
         if((status = pthread_condattr_destroy(&cond_attr)))
         {
-            fprintf(sderr, "ERROR: Couldn't destroy attributes for %s: %s\n", name, strerror(status));
+            fprintf(stderr, "ERROR: Couldn't destroy attributes for %s: %s\n", name, strerror(status));
             exit(1);
         }
     }
@@ -114,7 +119,7 @@ void sh_cv_wait(sh_cv_t* shcv, struct sh_mutex_t* shx)
     int status = -1;
     if((status = pthread_cond_wait(shcv->ptr, sh_mutex_getptr(shx))))
     {
-        fprinft(stderr, "ERROR: Waiting wasn't possible for condition variable %s\n", strerror(status));
+        fprintf(stderr, "ERROR: Waiting wasn't possible for condition variable %s\n", strerror(status));
         exit(1);
     }
 }
@@ -133,7 +138,7 @@ void sh_cv_timedwait(sh_cv_t* shcv, struct sh_mutex_t* shx, long int time_check)
     struct timespec current;
     current.tv_sec = current.tv_nsec = 0;
     
-    if((status = clock_gettime(CLOCK_REALTIME,  current)))
+    if((status = clock_gettime(CLOCK_REALTIME, &current)))
     {
         fprintf(stderr, "ERROR: Current time unavailable: %s\n", strerror(errno));
         exit(1);
