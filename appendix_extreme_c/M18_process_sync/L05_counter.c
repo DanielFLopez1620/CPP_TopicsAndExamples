@@ -2,6 +2,7 @@
 // Code was tested with gcc
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "L05_sh_mem.h"
 

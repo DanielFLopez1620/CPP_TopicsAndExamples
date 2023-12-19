@@ -28,6 +28,9 @@
  *      gcc sh_mem.o counter.o sh_mx.o sh_cv.o main.o lpthread -lrt -o cv_test.out
 */
 
+#include <stdlib.h>
+#include <signal.h>
+
 // Import for using the classes implemented with OOP in C
 #include "L05_counter.h"
 #include "L05_sh_mutex.h"
