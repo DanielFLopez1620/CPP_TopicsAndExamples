@@ -1,6 +1,8 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+#include <unistd.h>
+
 struct sh_mem_t;
 
 struct sh_mem_t* sh_mem_new();

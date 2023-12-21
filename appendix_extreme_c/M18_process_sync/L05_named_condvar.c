@@ -101,7 +101,7 @@ destroy:
     sh_mutex_dtor(mx);
     sh_mutex_delete(mx);
 
-    counter_dtor(counter);
+    shared_counter_dtor(counter);
     shared_counter_delete(counter);
 
    return 0;

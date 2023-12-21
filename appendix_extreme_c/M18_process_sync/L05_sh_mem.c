@@ -60,6 +60,7 @@ void sh_mem_ctor(sh_mem_t* shm, const char* name, size_t size)
 {
     shm->size = size;
     shm->name = (char*)malloc(strlen(name) + 1); // Manually allocate string
+    strcpy(shm->name, name);
     shm->shm_fd = shm_open(shm->name, O_RDWR, 0600);
     if(shm->shm_fd >= 0)
     {
@@ -118,7 +119,7 @@ void sh_mem_ctor(sh_mem_t* shm, const char* name, size_t size)
  * @exception Launches an error and exits if the couldn't close the sahred memory region.
  * @exception Launches an error and extis if the unlinking process (in case of ownership) fails.
 */
-void shm_mem_dtor(sh_mem_t* shm)
+void sh_mem_dtor(sh_mem_t* shm)
 {
     if (munmap(shm->map_ptr, shm->size) < 0)
     {
@@ -138,7 +139,7 @@ void shm_mem_dtor(sh_mem_t* shm)
     {
         if(shm_unlink(shm->name) < 0)
         {
-            fprintf("ERROR: Unlinking %s wasn't achieved: %s\n", shm->name, strerror(errno));
+            fprintf(stderr, "ERROR: Unlinking %s wasn't achieved: %s\n", shm->name, strerror(errno));
             exit(1);
         }
         printf("The memory region %s was unlinked and deleted\n", shm->name);
@@ -164,7 +165,7 @@ char* sh_mem_getptr(sh_mem_t* shm)
  * 
  * @return True (1) if it is owner of the region, False (0) otherwise.
 */
-__int32_t ssh_mem_isowner(sh_mem_t* shm)
+__int32_t sh_mem_isowner(sh_mem_t* shm)
 {
     return owner_process;
 }

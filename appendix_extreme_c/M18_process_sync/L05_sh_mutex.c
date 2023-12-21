@@ -99,7 +99,7 @@ void sh_mutex_dtor(sh_mutex_t* shx)
         int status = -1;
         if((status = pthread_mutex_destroy(shx->ptr)))
         {
-            fprintf("WARNING: Couldn't destroy mutex: %s\n", strerror(status));
+            fprintf(stderr, "WARNING: Couldn't destroy mutex: %s\n", strerror(status));
         }
     }
     sh_mem_dtor(shx->shm);
@@ -129,7 +129,7 @@ void sh_mutex_lock(sh_mutex_t* shx)
     int status = -1;
     if ((status = pthread_mutex_lock(shx->ptr)))
     {
-        fprintf(stderr, "ERROR: Lock process failed: %s\n", strerrror(status));
+        fprintf(stderr, "ERROR: Lock process failed: %s\n", strerror(status));
         exit(1);
     }
 }
