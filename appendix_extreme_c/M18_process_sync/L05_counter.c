@@ -48,7 +48,7 @@ void shared_counter_delete(shared_counter_t* shc)
 void shared_counter_ctor(shared_counter_t* shc, const char* name)
 {
     sh_mem_ctor(shc->shm, name, sizeof(__int32_t));
-    shc->ptr;
+    shc->ptr = (__int32_t*)sh_mem_getptr(shc->shm);
 }
 
 /**

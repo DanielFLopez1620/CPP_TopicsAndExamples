@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 
 // Import for using the classes implemented with OOP in C
 #include "L05_counter.h"
@@ -38,7 +39,7 @@
 
 int signal_rv = 0;
 struct sh_cv_t* cv = NULL;
-struct sh_mutex* mx = NULL;
+struct sh_mutex_t* mx = NULL;
 
 void signal_handler(int signal);
 
@@ -55,7 +56,7 @@ int main(int argc, char const **argv)
     int goal = atol(argv[1]);
     printf("My goal is: %d\n", goal);
 
-    struct counter_t* counter = shared_counter_new();
+    struct shared_counter_t* counter = shared_counter_new();
     shared_counter_ctor(counter, "/counter0");
     shared_counter_setvalue_ifowner(counter, 1);
 
@@ -65,16 +66,22 @@ int main(int argc, char const **argv)
     cv = sh_cv_new();
     sh_cv_ctor(cv, "/cond0");
 
+    printf("Regions created succesfully\n");
+
     sh_mutex_lock(mx);
+
+    printf("Mutex locked\n");
 
     while(shared_counter_getvalue(counter) < goal)
     {
+        printf("First signal check\n");
         if(signal_rv)
         {
             break;
         }
         printf("Waiting fo signal, timeout is 5 seconds...\n");
         sh_cv_timedwait(cv, mx, 5L * 1000 * 1000 * 1000);
+        printf("Second signal check\n");
         if(signal_rv)
         {
             break;
