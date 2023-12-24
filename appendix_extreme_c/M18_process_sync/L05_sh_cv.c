@@ -152,7 +152,7 @@ void sh_cv_timedwait(sh_cv_t* shcv, struct sh_mutex_t* shx, long int time_check)
     current.tv_sec += (int)(time_check / (1000L * 1000 * 1000));
     current.tv_nsec += time_check %(1000L * 1000 * 1000);
 
-    if ((status == pthread_cond_timedwait(shcv->ptr, sh_mutex_getptr(shx), &time_check)))
+    if ((status == pthread_cond_timedwait(shcv->ptr, sh_mutex_getptr(shx), &current)))
     {
         if(status == ETIMEDOUT)
         {

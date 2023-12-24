@@ -133,7 +133,7 @@ void sh_mem_dtor(sh_mem_t* shm)
         fprintf(stderr, "ERROR: Couldn't close shared memory region %s: %s\n", shm->name, strerror(errno));
         exit(1);
     }
-    printf("The shared memory %s was closed succesfully", shm->name);
+    printf("The shared memory %s was closed succesfully\n", shm->name);
 
     if(owner_process)
     {

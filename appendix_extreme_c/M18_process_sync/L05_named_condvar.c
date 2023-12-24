@@ -66,22 +66,19 @@ int main(int argc, char const **argv)
     cv = sh_cv_new();
     sh_cv_ctor(cv, "/cond0");
 
-    printf("Regions created succesfully\n");
-
     sh_mutex_lock(mx);
-
-    printf("Mutex locked\n");
 
     while(shared_counter_getvalue(counter) < goal)
     {
-        printf("First signal check\n");
+        printf("Counter: %d", shared_counter_getvalue(counter));
+
         if(signal_rv)
         {
             break;
         }
         printf("Waiting fo signal, timeout is 5 seconds...\n");
         sh_cv_timedwait(cv, mx, 5L * 1000 * 1000 * 1000);
-        printf("Second signal check\n");
+
         if(signal_rv)
         {
             break;
@@ -96,7 +93,7 @@ int main(int argc, char const **argv)
     }
 
     shared_counter_setvalue(counter, goal + 1);
-    printf("Another turn for: %d\n", goal);
+    printf("Now turn for: %d\n", goal);
     sh_mutex_unlock(mx);
     sleep(1);
     sh_cv_broadcast(cv);
