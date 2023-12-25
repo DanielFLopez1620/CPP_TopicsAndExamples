@@ -1,10 +1,12 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+// Headers needed
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
 
+// inheritance from shared memory object (father)
 #include "L05_sh_mem.h"
 
 // Attribute definition for shared counter

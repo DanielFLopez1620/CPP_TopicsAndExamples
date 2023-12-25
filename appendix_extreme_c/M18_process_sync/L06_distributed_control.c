@@ -28,4 +28,14 @@
  * - CENTRALIZED PROCESS SYNCHORINIZATION: Uses a central process (or node) that manages the other
  *   processes (which must be in communication with the central node), the master node manages
  *   (approves) orders to enter critical sections.
+ * 
+ * - DISTRIBUTED (PEER TO PEER) PROCESS SYNCHRONIZATION: Not having a central node, which is a 
+ *   challenge, and it has different ad hoc algortihms.
 */
+
+int main(int argc, char const *argv[])
+{
+    printf("In the next module, you will learn about processes in different machines...\n");
+    printf("Do not forget the control mechism you learn here in the module 18\n");
+    return 0;
+}

@@ -5,17 +5,15 @@
 struct sh_cv_t;
 struct sh_mutex_t;
 
-// Prototypes
+// Memory management mehtod prototypes
 struct sh_cv_t* sh_cv_new();
-
 void sh_cv_delete(struct sh_cv_t*);
 
+// Constructor and destructor prototypes
 void sh_cv_ctor(struct sh_cv_t*, const char*);
-
 void sh_cv_dtor(struct sh_cv_t*);
 
+// Methods prototypes
 void sh_cv_wait(struct sh_cv_t*, struct sh_mutex_t*);
-
 void sh_cv_timedwait(struct sh_cv_t*, struct sh_mutex_t*, long int);
-
 void sh_cv_broadcast(struct sh_cv_t*);

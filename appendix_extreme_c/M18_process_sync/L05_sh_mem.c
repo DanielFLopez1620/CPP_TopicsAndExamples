@@ -1,6 +1,7 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+// Headers needed
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,9 +10,11 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
+// Global attributes
 __int32_t owner_process_set = 0;
 __int32_t owner_process = 0;
 
+// Object definition (attribtues)
 typedef struct 
 {
     char* name; // Name of the shared memory region

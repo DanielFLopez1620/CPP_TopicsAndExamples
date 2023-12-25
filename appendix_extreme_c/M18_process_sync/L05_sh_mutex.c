@@ -1,6 +1,7 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+// Headers needed
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,6 +11,7 @@
 #include <sys/mman.h>
 #include <pthread.h>
 
+// Inheritance from shared memroy object (father)
 #include "L05_sh_mem.h"
 
 // Attributes definition

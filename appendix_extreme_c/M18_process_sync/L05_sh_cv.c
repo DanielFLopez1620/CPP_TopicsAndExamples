@@ -1,6 +1,7 @@
 // BASED ON THE "EXTREM C BOOK - 1 EDITION"
 // Code was tested with gcc
 
+// Headers needed
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,10 +12,11 @@
 #include <time.h>
 #include <pthread.h>
 
+// Inheritance from shared mutex and shared memory objects
 #include "L05_sh_mutex.h"
 #include "L05_sh_mem.h"
 
-// Ttribute struc definition
+// Attribute struc definition
 typedef struct
 {
     struct sh_mem_t* shm;
@@ -139,19 +141,23 @@ void sh_cv_wait(sh_cv_t* shcv, struct sh_mutex_t* shx)
 */
 void sh_cv_timedwait(sh_cv_t* shcv, struct sh_mutex_t* shx, long int time_check)
 {
+    //INitialize status and timer
     int status = -1;
     struct timespec current;
     current.tv_sec = current.tv_nsec = 0;
     
+    // Obtain current time
     if((status = clock_gettime(CLOCK_REALTIME, &current)))
     {
         fprintf(stderr, "ERROR: Current time unavailable: %s\n", strerror(errno));
         exit(1);
     }
 
+    // Update current time in struct
     current.tv_sec += (int)(time_check / (1000L * 1000 * 1000));
     current.tv_nsec += time_check %(1000L * 1000 * 1000);
 
+    // Wait for variable condition signal to appear, assume the mutex is locked
     if ((status == pthread_cond_timedwait(shcv->ptr, sh_mutex_getptr(shx), &current)))
     {
         if(status == ETIMEDOUT)
