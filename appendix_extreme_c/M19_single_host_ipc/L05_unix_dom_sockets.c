@@ -36,6 +36,46 @@
  *   When using a LAn adrress, each node has a MAC Adress (used for link layer protocols to trasmit to the
  *   LAN ) and an IP Adress (used to make connections within the same LAN or other LANs). So, we can say
  *   that this layer connects two or more LANs which generates a mesh of networks, for example, the internet
+ *   (where you need public adresses).
+ *   Ther ei s a basic tool to guarantee connection, and it is the 'ping', it sends a number of ICMP
+ *   (Internet Control Messages Protocol) packets and if it is replayed then it is connected.
+ * 
+ *      ping 8.8.8.8 # Check ping if you are connected with internet (Public IP of Google DNS Service).
+ * 
+ * - Transport Layer: Having just the connection is pretty general, and you would want different distinct 
+ *   connections for several processes, which has its own identifiers known as 'ports'.
+ *   It can be understood as a telephone system, when a person uses a telephone, the phone is the transport
+ *   connection, and the call is only possible if the infrastructure allows it. If you want to communicate
+ *   with others, they need a phone (or a NIC for nodes) and they will get notifies (ring) when someone is 
+ *   trying to communicate with them. For communicating with someones you need his/her number (IP) and the 
+ *   language must (in most cases) be the same, or at least a protocol you know.
+ *   
+ *  For the transport, we can talk about 'connection-oriented communication'  (a dedicated channel is created
+ *  for a connector). Here, as said before, the messages are sent in fragments, if they are received in a
+ *  different order, then they are re-arranged. Moreover, if one packet get lost, the receiver can request
+ *  a resend of it. One of the most famous protocols that supports this is the Transport Control Protocol
+ *  (TCP). On the other hand, the communcation can be 'connection-less' which doesn't guarantee the
+ *  individual delivery and the sequence of them, one example is the User Datagram Protocol (UDP).
+ * 
+ *  Another important concept in this layer is the 'stream' a sequence of bytes that is transmited over
+ *  a 'connection-oriented' channel, and another one is 'datagram' which is related with 'connection-
+ *  less' communication.
+ * 
+ *  Now, let's answer the question about 'How the transport sequence is initializated?', it is different
+ *  for both communications mentioned, but they have in common that the 'listener' always bind an endpoint
+ *  (IP + Port(number of two bytes)):
+ * 
+ *  * Connection-less initialization sequences:
+ *    1) Listener bind a port of the NICs, which will end in a redirection of the packets targeted to it.
+ *    2) Process waits to read messages.
+ *    3) The listener IP adress should be known for the connector to make the connection.
+ *    4) If it is established, the connector can write to the channel and read from it.
+ * 
+ *  * Connection-oriented initialization sequences:
+ *    1) Listener bind a port of the NICs.
+ *    2) Listener configures the size of the backlog (queue of pending connections)
+ *    3) After being set the backlock, the listener enters to listening mode.
+ *    4) Listener accepts incomming connections
  * 
  * 
  * NOTE: You can use 'tracereoute' to see the routers between your computer and another computer.
