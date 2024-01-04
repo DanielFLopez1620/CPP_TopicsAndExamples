@@ -77,6 +77,23 @@
  *    3) After being set the backlock, the listener enters to listening mode.
  *    4) Listener accepts incomming connections
  * 
+ * - Application layer: When a channel is established, there should be a way to talk or communicate.
+ *   Then, it is called 'application protocol' some well-known examples are HTTP or FTP.
+ *   
+ *   The standard protocol is the OSI (Open System Interconnections), but the most used is the
+ *   Internet Protocol Suite (IPS). 
  * 
- * NOTE: You can use 'tracereoute' to see the routers between your computer and another computer.
+ * NOTE: For each layer there are prominent protocols in Link Layer (Ethernet, IEEE 802.11), 
+ * Internet Layer (IPv4, IPv6, ICMP), Transport Layer (TCP, UDP) and Application Layer (HTTP,
+ * FTP, DNS, DHCP).
+ * 
+ * NOTE: You can use 'tracereoute' to see the routers between your computer and another computer. 
+ *    
 */
+
+int main(int argc, char **argv)
+{
+    printf("Read the comments to understand about unix domain Sockets\n");
+    printf("and the different layers for communications.\n");
+    return 0;
+}
