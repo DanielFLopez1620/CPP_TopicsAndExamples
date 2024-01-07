@@ -27,10 +27,44 @@
  * - /server/srvcore: It contains the sources common for the server processes (streams or datagrams), 
  *   and all the code is in the static library file named 'libsrvcore.a'.
  * 
- * - /server/unix/stream: For using channels behind a UDS, and comes with an executable to bring the
- *   calculator service.
+ * - /server/unix/stream: For using stream channels behind a UDS, and comes with an executable to bring 
+ *   the calculator service (unix_stream_calc_server).
+ * 
+ * - /server/unix/datagram: For using datagram channels behind a UDS, the executable related is 'unix_
+ *   datagram_calc_server"
+ * 
+ * - /server/tcp: TCP network sockets for using stream channels (tcp_calc_server).
+ * 
+ * - /server/udp: UDP network sockets of using datagram channels (udp_calc_server).
+ * 
+ * - /client/clicore: Which comes from 'Client Core' and it is core for stream and datagram client
+ *   processes, so it doesn't matter if they are using UDS or network sockets. It is present in the 
+ *   'libclicore.a' library.
+ * 
+ * - /client/unix/stream: Specific client that uses stream channels with UDS (unix_stream_calc_client 
+ *   is the executable).
+ * 
+ * - /client/unix/datagram: Specific client that uses datagram channels with UDS (the executable is
+ *   unix_datagram_calc_client).
+ * 
+ * - /client/tcp: Client program that uses stream channels with TCP Sockets (tcp_calc_client).
+ * 
+ * - /client/udp: Client program that uses datagram channels with UDP socket (udp_calc_client).
  *  
- * NOTE: The most important part is complete application protocol, so it allows you the communication
+ * Finally, for building the project, you will need cmake, you will learn of this tool in the future,
+ * for now, just execute the next commands:
+ * 
+ *      cd ch20-socket-programming
+ *      mkdir -p build
+ *      cmake ..
+ *      make
+ * 
+ * And for executing it, you can run (in the case of client with UDS):
+ * 
+ *      cd ch20-socket-programming
+ *      ./client/unix/strem/unix_stream_calc_client
+ * 
+ * NOTE: The most important part is the complete application protocol, so it allows you the communication
  * between the two parts.
  * 
 */
