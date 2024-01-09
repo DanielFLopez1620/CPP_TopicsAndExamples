@@ -67,6 +67,13 @@
  * NOTE: The most important part is the complete application protocol, so it allows you the communication
  * between the two parts.
  * 
+ * TROUBLESHOOTING:
+ * 
+ * - If you got the error: "#include <cmocka.h> not found" or related, install the package in 
+ *   Ubuntu with the next command:
+ *      sudo apt-get install -y libcmocka-dev
+ * 
+ * WHEN READ: Begin your journey in the /calser/calc_proto_req.h
 */
 
 int main(int argc, char **argv)
