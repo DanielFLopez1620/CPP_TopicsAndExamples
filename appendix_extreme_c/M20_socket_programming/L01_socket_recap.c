@@ -73,7 +73,7 @@
  *   Ubuntu with the next command:
  *      sudo apt-get install -y libcmocka-dev
  * 
- * WHEN READ: Begin your journey in the /calser/calc_proto_req.h
+ * WHEN READY: Begin your journey in the /calser/calc_proto_req.h
 */
 
 int main(int argc, char **argv)

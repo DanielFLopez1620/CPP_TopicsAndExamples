@@ -25,7 +25,7 @@
  *      
  *    <ID>#<Method>#<operand1>#<operand2>$  ,for example, 1620#MUL#16#20$
  * 
- * WHEN READ: Continue with the code of /calcser/clac_proto_resp.h.
+ * WHEN READY: Continue with the code of /calcser/clac_proto_resp.h.
 */
 
 // Custom enumeration for methods

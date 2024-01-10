@@ -7,8 +7,8 @@
 
 #define FIELD_COUNT_PER_REQ_MESSAGE 4
 #define FIELD_COUNT_PER_RESP_MESSAGE 3
-#define MESSAGE_DELIMITER '$'
-#define FIELD_DELIMITER '#'
+#define MESSAGE_DELIMITER '$' // Used for separation of attributes inside a message
+#define FIELD_DELIMITER '#' // Used for separation of different messages.s
 
 struct calc_proto_ser_t {
   char* ring_buf;
@@ -174,8 +174,18 @@ void _parse_resp_and_notify(struct calc_proto_ser_t* ser) {
   ser->resp_cb(ser->context, resp);
 }
 
+/**
+ * Private deserialization function
+ * 
+ * @param ser Pointer to serialization object in use
+ * @param buff Buffer that contains the serialized message.
+ * @param func Pointer to the function paser_and_notify_func_t
+ * @param error_code Feed a error code to consider
+ * @param found Boolean flag to check the request.
+*/
 void _deserialize(struct calc_proto_ser_t* ser, struct buffer_t buff,
-    parse_and_notify_func_t func, int error_code, bool_t* found) {
+    parse_and_notify_func_t func, int error_code, bool_t* found) 
+{
   if (buff.len > ser->buf_len) {
       if (ser->error_cb) {
         ser->error_cb(ser->context, -1, error_code);
@@ -257,35 +267,64 @@ void calc_proto_ser_set_resp_callback(struct calc_proto_ser_t* ser, resp_cb_t re
 void calc_proto_ser_set_error_callback(struct calc_proto_ser_t* ser, error_cb_t error_cb) {
   ser->error_cb = error_cb;
 }
-
+/**
+ * Function for response deserialization
+ * 
+ * @param ser Pointer to the serialization object in use
+ * @param buff Buffer that contains the serialized message of interest.
+ * @param req_found Boolean flag to check for valid request
+ * 
+*/
 void calc_proto_ser_server_deserialize(
     struct calc_proto_ser_t* ser,
     struct buffer_t buff,
-    bool_t* req_found) {
-  if (req_found) {
+    bool_t* req_found) 
+{
+  if (req_found) 
+  {
     *req_found = FALSE;
   }
+
+  // Deserialization process by
   _deserialize(ser, buff, _parse_req_and_notify,
           ERROR_INVALID_REQUEST, req_found);
 }
 
+/**
+ * Function for response serialization
+ * 
+ * @param ser Pointer to serialization object in use.
+ * @param resp Pointer to a response objectec that needs to be serialized.
+ * 
+ * @return Serialized message that implements the message and field delimitator.
+*/
 struct buffer_t calc_proto_ser_server_serialize(
     struct calc_proto_ser_t* ser,
-    const struct calc_proto_resp_t* resp) {
-  struct buffer_t buff;
-  char resp_result_str[64];
-  _serialize_double(resp_result_str, resp->result);
-  buff.data = (char*)malloc(64 * sizeof(char));
-  sprintf(buff.data, "%d%c%d%c%s%c", resp->req_id,
-          FIELD_DELIMITER, (int)resp->status, FIELD_DELIMITER,
+    const struct calc_proto_resp_t* resp) 
+{
+    // Create buffer
+    struct buffer_t buff;
+    char resp_result_str[64];
+    
+    // Get response and reserve memory (use private function for double serialization)
+    _serialize_double(resp_result_str, resp->result);
+    buff.data = (char*)malloc(64 * sizeof(char));
+
+    // Sends string (formatted) by using a pointer (like a print that goes to a str)
+    sprintf(buff.data, "%d%c%d%c%s%c", resp->req_id,
+            FIELD_DELIMITER, (int)resp->status, FIELD_DELIMITER,
       resp_result_str, MESSAGE_DELIMITER);
-  buff.len = strlen(buff.data);
-  return buff;
+
+    // Update length
+    buff.len = strlen(buff.data);
+    return buff;
 }
+
 
 void calc_proto_ser_client_deserialize(
     struct calc_proto_ser_t* ser,
-    struct buffer_t buff, bool_t* resp_found) {
+    struct buffer_t buff, bool_t* resp_found) 
+{
   if (resp_found) {
     *resp_found = FALSE;
   }

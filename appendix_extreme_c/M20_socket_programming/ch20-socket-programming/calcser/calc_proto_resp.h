@@ -12,7 +12,23 @@
  * The status here is needed to identify if the processes has been finished or if there something
  * else you need to do.
  * 
- * WHEN READ: Go to the code
+ * So the response declaration should be:
+ * 
+ *    #include "calc_prot_resp.h"
+ *    ...
+ *        struct calc_proto_resp_resp resp;
+ *        resp.req_id = 1620;
+ *        resp.status = STATUS_OK;
+ *        resp.result = 320;
+ *    ...
+ * 
+ * And the respect serialization (that uses # as field delimitator and $ as message delimitator" 
+ * should be:
+ * 
+ *    <req_id>#<status_num>#<result>$ --> 1620#0#320$
+ * 
+ * WHEN READY: Go to the code 'calc_proto_ser_t', as we will move to the serialization process.
+ * 
 */
 #include <stdint.h>
 
