@@ -7,94 +7,166 @@
 
 #define FIELD_COUNT_PER_REQ_MESSAGE 4
 #define FIELD_COUNT_PER_RESP_MESSAGE 3
-#define MESSAGE_DELIMITER '$' // Used for separation of attributes inside a message
-#define FIELD_DELIMITER '#' // Used for separation of different messages.s
+#define MESSAGE_DELIMITER '$' // Used for separation of different message
+#define FIELD_DELIMITER '#' // Used for separation of attributes inside a message
 
+// Structure that defines attributes for serialization/deserialization process
 struct calc_proto_ser_t {
   char* ring_buf;
-  int buf_len;
-  int curr_idx;
-  int start_idx;
-  error_cb_t error_cb;
-  req_cb_t req_cb;
-  resp_cb_t resp_cb;
-  void* context;
+  int buf_len;         // Lenght of message
+  int curr_idx;        // Current index of buffer
+  int start_idx;       // Start index of the buffer
+  error_cb_t error_cb; // Error callback
+  req_cb_t req_cb;     // Request callback
+  resp_cb_t resp_cb;   // Response callback
+  void* context;       // Pointer to function for contextual operation
 };
 
 typedef void (*parse_and_notify_func_t)(struct calc_proto_ser_t* ser);
 
-bool_t _parse_int(const char* str,  int* num) {
-  if (sscanf(str, "%d", num) == 1) {
+
+/**
+ * Private function to parse a int to a string or char array
+ * 
+ * @param str Char array or string to store the number converted
+ * @param Pointer to int variable to convert.
+ * 
+ * @return TRUE if the convertion is achieved
+*/
+bool_t _parse_int(const char* str,  int* num) 
+{
+  // sscanf reads formatted input from a string, and returns 1 if the reading was achieved
+  // %d as if it was in a print, indicates an integer.
+  if (sscanf(str, "%d", num) == 1) 
+  {
     return TRUE;
   }
   return FALSE;
 }
 
-bool_t _parse_double(const char* str, double* num) {
-  if (sscanf(str, "%lf", num) == 1) {
+
+/**
+ * Private function to parse a double to a string or char array
+ * 
+ * @param str Char array or string to store number converted
+ * @param num Pointer to double variable to convert.
+ * 
+ * @return TRUE if the convertion is achieved
+*/
+bool_t _parse_double(const char* str, double* num) 
+{
+  // sscanf reads formatted input from a string, and returns 1 if the reading was achieved
+  // %lf comes from long float which is equivalent to double in this case
+  if (sscanf(str, "%lf", num) == 1) 
+  {
     return TRUE;
   }
   return FALSE;
 }
 
-void _serialize_double(char* str, double num) {
+/**
+ * Private function to serialize a double number for message sending
+ * 
+ * @param str Destination string/char array to store serialized number
+ * @param num Double value to serialize
+*/
+void _serialize_double(char* str, double num) 
+{
   char tmp[64];
+
+  // sprintf sends formatted value to string or char array,
+  // in this case $lf refers to long float values (doubles).
   sprintf(tmp, "%lf", num);
+
+  // Make a copy to the returned value by pointer
   strcpy(str, tmp);
+
+  // Add termitation character to the string (\0)
   int i = strlen(str) - 1;
   while (str[i] == '0' && i >= 0) i--;
   if (i >= 0) str[i + 1] = '\0';
   if (i >= 0 && str[i] == '.') str[i] = '\0';
 }
 
-bool_t _is_buffer_full(struct calc_proto_ser_t* ser) {
-  if (ser->start_idx < 0) {
+/**
+ * Private function for checking if buffer still has space left.
+ * 
+ * @param ser Pointer to serialization object in use
+ * 
+ * @return FALSE if the buffer isn't full, TRUE otherwise
+*/
+bool_t _is_buffer_full(struct calc_proto_ser_t* ser) 
+{
+  if (ser->start_idx < 0) 
+  {
     return FALSE;
   }
+
+  // If the assert result in true, it does nothing. Otherwise, sends an error by using stderr
   assert(ser->start_idx != ser->curr_idx);
-  if (ser->start_idx < ser->curr_idx) {
+
+  // Validates that the current index is further that the start index, then calculates the lenght of both
+  // and finally, it is compared to the buffer lenght to determinate if it is full
+  if (ser->start_idx < ser->curr_idx) 
+  {
     return (ser->curr_idx - ser->start_idx) == (ser->buf_len - 1);
   }
   return (ser->start_idx - ser->curr_idx) == 1;
 }
 
+/**
+ * 
+*/
 bool_t _parse_fields(struct calc_proto_ser_t* ser, char** fields,
-    int field_count, int error_code) {
+    int field_count, int error_code) 
+{
   int end_idx = ser->curr_idx;
   int idx = ser->start_idx;
   char *ptr = ser->ring_buf + ser->start_idx;
   int field_idx = 0;
-  while (field_idx < field_count) {
+  while (field_idx < field_count) 
+  {
     fields[field_idx] = ptr;
-    while (*ptr != FIELD_DELIMITER) {
-        if (idx == end_idx) {
+    while (*ptr != FIELD_DELIMITER) 
+    {
+        if (idx == end_idx) 
+        {
           break;
         }
-        if (idx == (ser->buf_len - 1)) {
+        if (idx == (ser->buf_len - 1)) 
+        {
           idx = 0;
         }
         ptr++; idx++;
     }
-    if (field_idx < (field_count - 1)) {
-      if (*ptr != FIELD_DELIMITER) {
+    
+    if (field_idx < (field_count - 1)) 
+    {
+      if (*ptr != FIELD_DELIMITER) 
+      {
         if (ser->error_cb) ser->error_cb(ser->context, -1, error_code);
         return FALSE;
       }
       *ptr = '\0'; ptr++; idx++;
-    } else {
-      if (*ptr != MESSAGE_DELIMITER) {
+    } else 
+    {
+      if (*ptr != MESSAGE_DELIMITER) 
+      {
         if (ser->error_cb) ser->error_cb(ser->context, -1, error_code);
         return FALSE;
       }
       *ptr = '\0';
       assert(idx == end_idx);
-      if (idx != end_idx) {
+      if (idx != end_idx) 
+      {
         if (ser->error_cb) ser->error_cb(ser->context, -1, error_code);
         return FALSE;
       }
     }
     field_idx++;
   }
+
+  // Checks if all the index has been passed.
   assert(field_idx == field_count);
   return TRUE;
 }
