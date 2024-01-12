@@ -17,9 +17,9 @@ struct calc_proto_ser_t {
   int curr_idx;        // Current index of buffer
   int start_idx;       // Start index of the buffer
   error_cb_t error_cb; // Error callback
-  req_cb_t req_cb;     // Request callback
-  resp_cb_t resp_cb;   // Response callback
-  void* context;       // Pointer to function for contextual operation
+  req_cb_t req_cb;     // Request callback (to validate or check for errors)
+  resp_cb_t resp_cb;   // Response callback (to validate or check for errors)
+  void* context;       // Pointer contextual operation (response/request)
 };
 
 typedef void (*parse_and_notify_func_t)(struct calc_proto_ser_t* ser);
@@ -115,7 +115,15 @@ bool_t _is_buffer_full(struct calc_proto_ser_t* ser)
 }
 
 /**
+ * Private function taht validates that the message serialization structure is followed and can
+ * be used for the communication.
  * 
+ * @param ser Pointer to serialization object in use
+ * @param fields Double pointer to recognition of fields
+ * @param field_count Number of fields to be a valid serialization (vary according response/request)
+ * @param error_code Integer value needed for error handling.
+ * 
+ * @return TRUE if serialization is valid, FALSE otherwise.
 */
 bool_t _parse_fields(struct calc_proto_ser_t* ser, char** fields,
     int field_count, int error_code) 
@@ -124,37 +132,52 @@ bool_t _parse_fields(struct calc_proto_ser_t* ser, char** fields,
   int idx = ser->start_idx;
   char *ptr = ser->ring_buf + ser->start_idx;
   int field_idx = 0;
+
+  // Loop for validation of correct number of fields
   while (field_idx < field_count) 
   {
+    // Generate and array of fields, ptr will be the guide pointer for the process of replacing
     fields[field_idx] = ptr;
+
+    // Loop for detecting field delimiters
     while (*ptr != FIELD_DELIMITER) 
     {
         if (idx == end_idx) 
         {
+          // If end is reached with no delimiters found, exits and will rise future error.
           break;
         }
         if (idx == (ser->buf_len - 1)) 
         {
+          // Restart index for checking again.
           idx = 0;
         }
         ptr++; idx++;
     }
     
+    // Validate index and check that no extra fields passes
     if (field_idx < (field_count - 1)) 
     {
       if (*ptr != FIELD_DELIMITER) 
       {
+        // Raise error if the field delimiter isn't found
         if (ser->error_cb) ser->error_cb(ser->context, -1, error_code);
         return FALSE;
       }
+
+      // Replace delimiter with end of line, so it ends char array
       *ptr = '\0'; ptr++; idx++;
-    } else 
+    } 
+    else 
     {
       if (*ptr != MESSAGE_DELIMITER) 
       {
+        // Raise error if the message delimiter isn't found at the end of the message
         if (ser->error_cb) ser->error_cb(ser->context, -1, error_code);
         return FALSE;
       }
+
+      // Replace delimitater with end of line and check the message length
       *ptr = '\0';
       assert(idx == end_idx);
       if (idx != end_idx) 
@@ -171,78 +194,137 @@ bool_t _parse_fields(struct calc_proto_ser_t* ser, char** fields,
   return TRUE;
 }
 
-void _parse_req_and_notify(struct calc_proto_ser_t* ser) {
+/**
+ * Function that parse and check serialization for a request, while preventing the invalid ones.
+ * 
+ * @param ser Pointer to the serialization object in use.
+*/
+void _parse_req_and_notify(struct calc_proto_ser_t* ser) 
+{
+  // Generate pointer of char arrays to fill and identify message fields
   char* fields[FIELD_COUNT_PER_REQ_MESSAGE];
-  if (!_parse_fields(ser, fields, FIELD_COUNT_PER_REQ_MESSAGE, ERROR_INVALID_REQUEST)) {
+
+  // Call parse function with special configuration for req.
+  if (!_parse_fields(ser, fields, FIELD_COUNT_PER_REQ_MESSAGE, ERROR_INVALID_REQUEST)) 
+  {
     return;
   }
+
+  // Create and start filling structure of request
   struct calc_proto_req_t req;
-  if (!_parse_int(fields[0], &req.id)) {
-    if (ser->error_cb) {
+
+  // Update attribute of request id.
+  if (!_parse_int(fields[0], &req.id)) 
+  {
+    if (ser->error_cb) 
+    {
       ser->error_cb(ser->context, -1, ERROR_INVALID_REQUEST_ID);
       return;
     }
   }
+
+  // Update attribute of method (and check if it is valid)
   req.method = str_to_method(fields[1]);
-  if (req.method == NONE) {
-    if (ser->error_cb) {
+  if (req.method == NONE) 
+  {
+    if (ser->error_cb) 
+    {
       ser->error_cb(ser->context, req.id, ERROR_INVALID_REQUEST_METHOD);
       return;
     }
   }
-  if (!_parse_double(fields[2], &req.operand1)) {
-    if (ser->error_cb) {
+
+  // Update attributes related with operands
+  if (!_parse_double(fields[2], &req.operand1)) 
+  {
+    if (ser->error_cb) 
+    {
       ser->error_cb(ser->context, req.id, ERROR_INVALID_REQUEST_OPERAND1);
       return;
     }
   }
-  if (!_parse_double(fields[3], &req.operand2)) {
+  if (!_parse_double(fields[3], &req.operand2)) 
+  {
     if (ser->error_cb) {
       ser->error_cb(ser->context, req.id, ERROR_INVALID_REQUEST_OPERAND2);
       return;
     }
   }
-  if (!ser->req_cb) {
+
+  // Final check of request
+  if (!ser->req_cb) 
+  {
     fprintf(stderr, "Request callback is not set!\n");
     return;
   }
+
+  // Update request in serialization object
   ser->req_cb(ser->context, req);
 }
 
-void _parse_resp_and_notify(struct calc_proto_ser_t* ser) {
+/**
+ * Function that parse and check serialization for a response, while preventing invalid ones.
+ * 
+ * @param ser Pointer to serializatio object in use.
+*/
+void _parse_resp_and_notify(struct calc_proto_ser_t* ser) 
+{
+  // Generate array of pointer to char arrays that fits with response fields
   char* fields[FIELD_COUNT_PER_RESP_MESSAGE];
-  if (!_parse_fields(ser, fields, FIELD_COUNT_PER_RESP_MESSAGE, ERROR_INVALID_RESPONSE)) {
+
+  // Parse and check responses
+  if (!_parse_fields(ser, fields, FIELD_COUNT_PER_RESP_MESSAGE, ERROR_INVALID_RESPONSE)) 
+  {
     return;
   }
+
+  // Define response and start filling process
   struct calc_proto_resp_t resp;
-  if (!_parse_int(fields[0], &resp.req_id)) {
+
+  // Update attribute of request id
+  if (!_parse_int(fields[0], &resp.req_id)) 
+  {
     if (ser->error_cb) {
       ser->error_cb(ser->context, 0, ERROR_INVALID_RESPONSE_REQ_ID);
       return;
     }
   }
-  if (!_parse_int(fields[1], &resp.status)) {
-    if (ser->error_cb) {
+
+  // Update attribute of status
+  if (!_parse_int(fields[1], &resp.status)) 
+  {
+    if (ser->error_cb) 
+    {
       ser->error_cb(ser->context, resp.req_id, ERROR_INVALID_RESPONSE_STATUS);
       return;
     }
   }
-  if (resp.status > 4) {
-    if (ser->error_cb) {
+
+  // Check if status is valid to continue
+  if (resp.status > 4) 
+  {
+    if (ser->error_cb) 
+    {
       ser->error_cb(ser->context, resp.req_id, ERROR_INVALID_RESPONSE_STATUS);
       return;
     }
   }
+
+  // Update attribute of result (in case of valid status)
   if (!_parse_double(fields[2], &resp.result)) {
     if (ser->error_cb) {
       ser->error_cb(ser->context, resp.req_id, ERROR_INVALID_RESPONSE_RESULT);
       return;
     }
   }
+
+  // Final check to determinate if response is set
   if (!ser->resp_cb) {
     fprintf(stderr, "Response callback is not set!\n");
     return;
   }
+
+  // Update response in serialization object
   ser->resp_cb(ser->context, resp);
 }
 
