@@ -380,15 +380,35 @@ void _deserialize(struct calc_proto_ser_t* ser, struct buffer_t buff,
   }
 }
 
-struct calc_proto_ser_t* calc_proto_ser_new() {
+/**
+ * Manual allocator of new srialization objects
+ * 
+ * @return Address of the allocated objects
+*/
+struct calc_proto_ser_t* calc_proto_ser_new() 
+{
   return (struct calc_proto_ser_t*)malloc(sizeof(struct calc_proto_ser_t));
 }
 
-void calc_proto_ser_delete(struct calc_proto_ser_t* ser) {
+/**
+ * Delete serialization object
+ * 
+ * @param Pointer to serialization object to free and delete
+*/
+void calc_proto_ser_delete(struct calc_proto_ser_t* ser) 
+{
   free(ser);
 }
 
-void calc_proto_ser_ctor(struct calc_proto_ser_t* ser, void* context, int ring_buffer_size) {
+/**
+ * Constructor of serialization object.
+ * 
+ * @param ser Serialization object in use
+ * @param context Generic pointer that specifies context (related with req/res)
+ * @param ring_buffer_size Define buffer size (num of character)
+*/
+void calc_proto_ser_ctor(struct calc_proto_ser_t* ser, void* context, int ring_buffer_size) 
+{
   ser->buf_len = ring_buffer_size;
   ser->ring_buf = (char*)malloc(ser->buf_len * sizeof(char));
 
@@ -402,23 +422,56 @@ void calc_proto_ser_ctor(struct calc_proto_ser_t* ser, void* context, int ring_b
   ser->context = context;
 }
 
-void calc_proto_ser_dtor(struct calc_proto_ser_t* ser) {
+/**
+ * Destructor of serialization objects
+ * 
+ * @param ser Pointer to serialization object in use.
+*/
+void calc_proto_ser_dtor(struct calc_proto_ser_t* ser) 
+{
   free(ser->ring_buf);
 }
 
-void* calc_proto_ser_get_context(struct calc_proto_ser_t* ser) {
+/**
+ * Getter of context
+ * 
+ * @param ser Pointer to serialization object in use
+*/
+void* calc_proto_ser_get_context(struct calc_proto_ser_t* ser) 
+{
   return ser->context;
 }
 
-void calc_proto_ser_set_req_callback(struct calc_proto_ser_t* ser, req_cb_t req_cb) {
+/**
+ * Setter for request callback
+ * 
+ * @param ser Pointer to serialization object in use.
+ * @param req_cb Value to update for request management
+*/
+void calc_proto_ser_set_req_callback(struct calc_proto_ser_t* ser, req_cb_t req_cb) 
+{
   ser->req_cb = req_cb;
 }
 
-void calc_proto_ser_set_resp_callback(struct calc_proto_ser_t* ser, resp_cb_t resp_cb) {
+/**
+ * Setter for response callback
+ * 
+ * @param ser Pointer to serialization object in use
+ * @param resp_cb Value to to update for response management
+*/
+void calc_proto_ser_set_resp_callback(struct calc_proto_ser_t* ser, resp_cb_t resp_cb) 
+{
   ser->resp_cb = resp_cb;
 }
 
-void calc_proto_ser_set_error_callback(struct calc_proto_ser_t* ser, error_cb_t error_cb) {
+/**
+ * Setter for error callback
+ * 
+ * @param ser Pointer to serialization object in use
+ * @param error_cb Value of error or macro to update in the object
+*/
+void calc_proto_ser_set_error_callback(struct calc_proto_ser_t* ser, error_cb_t error_cb) 
+{
   ser->error_cb = error_cb;
 }
 /**
@@ -474,31 +527,56 @@ struct buffer_t calc_proto_ser_server_serialize(
     return buff;
 }
 
-
+/**
+ * Deserialization function for messages
+ * 
+ * @param ser Pointer to the serialization object in use
+ * @param buff Buffer to deserialize messages
+ * @param resp_found Flag to update that response was found
+*/
 void calc_proto_ser_client_deserialize(
     struct calc_proto_ser_t* ser,
     struct buffer_t buff, bool_t* resp_found) 
 {
-  if (resp_found) {
+  if (resp_found) 
+  {
     *resp_found = FALSE;
   }
   _deserialize(ser, buff, _parse_resp_and_notify,
           ERROR_INVALID_RESPONSE, resp_found);
 }
 
+/**
+ * Function for serialization of message that follows base structure.
+ * 
+ * @param ser Pointer to serialization object in use
+ * @param req Pointer to request made
+ * 
+ * @return Buffer object that includes serialized message
+*/
 struct buffer_t calc_proto_ser_client_serialize(
     struct calc_proto_ser_t* ser,
-    const struct calc_proto_req_t* req) {
+    const struct calc_proto_req_t* req) 
+{
+  // Base declaration
   struct buffer_t buff;
   char req_op1_str[64];
   char req_op2_str[64];
+
+  // Convert double values to valid strings for serialization
   _serialize_double(req_op1_str, req->operand1);
   _serialize_double(req_op2_str, req->operand2);
+
+  // Manual allocation for string with max of 64 characters
   buff.data = (char*)malloc(64 * sizeof(char));
+
+  // Update formatted string to generate serialization with the proper structure
   sprintf(buff.data, "%d%c%s%c%s%c%s%c", req->id, FIELD_DELIMITER,
           method_to_str(req->method), FIELD_DELIMITER,
           req_op1_str, FIELD_DELIMITER, req_op2_str,
           MESSAGE_DELIMITER);
+
+  // Update buffer and return
   buff.len = strlen(buff.data);
   return buff;
 }

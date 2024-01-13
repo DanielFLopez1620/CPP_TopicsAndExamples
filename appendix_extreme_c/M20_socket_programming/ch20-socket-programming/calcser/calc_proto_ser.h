@@ -11,6 +11,12 @@
  * - Other for receiving aresponse that has been deserialized.
  * - Another for receiving errors when the process fails.s
  * 
+ * Go to the source code of teh implementations, and read the comments of the function to follow the
+ * idea of the protocol.
+ * 
+ * WHEN READY: You can also check the test code and more on the request, but if you want to continue
+ * go to the /calcsv directory and start with the 'calc_service.c", keep in mind that the test aren't
+ * explained as they aren't the focues of this module.
 */
 
 #include <types.h>

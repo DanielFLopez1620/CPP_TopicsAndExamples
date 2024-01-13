@@ -27,7 +27,7 @@
  * 
  *    <req_id>#<status_num>#<result>$ --> 1620#0#320$
  * 
- * WHEN READY: Go to the code 'calc_proto_ser_t', as we will move to the serialization process.
+ * WHEN READY: Go to the code 'calc_proto_ser.c/.h', as we will move to the serialization process.
  * 
 */
 #include <stdint.h>

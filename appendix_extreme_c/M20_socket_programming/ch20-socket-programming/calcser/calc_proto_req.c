@@ -12,7 +12,15 @@ static char MUL_STR[]    = "MUL";
 static char MULM_STR[]   = "MULM";
 static char DIV_STR[]    = "DIV";
 
-method_t str_to_method(const char* str) {
+/**
+ * Function to make a valid convertion of the method
+ * 
+ * @param str Method to convert
+ * 
+ * @return Valid operation to pass to requests
+*/
+method_t str_to_method(const char* str) 
+{
   if (!strcmp(str, GETMEM_STR)) return GETMEM;
   if (!strcmp(str, RESMEM_STR)) return RESMEM;
   if (!strcmp(str, ADD_STR   )) return ADD;
@@ -25,8 +33,17 @@ method_t str_to_method(const char* str) {
   return 0;
 }
 
-const char* method_to_str(method_t method) {
-  switch (method) {
+/**
+ * Function to make a valid convertion from method to string
+ * 
+ * @param method Raw method to convert
+ * 
+ * @return Char array or string with the method interpreted
+*/
+const char* method_to_str(method_t method) 
+{
+  switch (method) 
+  {
     case GETMEM: return GETMEM_STR;
     case RESMEM: return RESMEM_STR;
     case ADD:    return ADD_STR;
