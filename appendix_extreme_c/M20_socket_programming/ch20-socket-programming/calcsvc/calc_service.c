@@ -4,7 +4,8 @@
 
 /**
  * When you are ready and understand this part, you can go to the part that talks about unix domain
- * sockets, the first file to check is: ""
+ * sockets, the first file to check is: "/server/unix/stream/main.c" as we will begin with the
+ * stream server.
 */
 
 // Attribute structure for the service
