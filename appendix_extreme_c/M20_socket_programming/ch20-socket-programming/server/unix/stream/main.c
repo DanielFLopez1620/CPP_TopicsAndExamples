@@ -76,11 +76,11 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  // ----------- 4. Start accepting clients ---------
+  // ----------- 4. Start accepting clients -------------------------------------------
   accept_forever(server_sd);
+  //NOTE: accept_forever is a blocking function, so the main would never stop
 
   // If you need to accept clients one by one, you can follow the next implementation:
-
   // while(1)
   // {
   //   int client_sd = accept(server_sd, NULL, NULL);
