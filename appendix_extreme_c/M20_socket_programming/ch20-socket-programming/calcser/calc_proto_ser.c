@@ -340,18 +340,29 @@ void _parse_resp_and_notify(struct calc_proto_ser_t* ser)
 void _deserialize(struct calc_proto_ser_t* ser, struct buffer_t buff,
     parse_and_notify_func_t func, int error_code, bool_t* found) 
 {
-  if (buff.len > ser->buf_len) {
-      if (ser->error_cb) {
+  // Check if size of buffer is longer that the expected
+  if (buff.len > ser->buf_len) 
+  {
+      if (ser->error_cb) 
+      {
         ser->error_cb(ser->context, -1, error_code);
       }
       return;
   }
+
+  // Iteration to check overflow
   bool_t overflow = FALSE;
   int i = 0;
-  for (; i < buff.len; i++) {
+  for (; i < buff.len; i++) 
+  {
+    // Update value with buffer
     ser->ring_buf[ser->curr_idx] = buff.data[i];
-    if (_is_buffer_full(ser)) {
-      if (ser->error_cb) {
+
+    // Check if start index is less than the initial position
+    if (_is_buffer_full(ser)) 
+    {
+      if (ser->error_cb) 
+      {
         ser->error_cb(ser->context, -1, error_code);
       }
       overflow = TRUE;
@@ -359,19 +370,26 @@ void _deserialize(struct calc_proto_ser_t* ser, struct buffer_t buff,
       ser->start_idx = -1;
       break;
     }
+    // Check if it is end of message
     if (ser->ring_buf[ser->curr_idx] == MESSAGE_DELIMITER &&
-        ser->start_idx >= 0) {
-      if (found) {
+        ser->start_idx >= 0) 
+    {
+      // Update status of request/response found, then parse and notify
+      if (found) 
+      {
         *found = TRUE;
       }
       func(ser);
       ser->start_idx = -1;
-    } else if (ser->ring_buf[ser->curr_idx] != MESSAGE_DELIMITER &&
-               ser->start_idx < 0) {
+    } 
+    else if (ser->ring_buf[ser->curr_idx] != MESSAGE_DELIMITER &&
+               ser->start_idx < 0)
+    {
       ser->start_idx = ser->curr_idx;
     }
     ser->curr_idx++;
-    if (ser->curr_idx == ser->buf_len) {
+    if (ser->curr_idx == ser->buf_len) 
+    {
       ser->curr_idx = 0;
     }
   }
@@ -529,7 +547,7 @@ struct buffer_t calc_proto_ser_server_serialize(
 
 /**
  * Deserialization function for messages
- * 
+ * calc_proto_ser_server_deserialize
  * @param ser Pointer to the serialization object in use
  * @param buff Buffer to deserialize messages
  * @param resp_found Flag to update that response was found

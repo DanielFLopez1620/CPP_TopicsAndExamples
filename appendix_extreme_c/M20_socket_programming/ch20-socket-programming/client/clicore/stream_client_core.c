@@ -10,6 +10,17 @@
 #include "common_client_core.h"
 
 /**
+ * The client will only have one serializer, as it is the oppositive of the server where every
+ * client has its one separated serializer object.
+ * 
+ * Also, threads would be needed to read and avoid the blocking process with a sperate flow of
+ * execution, the thread will read client's command line by recieving inputs provided by the user
+ * using the terminal.
+ * 
+ * WHEN READY: Go to the code /server/unix/datagram/main.c
+*/
+
+/**
  * Reader of the buffer to check if it is valid to be serialized
  * 
  * @param obj Generic pointer to context obj
