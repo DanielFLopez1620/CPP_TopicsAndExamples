@@ -15,39 +15,77 @@
 #include "datagram_server_core.h"
 
 /**
+ * The datagram server would be a single-threaded program as it only receives a
+ * datagram, deserialize the conent, handle the request and then serialize the
+ * response to send it to a new datagram which is going to be send.
  * 
+ * The key in the communication is, that after serialization, the function
+ * 'sendto' is used.
+ * 
+ * Finally, if you remember the file server/srvcore/datagram_server_core.c, 
+ * there you can find a function used called 'datgram_client_loop' which is
+ * pretty similiar to the one implemented in the stream, but as it was stated
+ * earlier, the change is defined with the usage of 'recvfrom' and 'sendto'
+ * functions
+ * 
+ * WHEN READY: Go to the file server/tcp/main.c as we will cover the network 
+ * sockets.
 */
 
+/**
+ * Client attribute structure, related with the socket file descriptor infos
+*/
 struct client_addr_t {
   int server_sd;
   struct sockaddr* sockaddr;
   socklen_t socklen;
 };
 
+
+/**
+ * Write response by using datagram
+ * 
+ * @param context Pointer to the client context (including socket info)
+ * @param resp Pointer to response object to write and send
+*/
 void datagram_write_resp(struct client_context_t* context,
-        struct calc_proto_resp_t* resp) {
+        struct calc_proto_resp_t* resp) 
+{
+  // Serialize response obtained and check if it was done correctly
   struct buffer_t buf =
       calc_proto_ser_server_serialize(context->ser, resp);
-  if (buf.len == 0) {
+  if (buf.len == 0) 
+  {
     close(context->addr->server_sd);
     fprintf(stderr, "Internal error while serializing object.\n");
     exit(1);
   }
+
+  // Use socket file descriptor to send information and check if it is ok
+  // It will close the file descriptor if something goes wrong
   int ret = sendto(context->addr->server_sd, buf.data, buf.len,
       0, context->addr->sockaddr, context->addr->socklen);
   free(buf.data);
-  if (ret == -1) {
+  if (ret == -1) 
+  {
     fprintf(stderr, "Could not write to client: %s\n",
             strerror(errno));
     close(context->addr->server_sd);
     exit(1);
-  } else if (ret < buf.len) {
+  } 
+  else if (ret < buf.len) 
+  {
     fprintf(stderr, "WARN: Less bytes were written!\n");
     close(context->addr->server_sd);
     exit(1);
   }
 }
 
+/**
+ * Generate a server taht will manage request forever
+ * 
+ * @param server_sd Info of the file descriptor to use
+*/
 void serve_forever(int server_sd) 
 {
   char buffer[64];
