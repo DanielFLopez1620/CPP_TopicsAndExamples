@@ -17,6 +17,8 @@
  * First, let's talk about a TCP server, they specifies a differet adress family
  * AF_INET, and have a different socket adresses requirement. But for the rest
  * is almost the same implementation.
+ * 
+ * WHEN READY: Go to the code /client/tcp/main.c
 */
 
 /**
@@ -62,8 +64,7 @@ int main(int argc, char** argv)
   addr.sin_port = htons(6666);       // Port number 
 
   // Binding process
-  int result = bind(server_sd,
-          (struct sockaddr*)&addr, sizeof(addr));
+  int result = bind(server_sd, (struct sockaddr*)&addr, sizeof(addr));
   if (result == -1) 
   {
     close(server_sd);
