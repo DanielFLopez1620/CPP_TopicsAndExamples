@@ -9,20 +9,40 @@
 
 #include "common_client_core.h"
 
-void* datagram_response_reader(void* obj) {
+/**
+ * Function that check , read, load and deserialize the socket file descriptor datagram for a
+ * future response.
+ * 
+ * @param obj Generic pointer used to manage context object
+ * 
+ * @return NULL the process is achieved
+*/
+void* datagram_response_reader(void* obj) 
+{
+  // Use generic pointer to abstract the context
   struct context_t* context = (struct context_t*)obj;
+
+  // Instance char array for buffer reading
   char buf[64];
-  while (1) {
+
+  while (1) 
+  {
+    // Receive context (read socket file descriptor) and load it into the buffer
     // We could use `read` since we don't need the source address.
     int ret = recvfrom(context->sd, buf, sizeof(buf), 0, NULL, NULL);
-    if (ret < 0) {
+    if (ret < 0) 
+    {
       fprintf(stderr, "Read error! %s\n", strerror(errno));
       break;
     }
-    if (ret == 0) {
+    if (ret == 0) 
+    {
       break;
     }
+    // Update buffer 
     struct buffer_t b; b.data = buf, b.len = ret;
+
+    // Deserialize message and update context
     calc_proto_ser_client_deserialize(context->ser, b, NULL);
   }
   return NULL;

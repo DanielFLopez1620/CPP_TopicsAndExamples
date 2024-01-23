@@ -124,6 +124,8 @@ bool_t _is_buffer_full(struct calc_proto_ser_t* ser)
  * @param error_code Integer value needed for error handling.
  * 
  * @return TRUE if serialization is valid, FALSE otherwise.
+ * 
+ * @exception Raise error that the delimeter wasn't found and returns FALSE.
 */
 bool_t _parse_fields(struct calc_proto_ser_t* ser, char** fields,
     int field_count, int error_code) 
@@ -198,6 +200,8 @@ bool_t _parse_fields(struct calc_proto_ser_t* ser, char** fields,
  * Function that parse and check serialization for a request, while preventing the invalid ones.
  * 
  * @param ser Pointer to the serialization object in use.
+ * 
+ * @exception If the context request isn't valid, exits the function
 */
 void _parse_req_and_notify(struct calc_proto_ser_t* ser) 
 {
@@ -218,6 +222,7 @@ void _parse_req_and_notify(struct calc_proto_ser_t* ser)
   {
     if (ser->error_cb) 
     {
+      // Raise error of invalid request error in case of bad context for ID
       ser->error_cb(ser->context, -1, ERROR_INVALID_REQUEST_ID);
       return;
     }
@@ -229,6 +234,7 @@ void _parse_req_and_notify(struct calc_proto_ser_t* ser)
   {
     if (ser->error_cb) 
     {
+      // Raise error of invalid request error in case of bad context for method
       ser->error_cb(ser->context, req.id, ERROR_INVALID_REQUEST_METHOD);
       return;
     }
@@ -239,13 +245,16 @@ void _parse_req_and_notify(struct calc_proto_ser_t* ser)
   {
     if (ser->error_cb) 
     {
+      // Raise error of invalid request error in case of bad context for operand 1
       ser->error_cb(ser->context, req.id, ERROR_INVALID_REQUEST_OPERAND1);
       return;
     }
   }
   if (!_parse_double(fields[3], &req.operand2)) 
   {
-    if (ser->error_cb) {
+    if (ser->error_cb) 
+    {
+      // Raise error of invalid request error in case of bad context for operand 1
       ser->error_cb(ser->context, req.id, ERROR_INVALID_REQUEST_OPERAND2);
       return;
     }
@@ -266,6 +275,8 @@ void _parse_req_and_notify(struct calc_proto_ser_t* ser)
  * Function that parse and check serialization for a response, while preventing invalid ones.
  * 
  * @param ser Pointer to serializatio object in use.
+ * 
+ * @exception If the context response isn't valid, it exits the program.
 */
 void _parse_resp_and_notify(struct calc_proto_ser_t* ser) 
 {
@@ -284,7 +295,9 @@ void _parse_resp_and_notify(struct calc_proto_ser_t* ser)
   // Update attribute of request id
   if (!_parse_int(fields[0], &resp.req_id)) 
   {
-    if (ser->error_cb) {
+    if (ser->error_cb) 
+    {
+      // Raise error for invalid response, in case of ID problems
       ser->error_cb(ser->context, 0, ERROR_INVALID_RESPONSE_REQ_ID);
       return;
     }
@@ -295,6 +308,7 @@ void _parse_resp_and_notify(struct calc_proto_ser_t* ser)
   {
     if (ser->error_cb) 
     {
+      // Raise error for invalid response, in case of status problems
       ser->error_cb(ser->context, resp.req_id, ERROR_INVALID_RESPONSE_STATUS);
       return;
     }
@@ -305,21 +319,26 @@ void _parse_resp_and_notify(struct calc_proto_ser_t* ser)
   {
     if (ser->error_cb) 
     {
+      // Raise error for invalid response, in case of response status
       ser->error_cb(ser->context, resp.req_id, ERROR_INVALID_RESPONSE_STATUS);
       return;
     }
   }
 
   // Update attribute of result (in case of valid status)
-  if (!_parse_double(fields[2], &resp.result)) {
-    if (ser->error_cb) {
+  if (!_parse_double(fields[2], &resp.result)) 
+  {
+    if (ser->error_cb) 
+    {
+      // Raise error for invalid response, in case of result problems
       ser->error_cb(ser->context, resp.req_id, ERROR_INVALID_RESPONSE_RESULT);
       return;
     }
   }
 
   // Final check to determinate if response is set
-  if (!ser->resp_cb) {
+  if (!ser->resp_cb) 
+  {
     fprintf(stderr, "Response callback is not set!\n");
     return;
   }
@@ -393,7 +412,8 @@ void _deserialize(struct calc_proto_ser_t* ser, struct buffer_t buff,
       ser->curr_idx = 0;
     }
   }
-  if (overflow) {
+  if (overflow) 
+  {
     _deserialize(ser, buff, func, error_code, found);
   }
 }

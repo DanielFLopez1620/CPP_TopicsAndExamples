@@ -4,11 +4,18 @@
 #include <calc_proto_ser.h>
 #include <calc_proto_req.h>
 
-struct context_t {
-  int sd;
-  struct calc_proto_ser_t* ser;
+
+/**
+ * Context attributes
+*/
+struct context_t 
+{
+  int sd;                        // Socket file attribute
+  struct calc_proto_ser_t* ser;  // Serialization object
 };
 
+
+// Methods and functions related with response and request management from the client
 int _to_double(const char* str, double* num);
 
 const char* _error_to_str(int error_code);
