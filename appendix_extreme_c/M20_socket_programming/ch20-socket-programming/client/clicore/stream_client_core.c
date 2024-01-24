@@ -118,6 +118,8 @@ void stream_client_loop(int conn_sd)
   // Destroy, close and free objects used
   calc_proto_ser_dtor(context.ser);
   calc_proto_ser_delete(context.ser);
+
+  // Join thread that was already used
   pthread_join(reader_thread, NULL);
   printf("Bye.\n");
 }

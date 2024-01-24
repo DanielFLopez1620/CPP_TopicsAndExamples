@@ -11,7 +11,7 @@
 
 /**
  * Function that check , read, load and deserialize the socket file descriptor datagram for a
- * future response.
+ * future request that will be made.
  * 
  * @param obj Generic pointer used to manage context object
  * 
@@ -48,36 +48,62 @@ void* datagram_response_reader(void* obj)
   return NULL;
 }
 
-void datagram_client_loop(int conn_sd) {
+/**
+ * Loop for client connection that will analize the datagram deserialized and process a prpoper
+ * request.
+ * 
+ * @param conn_sd Connection socket file descriptor
+*/
+void datagram_client_loop(int conn_sd) 
+{
+  // Generate context for client request
   struct context_t context;
-
   context.sd = conn_sd;
   context.ser = calc_proto_ser_new();
   calc_proto_ser_ctor(context.ser, &context, 128);
   calc_proto_ser_set_resp_callback(context.ser, on_response);
   calc_proto_ser_set_error_callback(context.ser, on_error);
 
+  // Create thread for reading the serialized buffer of the request and respond
   pthread_t reader_thread;
   pthread_create(&reader_thread, NULL, datagram_response_reader, &context);
 
   char buffer[128];
   printf("? (type quit to exit) ");
-  while (1) {
+
+  // Client loop
+  while (1) 
+  {
+    
+    // Read input from terminal
     scanf("%s", buffer);
     int brk = 0, cnt = 0;
     struct calc_proto_req_t req;
+
+    // Analize buffer to check for cotext of the request
     parse_client_input(buffer, &req, &brk, &cnt);
-    if (brk) {
+
+    // Cases for operation of exit or invalid character detected
+    if (brk) 
+    {
       break;
     }
-    if (cnt) {
+    if (cnt) 
+    {
       continue;
     }
+
+    // Serialize request processed
     struct buffer_t buf = calc_proto_ser_client_serialize(context.ser, &req);
+    
+    // Write response into socket file descriptor 
     // We could use `write` since we already know the destination.
     int ret = write(context.sd, buf.data, buf.len);
+
+    // Check for error during writting
     free(buf.data);
-    if (ret == -1) {
+    if (ret == -1) 
+    {
       fprintf(stderr, "Error while writing! %s\n", strerror(errno));
       break;
     }
@@ -85,10 +111,17 @@ void datagram_client_loop(int conn_sd) {
       fprintf(stderr, "Wrote less than anticipated!\n");
       break;
     }
+
+    // Log that request was send
     printf("The req(%d) is sent.\n", req.id);
   }
+  // Close connection made
   shutdown(conn_sd, SHUT_RD);
+
+  // Join threade after being used
   pthread_join(reader_thread, NULL);
+
+  // Destroy and delete object used
   calc_proto_ser_dtor(context.ser);
   calc_proto_ser_delete(context.ser);
   printf("Bye.\n");
