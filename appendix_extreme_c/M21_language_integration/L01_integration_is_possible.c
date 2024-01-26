@@ -19,7 +19,7 @@
  * Similar to the situation presented in the last module, we are gonna use the original code, and then we
  * are gonna go through a exploration by making comments.
  * 
- * WHEn READY: Go to the project folder and locate the file 'cstack.h'
+ * WHEN READY: Go to the project folder and locate the file 'cstack.h'
 */
 int main(int argc, char const *argv[])
 {

@@ -5,6 +5,20 @@
  * NOTE: It is called cstack to avoid confussion with the stack itsefl.
 */
 
+/**
+ * Here are the definition of a custom c stack that will serve as a base for a library that is
+ * going to be used with other codes from different languages.
+ * 
+ * Do not forget to also check the implementation of the OOP in the 'cstack.c' file.
+ * 
+ * When compiling and creating the library, you need to be located in the root of the project
+ * (ch21-integration-with-other-languages). Then run the next commands:
+ * 
+ *    gcc -c -g -fPIC cstack.c -o cstack.o
+ *    gcc -shared cstack.o -o libcstack.so
+ * 
+ * WHEN READY: Go to the file 'cstack_tests.c'
+*/
 #ifndef _CSTACK_H_
 #define _CSTACK_H_
 
@@ -29,6 +43,7 @@ extern "C"
 
   typedef struct cstack_type cstack_t;
 
+  // Custom type of deleter_t function that needs a value and return a generic pointer
   typedef void (*deleter_t)(value_t* value);
 
   value_t make_value(char* data, size_t len);
