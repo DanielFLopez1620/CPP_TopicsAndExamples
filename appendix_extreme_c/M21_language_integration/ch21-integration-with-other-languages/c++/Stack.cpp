@@ -1,8 +1,7 @@
 /* File name: Stack.cpp
- * Description: A generic stack class wrapping the
- *              cstack functions. It also contains
- *              a test scenario to check the stack
- *              functionality.
+
+ * Description: A generic stack class wrapping the cstack functions. It also contains a test 
+ * scenario to check the stack functionality.
  */
 
 #include <string.h>
@@ -11,6 +10,25 @@
 #include <string>
 
 #include "cstack.h"
+
+/**
+ * When making an integration for C++, we can thought of it as an OOP extension of C, therefore,
+ * it can use C objects easier than other languages.
+ * 
+ * One of our first matter will be the name mangling which support namescape and function
+ * overloading. Here, our focus for compiler will be 'clang' and 'clang++', they both can be used
+ * in C files, but there would be differences and warnings if you do it, for that you can use the 
+ * a flag related with macros which give a sign for clang++ of a C code being compiled, the usage
+ * is implemented below:
+ * 
+ *    #ifdef __cplusplus
+ *    extern "C" {
+ *    #endif
+ *    ...
+ *    #ifdef __cplusplus
+ *    }
+ *    #endif
+*/
 
 template<typename T>
 value_t CreateValue(const T& pValue);
