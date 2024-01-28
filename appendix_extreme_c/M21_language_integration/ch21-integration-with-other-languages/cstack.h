@@ -25,7 +25,7 @@
 #include <unistd.h>
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"  // Implementation for C++ to make a name mangling
 {
   #endif
 

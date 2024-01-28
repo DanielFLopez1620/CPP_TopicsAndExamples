@@ -28,43 +28,86 @@
  *    #ifdef __cplusplus
  *    }
  *    #endif
+ * 
+ * If you want to learn more about this 'linkage specification', you can check:
+ * 
+ * - https://isocpp.org/wiki/faq/mixing-c-and-cpp
+ * - https://stackoverflow.com/questions/1041866/what-is-the-effect-of-extern-c-in-c
+ * 
+ * Now, we will focus on the cpp implementation
 */
 
+// PROTOTYPE DEFINITONS (For various datatypes)
 template<typename T>
 value_t CreateValue(const T& pValue);
 
 template<typename T>
 T ExtractValue(const value_t& value);
 
+// CLASS IMPLEMENTATION
 template<typename T>
-class Stack {
+class Stack 
+{
+// Public class interface
 public:
-  // Constructor
-  Stack(int pMaxSize) {
+  /**
+   * Wrapped constructor of the custom C stack implementation
+   * 
+   * @param pMaxSize Max size for objects to stack.
+  */
+  Stack(int pMaxSize) 
+  {
     mStack = cstack_new();
     cstack_ctor(mStack, pMaxSize);
   }
 
-  // Destructor
-  ~Stack() {
+  /**
+   * Wrapped destructor of the custom C stack implementation
+  */ 
+  ~Stack() 
+  {
     cstack_dtor(mStack, free_value);
     cstack_delete(mStack);
   }
 
-  size_t Size() {
+  /**
+   * Wrapped getter of the stack's size.
+   * 
+   * @return Assigned size to the stack
+  */
+  size_t Size() 
+  {
     return cstack_size(mStack);
   }
 
-  void Push(const T& pItem) {
+  /**
+   * Wrapped push of the custom C stack implementation
+   * 
+   * @param pItem Value to be treated and then stored in stack.
+   * 
+   * @throws an error message when the stack is full.
+  */
+  void Push(const T& pItem) 
+  {
     value_t value = CreateValue(pItem);
-    if (!cstack_push(mStack, value)) {
+    if (!cstack_push(mStack, value)) 
+    {
       throw "Stack is full!";
     }
   }
 
-  const T Pop() {
+  /**
+   * Wrapped pop ofthe custo C stack implementation
+   * 
+   * @return Value that was on top of the stack.
+   * 
+   * @throws an error message whne the stack is empty.
+  */
+  const T Pop() 
+  {
     value_t value;
-    if (!cstack_pop(mStack, &value)) {
+    if (!cstack_pop(mStack, &value)) 
+    {
       throw "Stack is empty!";
     }
     T toReturn = ExtractValue<T>(value);
@@ -72,17 +115,32 @@ public:
     return toReturn;
   }
 
-  void Clear() {
+  /**
+   * Wrapped clear of the C custom stack implementation.
+  */
+  void Clear() 
+  {
     cstack_clear(mStack, free_value);
   }
 
+// Private interface class
 private:
+  // Pointer to custom c stack type, handle of an existing object in C
   cstack_t* mStack;
 };
 
 // Template specialization
+
+/**
+ * Templeate function (string specialization) for creating values by using a string passed.
+ * 
+ * @param pValue String with the info to store.
+ * 
+ * @return Info stored in a value object needed for usage in stack.
+*/
 template<>
-value_t CreateValue(const std::string& pValue) {
+value_t CreateValue(const std::string& pValue) 
+{
   value_t value;
   value.len = pValue.size() + 1;
   value.data = (char *)malloc(value.len * sizeof(char));
@@ -90,28 +148,53 @@ value_t CreateValue(const std::string& pValue) {
   return value;
 }
 
+/**
+ * Template function (string specialization) for extracting the values and using them in C++
+ * 
+ * @param value Pointer to object where the value is stored.
+ * 
+ * @return String with the converted info.
+*/
 template<>
-std::string ExtractValue(const value_t& value) {
+std::string ExtractValue(const value_t& value) 
+{
   return std::string(value.data, value.len);
 }
 
-int main(int argc, char** argv) {
+// MAIN 
+int main(int argc, char** argv) 
+{
+  // Create array for messages
   Stack<std::string> stringStack(100);
+
+  // Push content into array
   stringStack.Push("Hello");
   stringStack.Push("World");
   stringStack.Push("!");
+
+  // Display info of stack
   std::cout << "Stack size: " << stringStack.Size() << std::endl;
-  while (stringStack.Size() > 0) {
+
+  // Pop loop
+  while (stringStack.Size() > 0) 
+  {
     std::cout << "Popped > " << stringStack.Pop() << std::endl;
   }
+
+  // Log info to check size after popping out.
   std::cout << "Stack size after pops: " <<
       stringStack.Size() << std::endl;
+
+  // Make more push operations
   stringStack.Push("Bye");
   stringStack.Push("Bye");
   std::cout << "Stack size before clear: " <<
       stringStack.Size() << std::endl;
+
+  // Clear stack (delete all and log)
   stringStack.Clear();
   std::cout << "Stack size after clear: " <<
       stringStack.Size() << std::endl;
+
   return 0;
 }
