@@ -1,24 +1,39 @@
 // File name: Main.java
 
+/**
+ * As it was said in the intro, java compiler uses Java bytecode and it is analogous ot the
+ * Application Binary Interface (ABI), keep in mind that it will only run on a Java Virtual
+ * Machine (JVM) which is written in C or C++, therefore it has the power to load and use the C
+ * Standard Library.
+ * 
+ * NOTE: Bytecode is also used by scala, kotlin and groovy and are called JVM languages.
+ * 
+ * You cannot simply have a C code and call the functions in Jave (as there are separated 'native
+ * methods'), but there is a interface called Java Native Interface (JNI) to load shared object
+ * libraries, and we will take advantage of it in this code.
+ * 
+ */
 package com.packt.extreme_c.ch21.ex1;
 
 class NativeStack {
 
+  // Loading stack library
   static {
     System.loadLibrary("NativeStack");
   }
 
+  // Interfaces for wrapping memory managemnt from the custom C stack.
   public static native long newStack();
   public static native void deleteStack(long stackHandler);
 
+  // Interfaces for wrapping the constructor and destructor from the custom C stack.
   public static native void ctor(long stackHandler, int maxSize);
   public static native void dtor(long stackHandler);
 
+  // Interfaces for wrapping the stack functions from the custom C stack.
   public static native int size(long stackHandler);
-
   public static native void push(long stackHandler, byte[] item);
   public static native byte[] pop(long stackHandler);
-
   public static native void clear(long stackHandler);
 }
 

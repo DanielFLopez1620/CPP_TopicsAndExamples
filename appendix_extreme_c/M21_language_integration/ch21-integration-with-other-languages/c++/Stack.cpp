@@ -34,7 +34,25 @@
  * - https://isocpp.org/wiki/faq/mixing-c-and-cpp
  * - https://stackoverflow.com/questions/1041866/what-is-the-effect-of-extern-c-in-c
  * 
- * Now, we will focus on the cpp implementation
+ * Now, check the C++ implementation below, and place you attention in the how C++ wrapped the C
+ * code previously mentioned.
+ * 
+ * For compilation, the C++ code is using C++11, for that we need a compliant compiler, then try:
+ * 
+ *    cd c++
+ *    g++ -c -g -std=c++11 -I$PWD/.. Stack.cpp -o Stack.o
+ *    g++ -L$PWD/.. Stack.o -lcstack -o cstack_cpp.out
+ *    LD_LIBRARY_PATH=$PWD/.. ./cstack_cpp.out # Base running
+ *    
+ *    LD_LIBRARY_PATH=$PWD/.. valgrind --leak-check=full ./cstack_cpp.out # Valgrind check
+ * 
+ * Here are some comments, on the commands:
+ *  * -std=c++11 specifies to use a C++11 compiler
+ *  * -I -L are used for specifying custom includes and library directories
+ *  * -lcstack is passed to the linker for searching and linking the libcstack.so library
+ *  * valgrind can also be used to test the code against memory leaks.
+ * 
+ * WHEN READY: After finishing with C++, we will move to Java.
 */
 
 // PROTOTYPE DEFINITONS (For various datatypes)
