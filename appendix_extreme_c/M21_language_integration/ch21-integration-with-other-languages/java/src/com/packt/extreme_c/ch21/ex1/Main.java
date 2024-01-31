@@ -14,6 +14,45 @@
  * implemented and the comments.
  * 
  * TIP: Do not trust the Garbage Collector Mechanism.
+ * 
+ * The code only talks about the Java implementation, but you will also need to do some things with
+ * the native part. As the definitions are outside Java, therefore you need to provide a way to
+ * make sure the JVM finds them. 
+ * 
+ * For this case, the C library doesn't need assumpsitions to be used in JVM environments. And
+ * let's make a brief example: If you need a 'func' call of C from Java and the definition is in the
+ * file 'libfunc.so', we need to implement a native function in Java 'doFunc' but it will search
+ * for it in Java, then we need an intermediary library or obj file 'libNativeLibrary.so' that 
+ * contains the same symbols Java is looking for. For implementing this in the current example, you
+ * can run:
+ * 
+ *    cd java
+ *    mkdir -p build/headers
+ *    mkdir -p build/classes
+ *    javac -cp src -h build/headers -d build /classes \
+ *    src/com/packt/extrem_c/ch21/ex17Main.java
+ * 
+ * If everything goes right, when you check the directories, you should see that the marshaller and
+ * native classes appeared. The files .class contains the Java bytecode that will be used for
+ * loading the classes into JVM instances. As these codes are machine generated, it is not
+ * recommended to modify them, and they are intended to traslate and define the steps needed
+ * to consider the C/C++ code. Finally, you will need to add the intermediate library like this:
+ * 
+ *    cd java/native
+ *    g++ -c -fPIC -I$PWD/../.. -I$JAVA_HOME/include \
+ *    -I$JAVA_HOME/include/linux NativeStack.cpp -o NativeStack.o
+ *    g++ -shared -L$PWD/../.. NativeStack.o -lcstack -o libNativeStack.so
+ * 
+ * After all this, you can run the integration following the next:
+ * 
+ *    cd java/native
+ *    LD_LIBRARY_PATH=$PWD/.. java -Djava.library.path=$PWD/native \
+ *    -cp build/classes com.packt.extrem_c.ch21.ex1.Main
+ * 
+ * -Djava.library.path=... is used to add the path to the JVM so it can be found.
+ * 
+ * WHEN READY: After you reviewed this lesson, then you can go to the Python lesson for integration
+ * with C.
  */
 
 // Package paths
@@ -138,7 +177,7 @@ class StringMarshaller implements Marshaller<String> {
 
 public class Main {
   public static void main(String[] args) {
-    // Try is used to execute code in a controlled way to check for exceptions.
+    // "Try_with_resources" is used to execute code in a controlled way to check for exceptions.
     // In this case, the expection is related with the instance of the object that can use the
     // native interface of the C Library.
     try (Stack<String> stack = new Stack<>(new StringMarshaller())) {

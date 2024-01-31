@@ -1,6 +1,19 @@
 # File name: stack.py
 # Description: The python wrapper around the cstack library
 
+"""
+Python is interpreted, then there is no compilitation but rather an execution in time, so for the
+integration, it is needed to add that native library to C, for that exits a framework that loads 
+shared library objects which is the 'ctypes'.
+
+The steps needed for using it are simple:
+1) Import ctypes
+2) Define the input and outputs of the functions.
+3) If you preffer wraps the implementation.
+
+So, check the code below and review the implementation.
+"""
+
 import platform
 from ctypes import *
 
