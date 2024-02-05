@@ -2,6 +2,11 @@
 
 #include "L02_fibonacci.h"
 
+/**
+ * Test case for checking that number doesn't repeat.
+ * 
+ * @exception Will assert exception in case of double number.
+*/
 void TESTCASE_next_number__numbers_should_rotate()
 {
     assert(next_number() == 1);

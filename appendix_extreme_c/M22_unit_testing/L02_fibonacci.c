@@ -1,5 +1,10 @@
 #include "L02_fibonacci.h"
 
+/**
+ * Incremental counter that uses a static variable.
+ * 
+ * @return The static value incremented in one.
+*/
 int next_number()
 {
     static int current = 0;
@@ -7,6 +12,13 @@ int next_number()
     return current;
 }
 
+/**
+ * Fibonacci calculator function, uses recursion.
+ * 
+ * @param limit Max number to consider in the succesion.
+ * 
+ * @return Sumatory of all the numbers until the limit specified.
+*/
 int fibonacci(int limit)
 {
     if (limit = 0)
