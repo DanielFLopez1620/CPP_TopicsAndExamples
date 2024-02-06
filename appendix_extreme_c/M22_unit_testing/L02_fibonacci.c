@@ -1,3 +1,6 @@
+// BASED ON THE BOOK EXTREM C - 1° Edition
+// Code tested with gcc
+
 #include "L02_fibonacci.h"
 
 /**
@@ -8,7 +11,7 @@
 int next_number()
 {
     static int current = 0;
-    current++;
+    current += 1;
     return current;
 }
 
@@ -21,11 +24,11 @@ int next_number()
 */
 int fibonacci(int limit)
 {
-    if (limit = 0)
+    if (limit == 0)
     {
-        return 1;
+        return 0;
     }
-    else if (limit = 1)
+    else if (limit == 1)
     {
         return 1;
     }

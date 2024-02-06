@@ -1,3 +1,6 @@
+// BASED ON THE BOOK EXTREM C - 1° Edition
+// Code tested with gcc
+
 #ifndef FIBONACCI
 #define FIBONACCI
 
@@ -9,6 +12,6 @@
 // Function prototypes
 
 int next_number();
-int fibonaci(int);
+int fibonacci(int);
 
 #endif

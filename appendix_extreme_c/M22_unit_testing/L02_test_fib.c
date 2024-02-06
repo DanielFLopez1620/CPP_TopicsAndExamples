@@ -1,3 +1,6 @@
+// BASED ON THE BOOK EXTREM C - 1° Edition
+// Code tested with gcc
+
 #include <assert.h>
 
 #include "L02_fibonacci.h"
@@ -22,7 +25,7 @@ int feed_fib()
 void TESTCASE_fibonacci__fib_of_zero_is_zero()
 {
     consider_value = 0;
-    int result = fibonaci(consider_value);
+    int result = fibonacci(consider_value);
     assert(result == 0);
 }
 
@@ -34,18 +37,19 @@ void TESTCASE_fibonacci__fib_of_zero_is_zero()
 void TESTCASE_fibonacci__fib_of_one_is_one()
 {
     consider_value = 1;
-    int result = fibonaci(consider_value);
+    int result = fibonacci(consider_value);
     assert(result == 1);
 }
 
 /**
- * Test case for fibonacci of another specific case
+ * Test case for fibonacci of another specific case, this case isn't true, but it is
+ * made for the tests assertion.
  * 
  * @exception Will call assertioon if fib corresponds to value calculated manually.
 */
 void TESTCASE_fibonacci__fib_of_four_is_three()
 {
     consider_value = 4;
-    int result = fibonaci(consider_value);
+    int result = fibonacci(consider_value);
     assert(result == 3);
 }

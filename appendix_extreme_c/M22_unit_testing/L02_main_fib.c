@@ -1,6 +1,8 @@
+// BASED ON THE BOOK EXTREM C - 1° Edition
+// Code tested with gcc
+
 #include <stdio.h>
 
-#include "L02_fibonacci.h"
 
 /**
  * In the case of unit testing, you will need to isolate the function for test them, we will
@@ -35,14 +37,25 @@
  * the test is failing. For that cases C/C++ provides libraries for making the tests better, in the 
  * next lesson we will talk about them.
  * 
+ * Now, we need to introduce a concept "text doubles" that are objects that try to mimic a unit 
+ * dependency. And after this, there is also 'mock' functions are considered to be part
+ * of OOP Languages that allows manipulation, and there are also 'fake' functions that are used
+ * to give a simplified functionality of a more complex function.
+ * 
+ * Finally, let's talk about 'code coverage' that implies that you should do tests suites
+ * for all the possible cases to prevent errors and bugs later in other phases of the project. And
+ * the coverage test aims to test all the code available and prevent unwanted modifications.
+ * 
  * 
 */
+
+#include "L02_fibonacci.h"
 
 int main(int argc, char** argv)
 {
     for(int i = 0; i < 10; i++)
     {
-        printf("Fibonacci of %d is %d.\n", i, fibonaci(i));
+        printf("Fibonacci of %d is %d.\n", i, fibonacci(i));
     }
 
     printf("If you want to learn more of tests, you can check:\n");
