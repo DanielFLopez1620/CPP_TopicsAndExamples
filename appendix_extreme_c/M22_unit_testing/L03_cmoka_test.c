@@ -41,11 +41,21 @@
 
 int input_num = -1;
 
+/**
+ * Function that is used to feed the fibonacci, in a safe and replicable way.
+ * 
+ * @return Integer value of a global variable.
+*/
 int feed_num()
 {
     return input_num;
 }
 
+/**
+ * Fibonacci test case for zero input, zero output.
+ * 
+ * @param state Double pointer to state that allows CMocka to know about the assertions and cases.
+*/
 void fibonacci__fib_of_zero_is_zero(void** state)
 {
     input_num = 0;
@@ -53,6 +63,11 @@ void fibonacci__fib_of_zero_is_zero(void** state)
     assert_int_equal(result, 0);
 }
 
+/**
+ * Fibonacci test case for one input, one output.
+ * 
+ * @param state Double pointer to state that allows CMocka to know about the assertions and cases.
+*/
 void fibonacci__fib_of_one_is_one(void** state)
 {
     input_num = 1;
@@ -60,6 +75,11 @@ void fibonacci__fib_of_one_is_one(void** state)
     assert_int_equal(result, 1)
 }
 
+/**
+ * Fibonacci test case for four input, three output.
+ * 
+ * @param state Double pointer to state that allows CMocka to know about the assertions and cases.
+*/
 void fibonnaci__fib_of_four_is_three(void** state)
 {
     input_num = 4;
@@ -67,7 +87,12 @@ void fibonnaci__fib_of_four_is_three(void** state)
     assert_int_equal(result, 3);
 }
 
-void next_number__numbers_should_rotate()
+/**
+ * Next number test case, that validates the increment of the variable
+ * 
+ * @param state Double pointer to state that allows CMocka to know about the assertions and cases.
+*/
+void next_number__numbers_should_rotate(void** state)
 {
     int num1 = next_number();
     for(int i = 0; i <= 4; i++)
@@ -78,11 +103,25 @@ void next_number__numbers_should_rotate()
     assert_not_equal(num1, num2);
 }
 
+/**
+ * Simple set up implementation that must be executed before each test case.
+ * 
+ * @param state Double pointer to state that allows CMocka to know about the assertions and cases.
+ * 
+ * @return 0 If everthing goes OK.
+*/
 int setup(void** state)
 {
     return 0;
 }
 
+/**
+ * Simple tear_down implementation that must be executed after each test case ends.
+ * 
+ * @param state Double pointer to state that allows CMocka to know about the assertions and cases.
+ * 
+ * @return 0 If everthing goes OK.
+*/
 int tear_down(void** state)
 {
     return 0;
@@ -90,6 +129,7 @@ int tear_down(void** state)
 
 int main(int argc, char** argv)
 {
+    // Struct that groups every test designed
     const struct CMUnitTest tests[] = {
         cmoka_unit_test(fibonacci__fib_of_one_is_one),
         cmoka_unit_test(fibonacci__fib_of_zero_is_zero),
@@ -97,5 +137,6 @@ int main(int argc, char** argv)
         cmoka_unit_test(next_number__numbers_should_rotate)
     }
 
+    // Execute and get the feedback.
     return cmoka_run_group_tests(tests, setup, tear_down);
 }
