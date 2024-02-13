@@ -62,6 +62,69 @@
  * - OllyDBG: For Microsoft Windows debugging of GUI applications.
  * - Microsoft Visual Studio Debugger.
  * 
+ * MEMORY PROFILER: As we mention before, you can also find bugs related with memory, for this, you
+ *  can take advantage of memory chackers to prevent bugs, sometimes it is integrated with the 
+ * debugger, but it can be also provided as a separete program, some of its features are:
+ * 
+ * - Reporting memory allocated, freed memory, stack and heap allocations.
+ * - Detection of memory-leak situations.
+ * - Detection of invalid write/read operations.
+ * - Report on double frees.
+ * 
+ * We have focused only on 'memcheck' (a valgrind tool) but there are more, they can be agrupated
+ * as:
+ *  - Compile-time overriding:  This will imply modifiying your source code and add the checker
+ *    library, then to comile again and link the library, it isn't invasive in performance but
+ *    implies an additional compiliation. Examples are: LLVM AdressSanitizer (ASan), Memwatch,
+ *    Dmalloc and Mtrace.
+ * 
+ *  - Link-time overriding: Here you do not need changes, you just need to link the binaries with
+ *    library. The most well-know tool is 'heap checker' from 'gperftools'.
+ * 
+ *  - Runtime interception: AS the name says, it intercepts (or at least try) and track all memory
+ *    related operations and report of invalid access, the main advantage is that you do not need
+ *    to recompile, but it introudces an overhead in the execution and will need more resources. 
+ *    Memscheck can be used for this purposes, but it shouldn't be used while having a debugging
+ *    base.
+ * 
+ *  - Preloading libraries: Another method used is wrapping standard memory functions, as they uses
+ *    'LD_PRELOAD' environment variables, 'heap checker' can achieve this function.
+ * 
+ * THREAD DEBUGGERS: It is usually a must need when having a concurrency program which may lead
+ * to concurrency issues which can be data races, misusing threadin API, deadlock and lock ordering
+ * issues. Keep in mind that sometimes exists 'false positives' cases, depending on the tool you
+ * are using, but it also should consider your opinion on the matter.
+ * 
+ *  - Helgrind: Provided by Valdgrind for thread debugging. Check the resources below to see its
+ *    capabilities. Remember you can use helgrind with the command:
+ * 
+ *          vlagrind --tool=helgrind <path_to_file>
+ * 
+ *  - Intel Inspector: Successor of Intel Thread Checker acts like a thread debugger with 
+ *    integrated memory checker. But you need a pay license.
+ * 
+ *  - LLVM ThreadSanitizer (TSan), as part of LLVM, can be used for this purpose, but you will need
+ *    some slight compile-time modifications.
+ * 
+ * PERFORMANCE PROFILERS: Degradation of performance can be an issue when modifying a code, and you
+ * can collect specialized info for this purpose, which can be:
+ * 
+ *  - Gather statitistics about function calls.
+ *  - Trace call functions.
+ *  - Collect lock contention and allocation/deallocation statistics.
+ *  - Cache analysis
+ *  - Gather statistics abouts thread events.
+ * 
+ * Some tools you can use are:
+ * 
+ *  - Google Performance Tools (gperftools): Provides a performant malloc implementation, but it
+ *    doesn't stop here, as you can also use the heap checker by linking the final binary.
+ * 
+ *  - Callgrind (part of Valgrind): Which focuses on statistics for function calls and the relation
+ *    of caller/calle response.
+ * 
+ *  - Intel VTune: Provides all the features mentioned before but for a price of a license.
+ * 
 */
 
 int main(int argc, char** argv)
@@ -69,4 +132,6 @@ int main(int argc, char** argv)
     printf("Here you can find some useful resources:\n");
     printf("\t- https://en.wikipedia.org/wiki/Debugging\n");
     printf("\t- https://en.wikipedia.org/wiki/List_of_debuggers\n");
+    printf("\t- http://valgrind.org/docs/manual/hg-manual.html\n");
+    printf("\t- http://valgrind.org/docs/manual/drd-manual.html\n");
 }
