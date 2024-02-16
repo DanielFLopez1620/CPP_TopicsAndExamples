@@ -135,4 +135,17 @@
  *      clean: ${BUILD_DIR}
  *          rm -rf ${BUILD_DIR}
  * 
+ * Remember to make reproducible and understandable Makefiles, as the project keep getting bigger,
+ * make sure of it.
+ * 
+ * Finally, 'make' command should be used in the space where the Makefile is created and where the
+ * project is stored.
+ * 
 */
+
+int main(int argc, char** argv)
+{
+    printf("If you want to check a real project, go to the Chapter 23 of the book and practice!\n");
+    printf("Finally, you can learn more of CMake here:\n");
+    printf("\t- https://www.gnu.org/software/make/manual/html_node/index.html\n");
+}

@@ -19,6 +19,15 @@
  * also provides a 'dependency management' tool which comes very handy in big projects, this
  * process is reflected in the Makefiles that are recourse files with info to compile and link
  * codes. In this module, we will talk about Make and CMake.
+ * 
+ * NOTE: In the following lessons you will know some of the most used building systems (3) for 
+ * projects, your decision of using one of them should be a long-commitment and make sure what do
+ * you need, for example, dependency management, integration, flexibility or others, you can check:
+ * for more info: 
+ * 
+ * - https://www.reddit.com/r/cpp/comments/8zm66h/an_overview_of_build_systems_mostly_for_c_projects/
+ * - https://github.com/LoopPerfect/buckaroo/wiki/Build-Systems-Comparison
+ * - https://medium.com/@julienjorge/an-overview-of-build-systemsmostly-for-c-projects-ac9931494444
 */
 
 int main(int argc, char** argv)
