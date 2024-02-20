@@ -33,6 +33,7 @@ int main(int argc, char** argv)
     // - std::stoll(s, ptr) -> String to long long integer.
     // - std::stoul(s, ptr) -> String to unsigned long int.
     // - std::stoull(s, ptr) -> String to unsigned long long int.
+    // s is the str and prt is an internal prt to the conversion functions.
     auto str_to_num_1 = std::stoi("16");
     auto str_to_num_2 = std::stol("16201620");
     auto str_to_num_3 = std::stoi("0x2F", nullptr, 16);
@@ -40,6 +41,58 @@ int main(int argc, char** argv)
     std::cout << "String to integer: " << str_to_num_1 << std::endl;
     std::cout << "String to long int: " << str_to_num_2 << std::endl;
     std::cout << "String to hex interpret: " << str_to_num_3 << std::endl;
+
+    // INFO #3: Convert string to float by using:
+    // - std::stof(s, ptr) -> String to float.
+    // - std::stod(s, ptr) -> String to double.
+    // - std::stold(s, ptr) -> String to long double.
+    // s is the str to convert and prt is an internal ptr to the convert func.
+    auto str_to_flt_1 = std::stof("16.20");
+    auto str_to_flt_2 = std::stod("16.20e+2");
+    
+    std::cout << "String to float: " << str_to_flt_1 << std::endl;
+    std::cout << "String to double: " << str_to_flt_2 << std::endl;
+
+    // INFO #4: The convertion from string to a number discard whitespaces and
+    // take the major number of characters to form the number. Also, you
+    // can use prefix 0 to indicate octal base and 0x for hex.
+    auto num_case_1 = std::stoi("    16");
+    auto num_case_2 = std::stoi("  -16sixteen");
+
+    std::cout << "Conversion 1 (strange): " << num_case_1 << std::endl;
+    std::cout << "Conversion 2 (strange): " << num_case_2 << std::endl;
+
+    // INFO #5: If the conversion cannot be achieved, it will return an
+    // exception. Another possible error is out of range.
+    // Keep in mind that you can use some special keywords to use in the
+    // conversions:
+    // e - E: For exponential usage.
+    // 0x - 0X: For hex usage.
+    // INF - INFINITY: For infinity expression.
+    // NAN: Non number expression.
+
+    try
+    {
+        // No number detected
+        auto error_num = std::stoi("");
+    }
+    catch (std::exception const& e)
+    {
+        std::cout << "Invalid argument: "<< e.what() << std::endl;
+    }
+
+    try
+    {
+        // Invalid size for (normal) integer
+        auto error_num = std::stoi("9999999999999");
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Out of bounds: " <<e.what() << '\n';
+    }
+    
+    // For more info, you can check on: 
+    // https://en.cppreference.com/w/cpp/language/floating_literal
 
     return 0;
 }
