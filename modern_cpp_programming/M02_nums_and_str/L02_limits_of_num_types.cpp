@@ -37,6 +37,14 @@ T minimum(Iter const start, Iter const end)
     return minval;
 }
 
+template <typename T>
+void type_properties()
+{
+    std::cout   
+        << "Min Value: " << std::numeric_limits<T>::min() << std::endl
+        << "Max Value: " << std::numeric_limits<T>::max() << std::endl;
+}
+
 int main(int argc, char** argv)
 {
     // INFO #2: Use static methods or constants to retrieve properties.
@@ -44,8 +52,21 @@ int main(int argc, char** argv)
     // use it over C macros.
     auto n = 16;
     std::bitset<std::numeric_limits<decltype(n)>::digits>
-        bits { static_cast<unsigned long long> (n) };
+        bits1 { static_cast<unsigned long long> (n) };
+    
+    auto m = 16.20;
+    std::bitset<std::numeric_limits<decltype(m)>::digits>
+        bits2 {static_cast<unsigned long long>(m) };
 
-    std::cout << "Bitset size obtained from n (16): " << bits << std::endl;
+    // You can use templates to use numeric limits with any type, as the
+    // templates will allow it. And remember, that all the members of 
+    // 'std::numeric_limits' are 'constexpr' that implies they can be used
+    // where constant expressions are needed.
+
+    std::cout << "Bitset size obtained from n (16): " << bits1 << std::endl;
+    std::cout << "Bitset size obtained from m (16.20): " << bits1 << std::endl;
+
+    // INFO #3: You can use 'numeric_limits' to print the properties.
+    type_properties<double>();
     return 0;
 }
