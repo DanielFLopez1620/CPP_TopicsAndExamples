@@ -2,14 +2,72 @@
 // Code was tested with g++ in C++11
 
 #include <iostream>
-
-// If you didn't know, it is a common application in games and cartography, and
-// if someone tell you that you can write random numbers, it isn't true as
-// the algorithms used are determinist, then, it is a pseudo random
-// implementation.
-// If the numbers were really random, they couldn't be predictive, but it isn't
-// done here. Most of the cases, pseudo random num uses statistical
-// distributions, with the uniform one being one of the most common.
+/*
+ * If you didn't know, it is a common application in games and cartography, and
+ * if someone tell you that you can write random numbers, it isn't true as
+ * the algorithms used are determinist, then, it is a pseudo random
+ * implementation.
+ * If the numbers were really random, they couldn't be predictive, but it isn't
+ * done here. Most of the cases, pseudo random num uses statistical
+ * distributions, with the uniform one being one of the most common.
+ * Most of the engines produces integer numbers on a uniform distribution, and
+ * they implement the following methods:
+ * 
+ * - min(): Minimum value that can be produced with the generator.
+ * - max(): Maximum value that can be produced.
+ * - seed(): Initialization of the algorithm, not aplicable to 'random_devices'.
+ * - operator(): Generate a new number according the distributions and limits.
+ * - discard(): Discard a given psedo-random number.
+ * - entropy(): Will return 0 for a determinitstic generator, and a nonzero for
+ *   non-determinitics generator.
+ * 
+ * Some generators you can implement and use are:
+ * 
+ * - linear_congruential_engine: That follows the form x(i) = (A*x(i-1)+C)%M.
+ * 
+ * - mersenne_twister_engine: Follows the idea of W*(N-1)*R bits, as a bitset
+ *   play to generate pseudo-random numbers from segments of bits.
+ * 
+ * - substract_with_carry_engine: Based on x(i) = (x(i-R)-(i-S)-cy(i-1))%M, 
+ *   where cy can be one or zero according it is positive or negative.
+ * 
+ * And you can also find engine adapters (or wrappers):
+ * 
+ * - discard_block_engine: From every block of P numbers, keeps only R numbers
+ *   and discard the rest.
+ * 
+ * - independent_bits_engine: A generator that produces numbers of different
+ *   bits than the orginal.
+ * 
+ * - shuffle_order_engine: Produces K shuffled tables of numbers based on the
+ *   base engine, so then they are replaced.
+ * 
+ * Selecting a random pseudo-generator, should be considered under 
+ * your requirements for the case you are working, for example, linear-
+ * congruential is a little slower that subsct with carry, but the last one
+ * requires more memory. Also, mersenne twister can be slower one but can
+ * provide the longest non repetitive sequence if initialized properly.
+ * 
+ * Finally, let's mention some distributions you can keep in mind: 
+ * 
+ * - Uniform: Which comes with uniform_int_distribution, 
+ *   uniform_real_distribution.
+ * 
+ * - Bernoulli: Which comes with bernoull_distribution (bool), 
+ *   binomial_distribution (int), negative_binomial_distribution (int),
+ *   geometric_distribution (int).
+ * 
+ * - Poisson: With poisoon_distribution (int), exponential_distribution (real),
+ *   weibull_distribution (real) and extrem_value_distribution (real).
+ * 
+ * - Normal: With normal_distribution (real), lognormal_distribution (real),
+ *   chi_squared_distribution (real), cauchy_distribution (real), 
+ *   fisher_f_distribution (Real), student_t_distribution (real).
+ * 
+ * - Sampling: That includes: discrete_distribution (integer),
+ *   piecewise_constant_distribution (real) and piecewise_linear_distribution
+ *   (real).
+ */
 
 
 
@@ -18,7 +76,8 @@
 int main(int argc, char** argv)
 {
     // INFO #1: Let's generate a pseudo random number, do not forget to include
-    // the random library from C++.
+    // the random library from C++. The generators use distributions, so you
+    // will need to pick one.
 
     // Seeding a pseudo-random engine.
     std::random_device rand_dev{};
@@ -36,4 +95,6 @@ int main(int argc, char** argv)
         my_num = uniform_d(gen);
         std::cout << "Num #: " << i << " is: " << my_num << std::endl;
     }
+    
+    // Info #2: Using mtgen for mersenne twister.
 }
