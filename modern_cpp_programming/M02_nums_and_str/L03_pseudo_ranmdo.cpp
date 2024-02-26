@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code was tested with g++ in C++11
+// Code was tested with g++ in C++14
 
 #include <iostream>
 /*
@@ -67,11 +67,23 @@
  * - Sampling: That includes: discrete_distribution (integer),
  *   piecewise_constant_distribution (real) and piecewise_linear_distribution
  *   (real).
+ * 
+ * For running this code, you can execute:
+ * 
+ *      g++ -std=c++14 L03_pseudo_ranmdo.cpp -o pseudo.out
+ *      ./pseudo.out
  */
 
 
 
 #include <random>
+#include <chrono>
+#include <functional>
+#include <map>
+#include <iomanip>
+#include <algorithm>
+
+void gen_and_display(std::function<int(void)> , int const);
 
 int main(int argc, char** argv)
 {
@@ -97,4 +109,45 @@ int main(int argc, char** argv)
     }
     
     // Info #2: Using mtgen for mersenne twister.
+    std::random_device rand_dev2{};
+    auto gen2 = std::mt19937 {rand_dev2()};
+    auto uniform_d2 = std::uniform_int_distribution<> {1, 16};
+    gen_and_display(
+        [&gen2, &uniform_d2]() {return uniform_d2(gen2);}, 1000);
+
+    return 0;
+}
+
+void gen_and_display(std::function<int(void)> generator,
+                     int const iterations)
+{
+    auto storage = std::map<int, int>{};
+
+    for(auto n=0; n < iterations; ++n)
+    {
+        ++storage[generator()];
+    }
+
+    auto max_non_rep = 
+        std::max_element(std::begin(storage), std::end(storage),
+        [](auto value1, auto value2) {return value1.second < value2.second; });
+
+    for (auto i = max_non_rep->second / 200; i > 0; --i)
+    {
+        for (auto value : storage)
+        {
+            std::cout
+                << std::fixed << std::setprecision(1) << std::setw(3)
+                << (value.second / 200 >= 1 ? (char)219 : ' ');
+        }
+        std::cout << std::endl;
+    }
+
+    for (auto value : storage)
+    {
+        std::cout 
+            << std::fixed << std::setprecision(1) << std::setw(3) << value.first;
+    }
+
+    std::cout << std::endl;
 }
