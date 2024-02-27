@@ -121,33 +121,50 @@ int main(int argc, char** argv)
 void gen_and_display(std::function<int(void)> generator,
                      int const iterations)
 {
+    // Map can be understood as dictionaries, here we will stored the numbers
+    // and their repetitions.
     auto storage = std::map<int, int>{};
 
+    // Generate multiple random numbers (acccording desired iterations).
     for(auto n=0; n < iterations; ++n)
     {
         ++storage[generator()];
     }
 
+    // Max element is related with max values in maps, you will need the begin
+    // and the end (with its respective implementations). But here it
+    // implements its own comparison operator.
+    // The first and second calls, are related with the access to the pairs in
+    // the map we defined before.
+    // For more info check on: Geeks for Geeks | Map in C++ STL
+
+    // Our focus is to find the element with most repetitions
     auto max_non_rep = 
         std::max_element(std::begin(storage), std::end(storage),
         [](auto value1, auto value2) {return value1.second < value2.second; });
 
+    // Loop to print the bars
     for (auto i = max_non_rep->second / 200; i > 0; --i)
     {
+        // For each implementation
         for (auto value : storage)
         {
+            // Here we will display bars, by using std options from iostream:
+            // - fixed 
+            // - setprecision(n) -> Set n num of digits shown
+            // - setw(n) -> Set width as n spaces
             std::cout
                 << std::fixed << std::setprecision(1) << std::setw(3)
-                << (value.second / 200 >= 1 ? (char)219 : ' ');
+                << (value.second / 200 >= i ? (char)219 : ' ');
         }
         std::cout << std::endl;
     }
 
+    // Loop to print the numbers
     for (auto value : storage)
     {
         std::cout 
             << std::fixed << std::setprecision(1) << std::setw(3) << value.first;
     }
-
     std::cout << std::endl;
 }
