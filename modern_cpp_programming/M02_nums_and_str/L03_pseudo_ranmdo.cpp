@@ -102,18 +102,38 @@ int main(int argc, char** argv)
 
     // Now, let's try the random generation:
     auto my_num = uniform_d(gen);
+    std::cout << "Let's print random numbers" << std::endl;
     for(int i = 0; i < 15; ++i)
     {
         my_num = uniform_d(gen);
-        std::cout << "Num #: " << i << " is: " << my_num << std::endl;
+        std::cout << "Num # " << i << " is: " << my_num << std::endl;
     }
-    
-    // Info #2: Using mtgen for mersenne twister.
+    std::cout << std::endl;
+
+    // Info #2: Using mtgen for mersenne twister and check distribution.
+    std::cout << "Let's check a distribution generation:" << std::endl;
+    int iterations = 10000;
+
     std::random_device rand_dev2{};
     auto gen2 = std::mt19937 {rand_dev2()};
     auto uniform_d2 = std::uniform_int_distribution<> {1, 16};
+    std::cout 
+        << "Uniform distribution:" << std::endl
+        << "\tWith " << iterations << " iterations and each x is equivalent to "
+        << iterations*0.01 << " n of data" << std::endl;
     gen_and_display(
-        [&gen2, &uniform_d2]() {return uniform_d2(gen2);}, 1000);
+        [&gen2, &uniform_d2]() {return uniform_d2(gen2);}, iterations);
+
+    std::random_device rand_dev3{};
+    auto gen3 = std::mt19937 {rand_dev3()};
+    auto normal_d3 = std::normal_distribution<> {16, 2};
+    std::cout << std::endl
+        << "Normal distribution:" << std::endl
+        << "\tWith " << iterations << " iterations and each x is equivalent to "
+        << iterations*0.01 << " n of data" << std::endl;
+    gen_and_display([&gen3, &normal_d3]() 
+                    { return static_cast<int>(std::round(normal_d3(gen3))); }, 
+                     iterations);
 
     return 0;
 }
@@ -144,18 +164,18 @@ void gen_and_display(std::function<int(void)> generator,
         [](auto value1, auto value2) {return value1.second < value2.second; });
 
     // Loop to print the bars
-    for (auto i = max_non_rep->second / 200; i > 0; --i)
+    for (auto i = max_non_rep->second / (iterations * 0.01) ; i > 0; --i)
     {
         // For each implementation
         for (auto value : storage)
         {
             // Here we will display bars, by using std options from iostream:
-            // - fixed 
+            // - fixed -> Set precision of the displayed numeric values
             // - setprecision(n) -> Set n num of digits shown
             // - setw(n) -> Set width as n spaces
             std::cout
                 << std::fixed << std::setprecision(1) << std::setw(3)
-                << (value.second / 200 >= i ? (char)219 : ' ');
+                << (value.second / 200 >= i ? 'x' : ' ');
         }
         std::cout << std::endl;
     }
