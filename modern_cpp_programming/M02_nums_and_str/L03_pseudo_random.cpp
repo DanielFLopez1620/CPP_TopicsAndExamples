@@ -74,14 +74,12 @@
  *      ./pseudo.out
  */
 
-
-
-#include <random>
-#include <chrono>
-#include <functional>
-#include <map>
-#include <iomanip>
-#include <algorithm>
+#include <random>     // Random (pseudo) generation utilities
+#include <chrono>     // For types that tracks time (varying precision)
+#include <functional> // For functions objects and hash function
+#include <map>        // Contains collection of key-value pairs, unique keys
+#include <iomanip>    // Part of the input/output library (complements for texts)
+#include <algorithm>  // Contains functions with a variety of purposes
 
 void gen_and_display(std::function<int(void)> , int const);
 
@@ -138,6 +136,15 @@ int main(int argc, char** argv)
     return 0;
 }
 
+/**
+ * Generate the graph of the distribution selected in the rank specified. Keep
+ * in mind that this display is made on the terminal, so generating a wide
+ * range can  affect the stetic of the display
+ * 
+ * @param generator Function with void params that returns integers, related with
+ *                  the generator.
+ * @param iterations Number of generations made to consider in the graphic.
+*/
 void gen_and_display(std::function<int(void)> generator,
                      int const iterations)
 {
