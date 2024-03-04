@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code was tested with g++ in C++11
+// Code was tested with g++ in C++17
 
 #include <iostream>
 
@@ -33,6 +33,13 @@
  * should use the appropriate operator depdending on the character type
  * (char, wchar_t, char16_t, char32_t) and for strings consider the type of
  * string (with a pointer) and the size.
+ * 
+ * You can compile and run this code with:
+ * 
+ *      g++ -std=c++17 L05_cooked_used_lit.cpp -o cooked_lit.out
+ *      ./cooked_lit.out
+ * 
+ * NOTE: Do not forget to use namespace to prevent clash.
 */
 
 #include <array>
@@ -64,7 +71,7 @@ namespace packing
     {
         const double amount;
     public:
-        constexpr explicit quantity_pack(double const a) : unity(a) {}
+        constexpr explicit quantity_pack(double const a) : amount(a) {}
         explicit operator double() const { return amount; } 
     };
 
@@ -82,6 +89,13 @@ namespace packing
     {
         return quantity_pack<P>(
             static_cast<double>(p1) - static_cast<double>(p2));
+    }
+
+    template <pack P>
+    std::ostream& operator<<(std::ostream& os, quantity_pack<P> const &p1)
+    {
+        os << static_cast<double>(p1);
+        return os;
     }
 
     namespace quantity_pack_literals
@@ -126,15 +140,57 @@ int main(int argc, char** argv)
     auto buffer = std::array<byte, 1_MB>{};
     std::cout << "Example of literal 2 MB to bytes: " << mb_size << std::endl;
 
+    std::cout << std::endl;
     // Info #2:
     using namespace packing;
     using namespace quantity_pack_literals;
 
     std::cout << "Let's obtain the info of the package #1: " << std::endl;
-    auto p1_kg = { 1_kg };
-    auto p1_m2 = { 0.25_m2 };
-    auto p1_pcs = { 20_pcs };
-    std::cout << "Weight: " << p1_kg << "kg" << std::endl << "Area: " << p1_m2 
-              << " m^2" << std::endl << "Pieces: " << p1_pcs << std::endl;
+    auto p1_kg{ 1_kg };
+    auto p1_m2{ 0.25_m2 };
+    auto p1_pcs{ 20_pcs };
+    std::cout << "\tWeight: " << p1_kg << " kg" << std::endl << "\tArea: " 
+              << p1_m2 << " m^2" << std::endl << "\tPieces: " << p1_pcs 
+              << std::endl;
+
+    std::cout << "Let's obtain the info of the package #2: " << std::endl;
+    auto p2_kg{ 3.5_kg };
+    auto p2_m2{ 0.2_m2 };
+    auto p2_pcs{ 5_pcs };
+    std::cout << "\tWeight: " << p2_kg << " kg" << std::endl << "\tArea: " 
+              << p2_m2 << " m^2" << std::endl << "\tPieces: " << p2_pcs 
+              << std::endl;
+    
+    std::cout << "Now let's sum the information of the packages:" << std::endl;
+    auto pt_kg =  p1_kg + p2_kg;
+    auto pt_m2 = p1_m2 + p2_m2;
+    auto pt_pcs = p1_pcs + p2_pcs;
+    std::cout << "\tWeight: " << pt_kg << " kg" << std::endl << "\tArea: " 
+              << pt_m2 << " m^2" << std::endl << "\tPieces: " << pt_pcs 
+              << std::endl;
+
+    // Info #3: Additionally you can create literals for types like 
+    // std::basic_string and std::basic_string_view with:
+
+    using namespace std::string_literals;
+    auto str1{  "Dan"s };
+    auto str2{ L"Dan"s };
+    auto str3{ u"Dan"s };
+    auto str4{ U"Dan"s };
+    using namespace std::string_view_literals;
+    auto str5{ "Dan"sv };
+
+    // For watching the results, you will need to override operator<<
+    /* 
+    std::cout << "Let's see the string literals: " << std::endl
+              << "\tstd::string: " << str1 << std::endl
+              << "\tstd::wstring: " << str2 << std::endl
+              << "\tstd::u16string: " << str3 << std::endl
+              << "\tstd::u32string: " << str4 << std::endl
+              << "\tstd::string_view: " << str5 << std::endl;
+    */
+
+
+
     return 0;
 }
