@@ -46,6 +46,7 @@
 #include <complex>
 #include <chrono>
 #include <string>
+#include <codecvt>
 
 // Info #1: Creating literal by defining const expression.
 namespace bytes_related
@@ -180,17 +181,26 @@ int main(int argc, char** argv)
     using namespace std::string_view_literals;
     auto str5{ "Dan"sv };
 
-    // For watching the results, you will need to override operator<<
-    /* 
-    std::cout << "Let's see the string literals: " << std::endl
-              << "\tstd::string: " << str1 << std::endl
-              << "\tstd::wstring: " << str2 << std::endl
-              << "\tstd::u16string: " << str3 << std::endl
-              << "\tstd::u32string: " << str4 << std::endl
-              << "\tstd::string_view: " << str5 << std::endl;
-    */
+    std::string utf8_16(str3.begin(), str3.end());
+    std::string utf8_32(str4.begin(), str4.end());
+    
+    std::cout  << "Let's see the string literals: " << std::endl
+               << "\tstd::string: " << str1 << std::endl;
+    std::wcout << "\tstd::wstring: " << str2 << std::endl;
+    std::cout  << "\tstd::u16string: " <<  utf8_16 << std::endl 
+               << "\tstd::u32string: "  << utf8_32 << std::endl
+               << "\tstd::string_view: " << str5 << std::endl;
 
-
+    // Info 4: You can also use literals with chronos for time related
+    // operations, which type would be std::chrono::duration<long long>, the 
+    // operators can be operator""h (hours), operator""min (minutes), 
+    // operator""s (seconds), operator""ms (miliseconds), operator""us 
+    // (microseconds).
+    using namespace std::chrono_literals;
+    auto timer {16h + 42min + 16s};
+    std::cout << "Chrono duration of 16h 42m 16s is: "
+        << std::chrono::duration_cast<std::chrono::milliseconds>(timer).count() 
+        << " ms" << std::endl;
 
     return 0;
 }
