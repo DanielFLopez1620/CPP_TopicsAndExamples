@@ -34,6 +34,10 @@
  * (char, wchar_t, char16_t, char32_t) and for strings consider the type of
  * string (with a pointer) and the size.
  * 
+ * Check the info below to understand how to implement cooked literals,
+ * indicate voerrides for them, display them in a proper way, and also use
+ * string literals and chrono 
+ * 
  * You can compile and run this code with:
  * 
  *      g++ -std=c++17 L05_cooked_used_lit.cpp -o cooked_lit.out
@@ -42,13 +46,15 @@
  * NOTE: Do not forget to use namespace to prevent clash.
 */
 
-#include <array>
-#include <complex>
-#include <chrono>
-#include <string>
-#include <codecvt>
+#include <array>   // For managing contiguous array, including operators
+#include <complex> // For using complex numbers (real and imaginary part)
+#include <chrono>  // Related with time tracking in different precisions.
+#include <string>  // Usage of string and char arrays.
+#include <codecvt> // For conversion of character strings (wide and multibyte)
 
-// Info #1: Creating literal by defining const expression.
+// Info #1: Creating literal by defining const expression, for this you use a
+// constexpr and the usage of the ' operator "" ' and adding the suffix. The
+// usage of this definition can be checked on the main.
 namespace bytes_related
 {
     constexpr size_t operator "" _MB(unsigned long long const size)
@@ -57,7 +63,10 @@ namespace bytes_related
     }
 } 
 
-// Info #2: Overriding operators in literals.
+// Info #2: Overriding operators in literals, for this we will take advantage
+// of enumerations, then define the literals and then use templates to override
+// the operator + and - to allow this add and substract base operations. You
+// can check an example on the main.
 namespace packing
 {
     enum class pack
@@ -101,6 +110,7 @@ namespace packing
 
     namespace quantity_pack_literals
     {
+        // Kilogram suffix for floating type
         constexpr quantity_pack<pack::kilogram> operator "" _kg (
             long double const amount)
         {
@@ -108,6 +118,7 @@ namespace packing
                 { static_cast<double>(amount) };
         }
 
+        // Kilogram suffix for integer type
         constexpr quantity_pack<pack::kilogram> operator "" _kg (
             unsigned long long const amount)
         {
@@ -115,6 +126,7 @@ namespace packing
                 { static_cast<double>(amount) };
         }
 
+        // Square meters suffix for floating type
         constexpr quantity_pack<pack::squared_meters> operator "" _m2 (
             long double const amount)
         {
@@ -122,6 +134,7 @@ namespace packing
                 { static_cast<double>(amount) };
         }
 
+        // Pieces suffix for integer types
         constexpr quantity_pack<pack::num_elements> operator "" _pcs (
             unsigned long long const amount)
         {
@@ -139,10 +152,10 @@ int main(int argc, char** argv)
     auto mb_size{ 2_MB };
     using byte = unsigned char;
     auto buffer = std::array<byte, 1_MB>{};
-    std::cout << "Example of literal 2 MB to bytes: " << mb_size << std::endl;
+    std::cout << "Example of literal 2 MB to bytes: " << mb_size << std::endl 
+              << std::endl;
 
-    std::cout << std::endl;
-    // Info #2:
+    // Info #2: Using custom defined literals and check operations.
     using namespace packing;
     using namespace quantity_pack_literals;
 
@@ -171,7 +184,9 @@ int main(int argc, char** argv)
               << std::endl;
 
     // Info #3: Additionally you can create literals for types like 
-    // std::basic_string and std::basic_string_view with:
+    // std::basic_string and std::basic_string_view with, keep in mind that for
+    // the implementation you will need to override oeprator << or use diffent
+    // ostream options.
 
     using namespace std::string_literals;
     auto str1{  "Dan"s };
