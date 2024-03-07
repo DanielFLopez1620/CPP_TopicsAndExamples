@@ -13,28 +13,85 @@
  * 
  *  1. Use a namespace to avoid name clashes.
  *  2. Consider a suffix (including the underscore)
- *  3. Define a literal operator (or template).
+ *  3. Define a literal operator (or template):
+ *      T operator "" _suffix(const char*);
+ * 
+ * NOTE: The ellipsis ('...') used in the templates below are used to declare a
+ * parameter pack, in this case, it will be a pack of char types related with 
+ * ones and zeros for the bits.
 */
 
+
+// Info #1: Here we define a namespace 'binary' and define type aliases, we
+// want to use types like 1111_b8 or 000010100000_b16. The literal operators
+// are nested in the namespace called 'binary_literals' (which is made to 
+// avoid name collisions).
+// The usage of two additional namespaces 'binary_literals' and 
+// 'binary_interns' is to achieve a good pratice and hides the implementation
+// details from the client.
 namespace binary
 {
     using byte8 = unsigned char;
     using byte16 = unsigned short;
-    using byte32 = unsigned int;
 
     namespace binary_literals
     {
         namespace binary_interns
         {
+            // The implementation below seems to be recursive but it isn't true
+            // runtime recursion, this is because of the extension that is made
+            // by the compiler when using templates.
+            
+            // Base template that includes parameter pack of chars
             template <typename CharT, char... bits>
             struct binary_struct;
 
+            // Specialization for '0'
             template <typename CharT, char... bits>
             struct binary_struct<CharT, '0', bits...>
             {
                 static constexpr CharT value
                     { binary_struct<CharT, bits...>::value> };
             };
+
+            // Specialization for '1'
+            template <typename CharT, char... bits>
+            struct binary_struct<CharT, '1', bits...>
+            {
+                static constexpr CharT value
+                    { binary_struct<CharT, bits...>::value};
+            };
+
+            // Last specialization (empty)
+            template <typename CharT>
+            struct binary_struct<CharT>
+            {
+                static constexpr CharT value{ 0 };
+            };
+        }
+        template<char... bits>
+        constexpr byte8 operator""_b8()
+        {
+            // Check that the size is 8 (it cannot have trailing zeros)
+            static_assert(
+                sizeof...(bits) <= 8,
+                "Binary byte8 must be up to 8 digits long");
+            return binary_intern::binary_struct<byte8, bits...>::value;
+        }
+        template<char... bits>
+        constexpr byte16 operator""_b16()
+        {
+            // Check that the size is 16 (it cannot have trailing zeros)
+            static_assert(
+                sizeof...(bits) <= 16,
+                "Binary byte8 must be up to 16 digits long");
+            return binary_intern::binary_struct<byte8, bits...>::value;
         }
     }
+}
+
+int main(int argc, char** argv)
+{
+    
+    return 0;
 }
