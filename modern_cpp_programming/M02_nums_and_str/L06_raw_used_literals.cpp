@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code was tested with g++ in C++17
+// Code was tested with g++ in C++14
 
 #include <iostream>
 
@@ -51,7 +51,7 @@ namespace binary
             struct binary_struct<CharT, '0', bits...>
             {
                 static constexpr CharT value
-                    { binary_struct<CharT, bits...>::value> };
+                    { binary_struct<CharT, bits...>::value };
             };
 
             // Specialization for '1'
@@ -59,7 +59,7 @@ namespace binary
             struct binary_struct<CharT, '1', bits...>
             {
                 static constexpr CharT value
-                    { binary_struct<CharT, bits...>::value};
+                    { binary_struct<CharT, bits...>::value };
             };
 
             // Last specialization (empty)
@@ -76,7 +76,7 @@ namespace binary
             static_assert(
                 sizeof...(bits) <= 8,
                 "Binary byte8 must be up to 8 digits long");
-            return binary_intern::binary_struct<byte8, bits...>::value;
+            return binary_interns::binary_struct<byte8, bits...>::value;
         }
         template<char... bits>
         constexpr byte16 operator""_b16()
@@ -85,13 +85,27 @@ namespace binary
             static_assert(
                 sizeof...(bits) <= 16,
                 "Binary byte8 must be up to 16 digits long");
-            return binary_intern::binary_struct<byte8, bits...>::value;
+            return binary_interns::binary_struct<byte8, bits...>::value;
         }
     }
 }
 
 int main(int argc, char** argv)
 {
-    
+    // Info #2: Implementing our own raw literals, for this remember to use the
+    // proper namespaces.
+
+    using namespace binary;
+    using namespace binary_literals;
+
+    auto byte1 = 1001_b8;
+    auto byte2 = 100010001001_b16;
+
+    std::cout << "Byte1:" << (int) byte1 << std::endl;
+    std::cout << "Byte2:" << (int) byte2 << std::endl;
+    std::cout << "For properly using raw literals you will also need to "
+              << "override the operator<< and specify the proper string."
+              << std::endl;
+
     return 0;
 }
