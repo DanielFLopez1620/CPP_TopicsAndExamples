@@ -57,8 +57,6 @@ int main(int argc, char** argv)
               << "MS5: " << msg5 << std::endl
               << "MS6: " << msg6 << std::endl
               << "MS7: " << msg7 << std::endl;
-
-
-
+              
     return 0;
 }
