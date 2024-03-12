@@ -24,12 +24,17 @@
  * The previous mentions aren't complete instructions, do not forget to check
  * the code below and the documentation for better understanding.
  * 
+ * You can run this code with: 
+ * 
+ *      g++ -std=c++14 L08_string_helpers.cpp -o lib_str.out
+ *      ./lib_str.out
+ * 
  * NOTE: Do not forget to implement <string> and <algorithm> headers.
 */
 
-#include <algorithm>
-#include <string>
-#include <vector>
+#include <algorithm>  // For various purposes related with seacrhing, sorting...
+#include <string>     // String and char array management
+#include <vector>     // For vector structure management
 
 namespace string_lib
 {
