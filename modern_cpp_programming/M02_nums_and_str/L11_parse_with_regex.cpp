@@ -8,7 +8,7 @@
  * can use std::smatch, but you will also discover how to use std::regex_search
  * and std::sregex_iteration.
  * 
- * The regex we are going to use here is:
+ * Review of regex: 
  * 
  *      ^(?!#)(\w+)\s*=\s*([\w\d]+[\w\d._,\-:]*)$
  * 
@@ -20,12 +20,30 @@
  *  - = : Equals sign.
  *  - ([\w\d]+[\w\d._,\-:]*) : Capturing group for a word (can contain symbols)
  *  - $ : End of line.
+ * 
+ * In the code below, although we are going to use the regex:
+ * 
+ *   #([a-f0-9]{2})\n ([a-f0-9]{2}) "([a-f0-9]{2})\n : For hex color code
+ *   <\s*A\s+[^>]*href\s*=\s*"([^"]*)" : For catching URLs
+ * 
+ * Down below, you will use:
+ *  - regex_search: Determines if there is a match of a regex (and possibly
+ *    some sub-matches).
+ *  - regex_iterator: Access the individual matches of a regex.
+ *  - regex_token_iterator: Access individual sub-mathces of every match
+ *    within the underlying character sequence.
+ * 
+ * NOTE: For more info on regex check: https://en.cppreference.com/w/cpp/regex
+ * 
+ * You can run this code with:
+ * 
+ *      g++ -std=c++17 L11_parse_with_regex.cpp -o parse_regex.out
+ *      ./parse_regex.out
+ * 
 */
 
-#include <regex>
-#include <string>
-
-
+#include <regex>  // C++ Library to use regular expressions
+#include <string> // To manage strings and char arrays.
 
 int main(int argc, char** argv)
 {
@@ -50,6 +68,8 @@ int main(int argc, char** argv)
               << "Lines containts the pattern? " << std::endl;
     for (const auto& line : lines)
     {
+        // In this case, we only use search to use a flag if the pattern is
+        // present.
         std::cout << line << ":= " << std::boolalpha 
                   << std::regex_search(line, rgx) << std::endl;
     }
@@ -58,6 +78,8 @@ int main(int argc, char** argv)
     std::smatch color_match;
     for (const auto& line : lines)
     {
+        // Now we are using the search, with a match, so we can consider
+        // new matches.
         if (std::regex_search(line, color_match, rgx))
         {
             std::cout << "matches for '" << line << "'\n";
@@ -68,21 +90,40 @@ int main(int argc, char** argv)
         }
     }
 
-    // Info #2: Using iterator with regex for searching occasions.
-    std::string lines_str = {"Roses are #ff0000 \n violets are #0000ff \n all of my base are belong to you"};
+    // Info #2: Using sregex iterator with regex for searching matches.
+    std::string lines_str = {
+        "\tRoses are #ff0000 \n\tViolets are #0000ff \n \
+        All of my base are belong to you"
+    };
+    std::cout << "Searching for colors in poem: " << std::endl 
+              << lines_str << std::endl;
 
-    auto match_begin = std::sregex_iterator(lines_str.begin(), lines_str.end(), rgx);
+    // Create an iteratorthat starts with the array, and search for mathces.
+    auto match_begin = std::sregex_iterator(lines_str.begin(), 
+        lines_str.end(), rgx);
     auto match_end = std::sregex_iterator();
 
+    // Use the iterator with a loop to display the matches.
     for (std::sregex_iterator i = match_begin; i != match_end; ++i)
     {
         std::smatch patter_match = *i;
         std::string str_match = patter_match.str();
-        std::cout << str_match << std::endl;
+        std::cout <<"Match found: "<< str_match << std::endl;
     }
 
+    // Info #3: Using sregex token iterator with regex for searching mathces.
+    std::string html = "\t" R"(<p><a href="http://brave.com">brave</a> )"
+        "\n\t" R"(< a HREF ="http://cppreference.com">cppreference</a>\n</p>)";
     
+    std::cout << "Searching URLs in HTML Code: " << std::endl << html
+              << std::endl << std::endl << "URLs found: " << std::endl;
+    
+    std::regex url_re(R"!!(<\s*A\s+[^>]*href\s*=\s*"([^"]*)")!!", 
+        std::regex::icase);
 
+    std::copy(std::sregex_token_iterator(html.begin(), html.end(), url_re, 1),
+              std::sregex_token_iterator(),
+              std::ostream_iterator<std::string>(std::cout, "\n"));
 
     return 0;
 }
