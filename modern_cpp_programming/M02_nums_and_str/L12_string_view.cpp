@@ -21,17 +21,23 @@
  * 
  * It defines a reference to a constant contiguous sequence of characters, it
  * can only view the string, so no modifications are allowed. And this type
- * of data is smaller as it is only a pointer.
+ * of data is smaller as it is only a pointer. Additionally, the passing a
+ * string_view can still create temporaries, but the impact is pretty less than
+ * allatocations at the heap and copying.
  * 
  * NOTE: You cannot convert from basic_string_view to basic_string. But you
  * can create your own constructor explictly. 
-
+ * 
+ * You can run this code with:
+ *      g++ -std=c++17 L12_string_view.cpp -o str_view.out
+ *      ./str_view.out
 */
 
 #include <string>
 #include <string_view>
 
 std::string_view get_name(std::string_view word);
+std::string_view trimming(std::string_view text);
 
 int main()
 {
@@ -43,7 +49,24 @@ int main()
     auto filename1 = get_name(file);
 
     std::cout << "Path: " << file << std::endl
-              << "Name of file: " << filename1 << std::endl;
+              << "Name of file: " << filename1 << std::endl << std::endl;
+
+    // Info #2: Using string_view and the converting to string.
+    std::string_view str_vw { "preview" };
+    std::string normal_str{ str_vw };
+
+    std::cout << "String view:" << str_vw << std::endl
+              << "String basic: " << normal_str << std::endl << std::endl;
+
+    // Info #3: You can use two addtional methods when using string_view, they
+    // are remove_prefix() and remove_suffix, illustrated below with a custom
+    // function, so do not forget to check it.
+
+    auto text_to_trim { "  trim here     " };
+    auto text_trimmed{ trimming(text_to_trim) };
+
+    std::cout << "Text to trim: {" << text_to_trim << "}" << std::endl
+              << "Text trimmed: {" << text_trimmed << "}" << std::endl;
 
     return 0;
 }
@@ -62,4 +85,21 @@ std::string_view get_name(std::string_view word)
     auto const index1 {word.find_last_of(R"(\)")};
     auto const index2 {word.find_last_of('.')};
     return word.substr(index1 + 1, index2 - index1 - 1);
+}
+
+/**
+ * Function that trimms spaces considering them suffix and prefix, so it return
+ *  a string with no additional spaces.
+ * 
+ * @param text Sting to trim additional spaces
+ * 
+ * @return Trimmed string with no additional spaces as suffix or prefix.
+*/
+std::string_view trimming(std::string_view text)
+{
+    auto const ini{ text.find_first_not_of(" ") };
+    auto const end{ text.find_last_not_of(" ") };
+    text.remove_suffix(text.length() - end - 1);
+    text.remove_prefix(ini);
+    return text;
 }
