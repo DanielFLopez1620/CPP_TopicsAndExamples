@@ -10,6 +10,11 @@
  * 
  * For this, you will need to define a specialization of the std::formatter
  * template, then implement a parse method and a finally a format method.
+ * Check the implementation in this code below.
+ * 
+ * You can compile this code with:
+ *      g++ -std=c++20 L14_format_user_types.cpp -o format_t.out
+ *      ./format_t.out
 */
 
 #include <format>
@@ -23,7 +28,31 @@ struct student_t
     float mean_grade;
 };
 
+// Info #1: Template for implementing the formatter of type student 
+template <>
+struct std::formatter<student_t>
+{
+    // Info #2: Parse takes a single arg that returns a 
+    // basic_format_parse_context iterator.
+    constexpr aut parse(format_parse_context& ctx)
+    {
+        return ctx.begin();
+    } 
+
+    // Info #3: Format takes two arguments (the object of interest and then
+    // the context), and it will write the output (formatted string) to the
+    // ctx.out().
+    auto format(student_t const & student, format_context& ctx)
+    {
+        return std::format_to(ctx.out(), "Student {} with ID {} has {} points",
+            student.id, student.name, student.mean_grade);
+    }
+};
+
 int main(int argc, char** argv)
 {
+    // Info #4: Creating an object and using format.
+    student_t stu{ 16, "Dan", 4.8};
+    auto report = std::format("{}", stu);
     return 0;
 }
