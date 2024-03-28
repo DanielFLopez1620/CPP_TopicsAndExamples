@@ -18,9 +18,24 @@
  *   make possible a copy.
  * - When we say move, we refer to using move constructor and move assignment
  *   so it is possible to move and object.
+ * - Using the special member cases provided below, you can prevent certain
+ *   usages and make sure that the compiler doesn't create more implementations
+ *   for those special members.
+ * 
+ * Finally, you may need to know that there are some cases you still need to
+ * provide an empty implementation in order to prevent copies or operations that
+ * you do not want, but prefer to use the commands and helps presented in this
+ * module.
+ * 
+ * NOTE: When ready, you can run this code with:
+ * 
+ *      g++ -std=c++11 /L01_def_del_func.cpp -o def_f.out
+ *      ./def_f.out
+ * 
  * 
  * Now, let's mention some handler option to functions:
 */
+
 
 class MySetOfFuncs
 {
@@ -72,22 +87,46 @@ public:
 
     // Making sure it is movable
     NonCopyButMovable(NonCopyButMovable&& other):ex(std::move(other.ex))
-    {   other.ex = nullptr;   }
+    {
+        other.ex = nullptr;   
+    }
+    NonCopyButMovable& operator=(NonCopyButMovable&& other)
+    {
+        if(this != std::addressof(other))
+        {
+            delete ex;
+            ex = std::move(other.ex);
+            other.ex = nullptr;
+        }
+        return *this;
+    }
+
 };
+
+// Info #6: You can use templates and then use '=delete' to prevent certain
+// types, prevent promotions or ensure you use specific types
+template <typename T>
+void command(T val) = delete;
+void command(short val)  // Can only be called with short values
+{
+    std::cout << std::endl << "This command works only for shorts" << std::endl;
+}
+ 
 
 // In the main we will test our implementations:
 int main(int argc, char** argv)
 {
     std::cout << "Check the code to understand the constructor that call"
               << " the results shown below, so you can learn about defaulted"
-              << " and deleted functions" << std::endl;
+              << " and deleted functions" << std::endl << std::endl;
     
-    // Info #: Calling the constructors implementations.
+    // Info #7: Calling the constructors implementations.
     MySetOfFuncs a;             // Default
     MySetOfFuncs name1("Dan");  // Parameterized constructor
     MySetOfFuncs name2("DD");   // Parameterized constructor
     // name1 = name2            // Error, copy isn't possible
     // MySetOfFuncs dou1(1620)  // Error, double type param is disabled
 
+    command((short) 4);
     return 0;
 }
