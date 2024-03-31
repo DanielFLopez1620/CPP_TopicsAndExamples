@@ -1,7 +1,7 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
 // BASED TOO ON GEEKSFORGEEKS Website:
 // https://www.geeksforgeeks.org/lambda-expression-in-c/
-// Code was tested with g++ in C++11
+// Code was tested with g++ in C++14
 
 #include <iostream>
 
@@ -13,6 +13,39 @@
  *      {
  *          defintion
  *      } 
+ * 
+ * Another way to consider a lambda expression is:
+ * 
+ *      [capture-list](params) mutable constexpr excpetion attr -> return
+ *      {
+ *          body
+ *      }
+ * 
+ * So, the simpliest lambda is []{}
+ * 
+ * Here is important to say that lamdbas are actually a class, so when we
+ * create one lambda, we instance a new object which is called 'lambda
+ * clousure'.
+ * 
+ * Lambda expressions, similar to functions, can capture variables by copy
+ * (value) or by reference, but it cannot be captured multiple times. Also, 
+ * they can capture variables available to its content, so elements with
+ * static storage aren't recommended with lambdas. More info on captures is
+ * considered below:
+ * 
+ * - [](){}        -> Doesn't capture anything.
+ * - [&](){}       -> Capture everything by reference
+ * - [=](){}       -> Capture everything by copy
+ * - [&x](){}      -> Captures x by reference
+ * - [x](){}       -> Captures x by copy
+ * - [&x...](){}   -> Captures pack extension x by reference.
+ * - [x...](){}    -> Captures pack extension x by copy
+ * - [&, x](){}    -> Captures everything by reference, except x (copy)
+ * - [=, &x](){}   -> Captures everythin by copy, except x (reference)
+ * - [&x=expr](){} -> Reference to x, initialized from expr
+ * - [x, x](){}    -> ERROR, multiple captures aren't possible.
+ * - [&this](){}   -> ERROR, pointer is always considered as copy
+ * 
 */
 
 #include <vector>
@@ -61,7 +94,16 @@ int main()
         m_notes_str += std::to_string(note) + " ,";
     }
     std::cout << "From notes array: " << m_notes_str << std::endl
-            << "How many pretty good? " << aproveds << std::endl << std::endl;
+            << "How many pretty good?: " << aproveds << std::endl << std::endl;
+
+    // Info #4: You can use lambdas to generate moves, consider the next case
+    // by combining it with std::move. 
+    auto ptr = std::make_unique<int>(1620);
+    std::cout << "Consider original value: " << *ptr << std::endl;
+    auto l = [ptr = std::move(ptr)]() mutable 
+        { auto& lptr = ptr; return ++*lptr; };
+    l();
+    std::cout << "Increment using pointer and lambda: " << *ptr << std::endl;
 
     return 0;
 }
