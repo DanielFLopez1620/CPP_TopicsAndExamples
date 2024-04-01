@@ -1,7 +1,7 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
 // BASED TOO ON GEEKSFORGEEKS Website:
 // https://www.geeksforgeeks.org/lambda-expression-in-c/
-// Code was tested with g++ in C++14
+// Code was tested with g++ in C++17
 
 #include <iostream>
 
@@ -46,13 +46,22 @@
  * - [x, x](){}    -> ERROR, multiple captures aren't possible.
  * - [&this](){}   -> ERROR, pointer is always considered as copy
  * 
+ * For testing, you can run this code with:
+ *      g++ -std=c++17 L02_lambda_func.cpp -o lambda.out
+ *      ./lambda.out
+ * 
 */
 
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <numeric>
-#include <memory>
+#include <vector>    // Library for using vectors (sequence containers
+                     // representing arrays that can change).
+
+#include <algorithm> // Collection of functions for range of elements.
+
+#include <string>    // Functions and methods for string management.
+
+#include <numeric>   // Set of algorithms to perform operations on numeric val.
+
+#include <memory>    // For managing dynamic memory
 
 int main()
 {
@@ -96,7 +105,24 @@ int main()
     std::cout << "From notes array: " << m_notes_str << std::endl
             << "How many pretty good?: " << aproveds << std::endl << std::endl;
 
-    // Info #4: You can use lambdas to generate moves, consider the next case
+    // Info #4: Considering lambda and reference access.
+    std::vector<int> nums_vec = {1, 6, 2, 0};
+    std::cout << "Numeric array before: " << std::endl;
+    for(const int n : nums_vec)
+    {
+        std::cout << n << ", ";
+    }
+    std::cout << std::endl;
+    auto l_push = [&](int num) { nums_vec.push_back(num); };
+    l_push(1620);
+    std::cout << "Numeric array after: " << std::endl;
+    for(const int n : nums_vec)
+    {
+        std::cout << n << ", ";
+    }
+    std::cout << std::endl << std::endl;
+
+    // Info #5: You can use lambdas to generate moves, consider the next case
     // by combining it with std::move. 
     auto ptr = std::make_unique<int>(1620);
     std::cout << "Consider original value: " << *ptr << std::endl;
