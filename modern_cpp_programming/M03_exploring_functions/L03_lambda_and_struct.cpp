@@ -8,10 +8,17 @@
 /**
  * There are many ways to use a lambda, and it also includes a class and a
  * struct usage. Here we are going to illustrate some of them.
+ * 
+ * Check each one, and when you are ready, you can execute the program with:
+ * 
+ *      g++ -std=c++17 L03_lambda_and_struct.cpp -o struct_lambda.out
+ *      ./struct_lambda.out
 */
 
-#include <vector>
-#include <algorithm>
+#include <vector>     // Library for using vectors (sequence containers
+                      // representing arrays that can change).
+
+#include <algorithm>  // Collection of functions for range of elements.
 
 // Info #1: Create a lambda class for multiple implementations 
 class range_checker
@@ -38,12 +45,70 @@ public:
      }
 };
 
+// Info #2: Using structs and capturing data members with copy:
+struct presentation_type1
+{
+    std::string name;
+    std::string profession;
+
+    auto present()
+    {
+        return [i = name, j = profession] 
+        { std::cout << "I am" << i << " / " << j << std::endl; };
+    }
+};
+
+// Info #3: Using structs and capturing data members with copying the entire 
+// object (implicit caputre of 'this' is deprecated in C++20 in this form)
+struct presentation_type2
+{
+    std::string name;
+    std::string profession;
+
+    auto present()
+    {
+        return [=] 
+        { 
+            std::cout << "I am" << name << " / " << profession << std::endl; 
+        };
+    }
+};
+
+// Info #4: You can use this in the capturing group and it allows to invoke
+// other methods.
+struct presentation_type3
+{
+    std::string name;
+    std::string profession;
+
+    auto present()
+    {
+        return [this] 
+        {
+            std::cout << "I am" << name << " / " << profession << std::endl; 
+        };
+    }
+};
+
 int main(int argc, char** argv)
 {
+    // Info #5: Implementing the lambda range_checker function
     auto nums = std::vector<int>{0, 19, 17, 12, 3};
     int max { 20 };
     int min { 16 };
     auto is_inrage = std::count_if(std::begin(nums), std::end(nums), 
         range_checker(min, max));
+    std::cout << "Nums vector: ";
+    for(const int n : nums)
+    {
+        std::cout << n << ", ";
+    }
+    std::cout << std::endl << "How many between " << min << " and " << max
+              << "? : " << is_inrage << std::endl << std::endl;
+
+    // Info #6: Calling presentations and getting the displays of the lambdas.
+    auto p1 = presentation_type1{ "Dan", "Eng."}.present();
+    auto p2 = presentation_type2{ "DD", "Des."}.present();
+    auto p3 = presentation_type3{ "Skovk", "Eng."}.present();
     return 0;
 }
