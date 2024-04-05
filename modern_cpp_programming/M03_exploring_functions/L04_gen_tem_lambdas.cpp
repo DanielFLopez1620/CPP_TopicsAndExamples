@@ -25,18 +25,31 @@
  *   compile time and decay_t, remove any qualifier (const, volatile...) to 
  *   leave the underlying type.
  * 
+ * - std::forward<template>(args);
+ *   Forwards lvalues as lvalue or rvalue depending on the template
+ * 
  * Now, for C++20, there is the possibility of using template lambdas. And they
  * can be used to restrict the use of a generic lambda to only some types, make
  * sure that two or more arguments have the same type, retrieve the type of a
  * generic parameter (so it allows to use static methods or iterator) or
  * perform a perfect forwarding in a generic lambda.
+ * 
+ * You can try this code with:
+ * 
+ *      g++ -std=c++20 L04_gen_tem_lambdas.cpp -o gen_lambda.out
+ *      ./gen_lambda.out
 */
 
-#include <vector>
-#include <algorithm>
-#include <utility>
-#include <numeric>
-#include <string>
+#include <vector>     // Library for using vectors (sequence containers
+                      // representing arrays that can change).
+
+#include <algorithm>  // Collection of functions for range of elements.
+
+#include <utility>    // Language support and general purpose library
+
+#include <numeric>    // Common math functions and types
+
+#include <string>     // Fro string and char array management
 
 // Info #1: Creating a lambda that can only invoked with vector types.
 std::vector<float> vec_ex {1.6, 2.0, 6.2, 2.6};
@@ -60,7 +73,7 @@ struct generic_sum
 
 int main(int argc, char** argv)
 {
-    // Info #: Basic usage of lambda with int and text examples, but in this
+    // Info #3: Basic usage of lambda with int and text examples, but in this
     // case, using auto for a generic implementations.
     auto lambda_sum = [](auto const e1, auto const e2) { return e1 + e2; };
 
@@ -80,13 +93,13 @@ int main(int argc, char** argv)
     for( auto str : my_texts) { std:: cout << str << ", "; }
     std::cout << std::endl << "Concatenation: " << concatenate << std::endl;
 
-    // Info #: Using a template for std::vectors lambdas with templates.
+    // Info #4: Using a template for std::vectors lambdas with templates.
     std::cout << "TEMPLATE LAMBDA\nFor the numeric vector: " << std::endl;
     for( auto num : my_nums) { std:: cout << num << ", "; }
     vector_lambda(my_nums);
     //vector_lambda(1620); // Will fail because it is not vector.
 
-    // Info #: Using generic lambdas to create templates with two different
+    // Info #5: Using generic lambdas to create templates with two different
     // variables of the same type.
     auto displayer = []<typename T>(T x, T y)
     {
@@ -97,7 +110,7 @@ int main(int argc, char** argv)
     // displayer(10, "Dan"); // Will launch error
 
 
-    // Info #: There may be cases when you need to know the type of a 
+    // Info #6: There may be cases when you need to know the type of a 
     // parameter and then you can use the instances and the static methods,
     // then you can use type deducers and pointers.
 
@@ -107,7 +120,7 @@ int main(int argc, char** argv)
         static void disp() { std::cout << "Str member" << std::endl; }
     };
 
-    auto type_det = [](auto x)
+    auto type_detect = [](auto x)
     {
         // Determindate type of X and then use it with T
         using T = std::decay_t<decltype(x)>;
@@ -118,8 +131,21 @@ int main(int argc, char** argv)
     };
 
     // Call lambda
-    type_det(str_member{});
+    type_detect(str_member{});
 
+    // Info #7: Generic lambdas with templates also allow to work with multiple
+    // data provided to the function argumetns
+    template <typename ...T>
+    void type_multi_detect(T&& ... args)
+    { /* ... */}
+
+    auto multi_args = [](auto&& ...args)
+    {
+        return type_multi_detect(std::forward<decltype(args)>(args)...);
+        // Alternative:
+        // reutrn type_multi_detect(std::forward<T>(args)...);
+    };
+    multi_args(1620, "Hi");
 
     return 0;
 }
