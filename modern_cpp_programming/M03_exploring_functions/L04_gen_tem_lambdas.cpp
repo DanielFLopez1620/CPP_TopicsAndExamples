@@ -1,7 +1,7 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
 // BASED TOO ON GEEKSFORGEEKS Website:
 // https://www.geeksforgeeks.org/lambda-expression-in-c/
-// Code was tested with g++ in C++20
+// Code wasn't tested, oriented with g++ in C++20
 
 #include <iostream>
 
