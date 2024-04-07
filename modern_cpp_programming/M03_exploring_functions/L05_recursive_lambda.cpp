@@ -19,6 +19,11 @@
  * the capture. Then, it must have a name, it can only be defined in a
  * function scope, itmust not be from a unspecified type and the capture must
  * be by reference.
+ * 
+ *  You can try this code with:
+ * 
+ *      g++ -std=c++20 L05_recursive_lambda.cpp -o rec_lambda.out
+ *      ./rec_lambda.out
 */
 
 #include <functional>  // For std::function and related usage of functions
