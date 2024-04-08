@@ -69,11 +69,12 @@ int main(int argc, char** argv)
 
     std::cout << "Multiplication 1: " << product1 << std::endl
               << "Multiplication 2: " << product2 << std::endl << std::endl;
-    return 0;
 
     // Info #4: Using odd vector implementation
     auto num1 = 1, num2 = 7, num3 = 5;
     std::cout << "My odd vector is: " << num1 << " " << num2 << " "
               << num3 << std::endl;
     auto vector1 = make_odd_vector(num1, num2, num3);
+    
+    return 0;
 }
