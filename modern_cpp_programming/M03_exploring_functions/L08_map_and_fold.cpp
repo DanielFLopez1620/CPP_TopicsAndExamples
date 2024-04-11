@@ -28,7 +28,8 @@
 // - Generic function template that takes a function and a range as parameters,
 //   the std::transform apply the function to all elements in the range (in 
 //   place) and std::forward ensures the correct type. To finally return the
-//   range.
+//   range. So this implementation works for support iterating elements like
+//   std::vector, std::list, std::arrays and C arrays.
 template <typename F, typename R>
 R mapf(F&& func, R range)
 {
@@ -38,7 +39,8 @@ R mapf(F&& func, R range)
 }
 // - Generic function template that takes a function and an object as params,
 //   then using the map created, insert the transformed value obtained
-//   in the iteration of the elements after it applyed the function.
+//   in the iteration of the elements after it applyed the function. So this
+//   implementation is focused on std::maps and std::pairs.
 template<typename F, typename T, typename U>
 std::map<T, U> mapf(F&& func, std::map<T,U> const & map)
 {
@@ -51,20 +53,56 @@ std::map<T, U> mapf(F&& func, std::map<T,U> const & map)
 }
 // - Generic function template that takes a function and a queue object as a 
 //   param, then iterates ( pop) the elements of the input queue, to 
-//   finally apply the function and add (push) the return to a new queue.
+//   finally apply the function and add (push) the return to a new queue. So this
+//   implementation only works for std::queue.
 template<typename F, typename T>
-std::queue<T> mapf(F&& func, std::queue<T> q)
+std::queue<T> mapf(F&& func, std::queue<T> queue)
 {
     std::queue<T> r;
-    while(!q.empty())
+    while(!queue.empty())
     {
-        r.push(func(q.front()));
-        q.pop();
+        r.push(func(queue.front()));
+        queue.pop();
     }
 }
 
+// Info #2: Down below, you can find implementations of fold expressions.
+// - Generic function template which takes a function, a range and an initial 
+// value to implement an accumulation of the elements of the range (it uses 
+// left folding).
+template <typename F, typename R, typename T>
+const T fold_left(F&& func, R&& range, T init)
+{
+    return std::accumulate(
+        std::begin(range), std::end(range), std::move(init), std::forward<F>(func);
+    )
+}
+// - Generic function template which takes a function, a range and an initial
+//   value to implement an accumulation of the elements of the range (it uses
+//   right folding)
+template <typename F, typename R, typename T>
+constexpr T fold_right(F&& func, R&& range, T init)
+{
+    return std::accumulate(
+        std::rbegin(range), std::rend(range), std::move(init), std::forward<F>(func));
+    )
+}
+// - Generic function template that takes a function, a queue and a initial 
+//   value, so it iterates through the elements (performing a left fold) until
+//   a function is applyied to all the elemtent and the accumulated value is
+//   returned.
+template <typename F, typename T>
+constexpr T fold_left(F&& func, std::queue<T> queue, T init)
+{
+    while(!queue.empty())
+    {
+        init = func(init, queue.front());
+        queue.pop();
+    }
+    return init;
+}
 
 int main(int argc, char** argv)
 {
-
+    return 0;
 }
