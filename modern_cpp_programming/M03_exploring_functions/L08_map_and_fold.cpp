@@ -104,5 +104,46 @@ constexpr T fold_left(F&& func, std::queue<T> queue, T init)
 
 int main(int argc, char** argv)
 {
+    
+    // Info #4: Applying maps to get the absolute value of the elements of
+    // a vector or array.
+    auto vec_nums = std::vector<float>{0.0, -16.20, 1.521, -20.16};
+    auto abs_nums = mapf([](int const i){ return std::abs(i); }, vec_nums);
+    std::cout << "Original vector of nums: " ;
+    for (float num : vec_nums)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << "Absolute values: " ;
+    for (float num : abs_nums)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << std::endl;
+
+    // Info #5: Applying maps to elevate the numbers to the third power that
+    // belongs to an array.
+    auto list_nums = std::list<float>{1.5, 1.6, 1.7, 1.8};
+    auto pow3_nums = mapf([](int const i) { return i*i*i; }, list_nums);
+    std::cout << "Original list of nums: " ;
+    for (float num : list_nums)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << "Cubed values: " ;
+    for (float num : pow3_nums)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << std::endl;
+
+    // Info #6: Make lower case the elements of a map using map function.
+    auto phonem = std::map<std::string, std::string> {
+        {"D", "de"}, {"E", "i"}, {"F", "eff"}
+    };
+    auto low_phonem = mapf([](std::pair<std::string, std::string> const pair_ele){
+        return std::make_pair(mapf(tolower, pair_ele.first), pair_ele.second);
+    }, phonem);
+
     return 0;
 }
