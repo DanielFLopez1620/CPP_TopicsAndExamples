@@ -23,6 +23,7 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 
 // Info #1: Down below, you can see three implementations using map
 // - Generic function template that takes a function and a range as parameters,
@@ -47,7 +48,7 @@ std::map<T, U> mapf(F&& func, std::map<T,U> const & map)
     std::map<T, U> range_to_return;
     for (auto const element : map)
     {
-        range_to_return.insert(funct(element));
+        range_to_return.insert(func(element));
     }
     return range_to_return;
 }
@@ -64,6 +65,7 @@ std::queue<T> mapf(F&& func, std::queue<T> queue)
         r.push(func(queue.front()));
         queue.pop();
     }
+    return r;
 }
 
 // Info #2: Down below, you can find implementations of fold expressions.
@@ -74,8 +76,8 @@ template <typename F, typename R, typename T>
 const T fold_left(F&& func, R&& range, T init)
 {
     return std::accumulate(
-        std::begin(range), std::end(range), std::move(init), std::forward<F>(func);
-    )
+        std::begin(range), std::end(range), std::move(init), std::forward<F>(func)
+    );
 }
 // - Generic function template which takes a function, a range and an initial
 //   value to implement an accumulation of the elements of the range (it uses
@@ -84,8 +86,8 @@ template <typename F, typename R, typename T>
 constexpr T fold_right(F&& func, R&& range, T init)
 {
     return std::accumulate(
-        std::rbegin(range), std::rend(range), std::move(init), std::forward<F>(func));
-    )
+        std::rbegin(range), std::rend(range), std::move(init), std::forward<F>(func)
+    );
 }
 // - Generic function template that takes a function, a queue and a initial 
 //   value, so it iterates through the elements (performing a left fold) until
@@ -100,6 +102,14 @@ constexpr T fold_left(F&& func, std::queue<T> queue, T init)
         queue.pop();
     }
     return init;
+}
+
+template<typename F, typename T>
+void for_each_queue(std::queue<T>& q, F&& func) {
+    while (!q.empty()) {
+        func(q.front());
+        q.pop();
+    }
 }
 
 int main(int argc, char** argv)
@@ -141,9 +151,46 @@ int main(int argc, char** argv)
     auto phonem = std::map<std::string, std::string> {
         {"D", "de"}, {"E", "i"}, {"F", "eff"}
     };
-    auto low_phonem = mapf([](std::pair<std::string, std::string> const pair_ele){
-        return std::make_pair(mapf(tolower, pair_ele.first), pair_ele.second);
-    }, phonem);
+    auto low_phonem = mapf(
+        [](std::pair<std::string, std::string> const pair_ele)
+        {
+            return std::make_pair(mapf(tolower, pair_ele.first), pair_ele.second);
+        }, phonem);
+    std::cout << "Original pairs: " ;
+    std::for_each(phonem.begin(), phonem.end(), [](const auto& kvp)
+    {
+        std::cout << "( " << kvp.first << ", " << kvp.second << "), ";
+    });
+    std::cout << std::endl << "Converted pairs: ";
+    std::for_each(low_phonem.begin(), low_phonem.end(), [](const auto& kvp)
+    {
+        std::cout << "( " << kvp.first << ", " << kvp.second << "), ";
+    });
+    std::cout << std::endl << std::endl;
+
+    // Info #7: Using queues for determinating if a grade is approved or not
+    // using maps.
+    auto student_grades = std::queue<float>();
+    student_grades.push(5.0);
+    student_grades.push(2.6);
+    student_grades.push(3.5);
+    student_grades.push(4.0);
+    student_grades.push(1.7);
+    auto reviewed_grades = mapf([](int const i)
+        {
+            return i > 3.0 ? 'A' : 'D';
+        }, student_grades);
+    std::cout << "Student Grades: ";
+    for_each_queue(student_grades, [](float grade) {
+        std::cout << grade << ", ";
+    });
+    std::cout << std::endl << "Grades review: " ;
+    for_each_queue(reviewed_grades, [](char review) {
+        std::cout << review << ", ";
+    });
+    std::cout << std::endl << std::endl;
+
 
     return 0;
 }
+
