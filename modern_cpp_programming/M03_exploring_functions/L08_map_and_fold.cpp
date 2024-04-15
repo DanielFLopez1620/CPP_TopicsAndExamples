@@ -11,8 +11,9 @@
  * 
  * Commands to learn:
  * 
- * - std::transform
- * - std::forward
+ * - std::transform.
+ * - std::forward.
+ * - std::plus.
 */
 
 #include <vector>
@@ -104,6 +105,12 @@ constexpr T fold_left(F&& func, std::queue<T> queue, T init)
     return init;
 }
 
+/**
+ * Custom implementation to iterate through a queue or stack object
+ * 
+ * @param q Standard queue with the data to access
+ * @param func Reference to function that will be used with the queue.
+*/
 template<typename F, typename T>
 void for_each_queue(std::queue<T>& q, F&& func) {
     while (!q.empty()) {
@@ -190,6 +197,42 @@ int main(int argc, char** argv)
     });
     std::cout << std::endl << std::endl;
 
+    // Info #8: Using fold expression to make sums of elements. Keep in mind
+    // that the sum can also be achieved with std::plus<>().
+    auto int_vec = std::vector<int>{16, 17, 18, 19};
+    auto sum_int_vec = fold_left([](const int n1, const int n2) 
+        {return n1 + n2; }, int_vec, 0); 
+    std::cout << "Original vector of nums: " ;
+    for (float num : list_nums)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << "Sum of values: " << sum_int_vec << std::endl;
+
+    // Info #9: Using fold expression to concatenate strings. Similar to the
+    // previous case, you can also use std::plus<>  but only when joining chars 
+    // to create a string.
+    auto chains = std::vector<std::string>{"This", "is", "Esparta", "!"};
+    auto conca_ch = fold_right( [](std::string const & t1, 
+        std::string const & t2 ) { return t1 + t2; } , chains, std::string{});
+    std::cout << "Original words: " ;
+    for (float num : list_nums)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << "Right Concatenation: " << conca_ch << std::endl;
+
+    // Info #10: Using fold expressions with maps and pairs, to sum data stored
+    // in the keys.
+    auto data = std::map<char, int>{{'a', 3}, {'b', 5}, {'d', 2}};
+    auto counter = fold_left([](int const freq, std::pair<char, int> const dict)
+        { return freq + dict.second; }, data, 0);
+    std::cout << std::endl << "Original pairs of data and their frequency: " ;
+    std::for_each(phonem.begin(), phonem.end(), [](const auto& kvp)
+    {
+        std::cout << "( " << kvp.first << ", " << kvp.second << "), ";
+    });
+    std::cout << "\nThe num of data registered is: " << counter << std::endl;
 
     return 0;
 }
