@@ -11,20 +11,32 @@
  * 
  * Commands to learn:
  * 
- * - std::transform.
- * - std::forward.
- * - std::plus.
+ * - std::transform(ini, end , pos, func):
+ *      For applying functions to the elements of the given array.
+ * - std::forward(element):
+ *      Pass the lvalue as lvalue or rvalue.
+ * - std::plus<>():
+ *      Function object to perform a effective addition on two instances
+ * 
+ * NOTE: If you do not know the difference, a vector is a dynamic array with
+ * the abiltily to resize automatically (contiguous storage), while a list is 
+ * double linked sequence (in non contiguous memory).
+ * 
+ * For running this code you can use:
+ * 
+ *      g++ -std=c++17 L08_map_and_fold.cpp -o mapfold.out
+ *      ./mapfold.out
 */
 
-#include <vector>
-#include <list>
-#include <map>
-#include <array>
-#include <queue>
-#include <string>
-#include <algorithm>
-#include <cmath>
-#include <numeric>
+#include <vector>    // Oriented to use variable-size arrays.
+#include <list>      // To manage sequences stored in non contiguous memory.
+#include <map>       // Pair elements that consist of a key and a value.
+#include <array>     // For using arrays
+#include <queue>     // For stack elements with pop and push operations
+#include <string>    // Oriented to string and char arrays management
+#include <algorithm> // For common implementations of functions
+#include <cmath>     // Constants and math values
+#include <numeric>   // For numerical functions
 
 // Info #1: Down below, you can see three implementations using map
 // - Generic function template that takes a function and a range as parameters,
@@ -233,6 +245,22 @@ int main(int argc, char** argv)
         std::cout << "( " << kvp.first << ", " << kvp.second << "), ";
     });
     std::cout << "\nThe num of data registered is: " << counter << std::endl;
+
+    // Info #11: You can combine fold and map operations, to get a single result,
+    // but keep in mind the proper order.
+    auto vec_flt = std::vector<float>{ -1.6, 1.7, -1.8, 1.9};
+    auto comb_flt = fold_left(
+        std::plus<>(), 
+        mapf([](int const num) {return num*2;}, mapf(
+        [](int const num) { return std::abs(num); }, vec_flt)), 0
+    );
+    std::cout << "Original float numbers: " ;
+    for (float num : vec_flt)
+    {
+        std::cout << num << ", ";
+    } 
+    std::cout << std::endl << "Result fold and map expressions: " << comb_flt 
+              << std::endl;
 
     return 0;
 }
