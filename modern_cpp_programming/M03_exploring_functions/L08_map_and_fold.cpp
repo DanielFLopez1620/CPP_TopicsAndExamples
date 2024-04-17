@@ -89,7 +89,8 @@ template <typename F, typename R, typename T>
 const T fold_left(F&& func, R&& range, T init)
 {
     return std::accumulate(
-        std::begin(range), std::end(range), std::move(init), std::forward<F>(func)
+        std::begin(range), std::end(range), std::move(init), 
+        std::forward<F>(func)
     );
 }
 // - Generic function template which takes a function, a range and an initial
@@ -99,7 +100,8 @@ template <typename F, typename R, typename T>
 constexpr T fold_right(F&& func, R&& range, T init)
 {
     return std::accumulate(
-        std::rbegin(range), std::rend(range), std::move(init), std::forward<F>(func)
+        std::rbegin(range), std::rend(range), std::move(init), 
+        std::forward<F>(func)
     );
 }
 // - Generic function template that takes a function, a queue and a initial 
@@ -173,7 +175,8 @@ int main(int argc, char** argv)
     auto low_phonem = mapf(
         [](std::pair<std::string, std::string> const pair_ele)
         {
-            return std::make_pair(mapf(tolower, pair_ele.first), pair_ele.second);
+            return std::make_pair(mapf(tolower, pair_ele.first), 
+                pair_ele.second);
         }, phonem);
     std::cout << "Original pairs: " ;
     std::for_each(phonem.begin(), phonem.end(), [](const auto& kvp)
@@ -246,8 +249,9 @@ int main(int argc, char** argv)
     });
     std::cout << "\nThe num of data registered is: " << counter << std::endl;
 
-    // Info #11: You can combine fold and map operations, to get a single result,
-    // but keep in mind the proper order.
+    // Info #11: You can combine fold and map operations, to get a single 
+    // result, but keep in mind the proper order. This process is also know as
+    // pipelined.
     auto vec_flt = std::vector<float>{ -1.6, 1.7, -1.8, 1.9};
     auto comb_flt = fold_left(
         std::plus<>(), 
