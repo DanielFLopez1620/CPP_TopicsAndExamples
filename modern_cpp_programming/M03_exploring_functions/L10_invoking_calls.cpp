@@ -29,33 +29,58 @@
  * warnings.
 */
 
-#include <functional>
+#include <functional> // For using function objects and the standard hash func.
 
+/**
+ * Simple function to calculate the product of two nums
+ * 
+ * @param n1 First floating factor
+ * @param n2 Second floating factor
+ * 
+ * @return Product of the given nubers
+*/
 float product(float const n1, float const n2)
 {
     return n1 * n2;
 }
 
+/**
+ * Structure that initialize a value, and has a method to calculate a product.
+*/
 struct factor
 {
-    float n1 = 2;
+    float n1 = 16;
     void num_by(float const n2) { n1 *= n2; }
 };
 
 int main(int argc, char* argv[])
 {
+    // Info #1: Using invoke with a function and providing the args.
     float n1 = 16.0, n2 = 20.0;
     auto call1 = std::invoke(product, n1, n2);
+    std::cout << "Using nums: ( " << n1 << ", " << n2 << ")..." << std::endl
+              << "Call 1: Product function: " << call1 << std::endl;
 
+    // Info #2: Using a pointer to access a function and provide the args.
     auto call2 = std::invoke(&product, n1, n2);
+    std::cout << "Call 2: Pointer to function: " << call2 << std::endl; 
 
+    // Info #3: Creating a pointer to the proper function, then provide the
+    // args.
     float(*p_product)(float const, float const) = &product;
     auto call3 = std::invoke(p_product, n1, n2);
+    std::cout << "Call 3: Double pointer: " << call3 << std::endl;
 
+    // Info #4: Accesing a struct and using its attributes and methods with
+    // invoke.
     factor fac;
-    auto call4 = std::invoke(std::multiplies<>(), std::invoke(&fac::n1), n2);
+    auto call4 = std::invoke(std::multiplies<>(), std::invoke(&factor::n1, fac), n2);
+    std::cout << "Call 4: Struct and attribute: " << call4 << std::endl; 
 
-    auto l_product = [](auto n1, auto n2) { return a*b; };
+    // Info #5: Using invoke for names lambdas.
+    auto l_product = [](auto n1, auto n2) { return n1*n2; };
     auto call5 = std::invoke(l_product, n1, n2);
+    std::cout << "Call 5: Lambda function: " << call5 << std::endl;
+
     return 0;
 }
