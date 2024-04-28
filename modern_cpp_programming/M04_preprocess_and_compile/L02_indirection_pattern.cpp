@@ -12,6 +12,11 @@
  * Here we will check more forms of definitions that can be considered with
  * the preprocesor.
  * 
+ * You can execute the code with:
+ * 
+ *      g++ -std=c++17 L02_indirection_pattern.cpp -o ind_pat.out
+ *      ./ind_pat.out
+ * 
 */
 
 // Info #1: Here we define a macro that expands with the stringizing operator,
