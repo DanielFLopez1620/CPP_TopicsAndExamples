@@ -82,14 +82,16 @@ public:
 int main(int argc, char** argv)
 {
     // Using as size checker
-    std::cout << "Passport type has two integers, one boolean and one char "
+    std::cout << "Size Checker: " << std::endl
+              << "Passport type has two integers, one boolean and one char "
               << "then, the size should be 12, otherwise it will call assert. "
               << "\nEdit the size below in source code, to watch the assert."
               << std::endl << std::endl; 
     static_assert(sizeof(passport_t) == 12, "Size of passport must be 12");
     
     // Using as POD checker
-    std::cout << "AS you can see, the next classes are POD, but if you "
+    std::cout << "POD Checker: " << std::endl
+              << "As you can see, the next classes are POD, but if you "
               << "uncomment the custom obj part, you can check the assertion"
               << std::endl << std::endl;
     pod_checker<int> t1; 
@@ -97,7 +99,8 @@ int main(int argc, char** argv)
     // pod_checker<NonPOD> t3;
 
     // Using argument checker
-    std::cout << "You can also use a checker of the arguments, so you ensure"
+    std::cout << "Arg Checker: " << std::endl
+              << "You can also use a checker of the arguments, so you ensure"
               << " about a proper type of them. The first definition is valid,"
               << " but if you uncomment the secound one, you will see the "
               << "assertion" << std::endl << std::endl;
