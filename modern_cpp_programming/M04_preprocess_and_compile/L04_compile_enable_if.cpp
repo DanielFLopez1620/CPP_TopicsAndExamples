@@ -24,7 +24,26 @@
  *          typedef T type;
  *      }; 
  * 
+ * Why this works? Well... the compiler needs to build a set of possible
+ * overloads when encountering a function call, and in case of templates
+ * it needs to performa substituion for the specified or deduced types. But
+ * when using SFINAE, a fails in the construction doesn't call an error, it 
+ * just remove the certain function overload and continues.
+ * 
+ * In this code, you can check examples similar to the previous lesson, the
+ * difference is that static_assert doesn't rely on SFINAE, then the result
+ * is a failed assert at compile time, while std::enable_if doesn't trigger
+ * compiler errores. Then you can use std::enable_if to more precise 
+ * constructions of functions, because if a type or condition is not allowed
+ * it will just do not write the overload, then preventing ambiguous call
+ * of overloaded functions.
+ * 
  * NOTE: For using std::enable_if, the header <type_traits> is required.
+ * 
+ * You can use this code with:
+ * 
+ *      g++ -std=c++17 L04_compile_enable_if.cpp -o enable.out
+ *      ./enable.out
 */
 
 #include <type_traits>
