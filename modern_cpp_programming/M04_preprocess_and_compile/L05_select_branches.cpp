@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code was tested with g++ in C++17
+// Code wasn't tested, oriented to C++ 20
 
 #include <iostream>
 
@@ -28,7 +28,15 @@
  * in case of pointer. On the other hand, std::is_pointer_v<T> refers to type
  * traits value constants, also defined in type traits, and they are more concise
  * in given the value.
+ * 
+ * You can compile and use this code with:
+ *  
+ *      g++ -std=c++20 L05_select_branches.cpp -o branches.out
+ *      ./branches.out
 */
+
+#include <memory>
+#include <type_traits>
 
 // Info #1: You can change the usage of std::enable_if and still be relying on
 // the SFINAE with a if constexpr to impose restrictions on function templates
@@ -37,19 +45,19 @@ template <typename T>
 auto get_value(T value)
 {
     if constexpr (std::is_pointer_v<T>)
-        return *value;
+        return *value;  // Return the dereferenced pointer
     else
-        return value;
+        return value;   // Return the original value
 }
 
 // In constrast, you can use the enable_if command to obtain similar results:
 template <typename T, typename = typename std::enable_if_t<std::is_pointer_v<T>, T>>
-auto get_value_e(T value)
+auto get_value_e_p(T value)
 {
     return *value;
 }
 template <typename T, typename = typename std::enable_if_t<!std::is_pointer_v<T>, T>>
-auto get_value_e(T value)
+auto get_value_e_v(T value)
 {
     return value;
 }
@@ -75,7 +83,7 @@ namespace binary
             // chain, based on a CharT type, a letter or character d and a pack
             // of characters bits.
             template <typename CharT, char d, char... bits>
-            constexpr Chart binary_eval()
+            constexpr CharT binary_eval()
             {
                 // If the size of the pack is zero, converst the value of the
                 // single character.
@@ -105,8 +113,19 @@ namespace binary
 
 int main(int argc, char* argv[])
 {
+    // Using getter of value that is based on if const expr
     auto value1 = get_value(16.20);
-    auto ptr = std::make_unique<float>(20.16)
+    auto ptr = std::make_unique<float>(20.16);
     auto value2 = get_value(ptr);
+
+    std::cout << "Get value of var: " << value1 << std::endl
+              << "Get value of ptr: " << value2 << std::endl;
+
+    // Using binary literals
+    using namespace binary;
+    using namespace binary_literals;
+
+    auto my_8bit = 1100_b8;
+    std::cout << std::endl << "Byte8:" << (int) my_8bit << std::endl;
     return 0;
 }
