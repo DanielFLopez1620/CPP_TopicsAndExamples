@@ -8,6 +8,17 @@
  * Then, the compilers have their own way to have extensions, but in C++11
  * the attributes were introduced, and they tell the compiler how to implement
  * certain extensions.
+ * 
+ * Some of the ones you can find are:
+ * 
+ * - deprecated: For those caes when an implementation is getting old
+ * - nodiscard: To prevent discards of returns
+ * - maybe_unused: Just to indicate that it may not be used.
+ * - noreturn: A function that doesn't return
+ * - carries_depedency: std::memroy_order propagetes in and out the func.
+ * - likely: More likely to be executed.
+ * - unlikely: Less likely to be executed.
+ * - no unique_adress:  Save spece if no type, or resue any padding otherwise.
 */
 
 // Info #1: If you want to make sure a return value isn't discarded, you can use
@@ -39,6 +50,36 @@ ErrorCode processRead(int input)
     return 0;
 }
 
+// Info #4: You can use [[maybe_unused]] so the compiler doesn't emit a
+// warning when a variable isn't used. 
+void strange_display(int a, float b, [[maybe_unused]] char c)
+{
+    std::cout << "Int: " << a << std::endl
+              << "Float: " << b << std::endl
+              << "Char: Unused" << std::endl;
+}
+
+// Info #5: In case you need to "fall" of a case in a switch, you can use
+// [[fallthroug]], to indicate the intentionality of do not break.
+void strange_switch(int a)
+{
+    switch (a)
+    {
+    case 1:
+        std::cout << "Printing one..." << std::endl;
+        [[fallthroug]]
+    case 2:
+        std::cout << "Printing two..." << std::endl;
+        break;
+    case 3:
+        std::cout << "Printing three..." << std::endl;
+        break;
+    
+    default:
+        break;
+    }
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -66,6 +107,22 @@ int main(int argc, char* argv[])
               << "Uncomment the function below to watch a warn of a old func"
               << std::endl;
     auto old_num = old_getter();
+
+    // Just not use certain variables
+    std::cout << std::endl << "You can prevent a warn of unused variables,"
+              << "with attributes. Check the two lines below, as they are"
+              << "unused, we can't (well... we shouldn't use them.)"
+              << std::endl; 
+    [[maybe_unused]] auto word = "Am I ignored?";
+    strange_display(1620, 16.20, '1');
+
+    // Falling through a case...
+    std::cout << std::endl << "FALLTRHOUGH" << std::endl
+              << "In case you have asked, yes, you can use two cases of the"
+              << " switch, then use the fallthrough. Check the example: (1)"
+              << std::endl;
+    strange_switch(1);
+
 
     return 0;
 }
