@@ -22,10 +22,22 @@
  * - It promotes good OOP and mean less concern of the types
  * - Auto does not work with moveable, const or valatile types
  * - Do not try to use auto for multi-word types
+ * - You cannot use const and volatile with auto, as they need a ref type.
+ * - Combining auto with multi word types in the context isn't allowed.
+ * 
+ * You can even use auto in for loops. But in some cases you may need to give
+ * more context, for example, when using maps.
+ * 
+ * You can run and compile this code with:
+ * 
+ *      g++ -std=c++20 L01_using_auto.cpp -o auto.out
+ *      ./auto.out
 */
 
 #include <vector>
 
+// Function prototype
+// Check the info below.
 auto ex_func(auto a, auto b);
 
 int main(int argc, char* argv[])
@@ -37,7 +49,7 @@ int main(int argc, char* argv[])
     std::cout << "Using auto with common types: " << std::endl
               << "\tInteger: " << num << std::endl
               << "\tFloating: " << flt << std::endl
-              << "\tString: " << text << std::endl;
+              << "\tString: " << text << std::endl << std::endl;
 
     // Info #2: The type deduction can go further if you want, you can use 
     // 'auto <name> = <type-id> {<value>}' to declare local variabels and 
@@ -51,13 +63,13 @@ int main(int argc, char* argv[])
     {
         std::cout << letters[i] << " ";
     }
-    std::cout << std::endl << "String: " << word << std::endl
-              << "Integer vector: ";
+    std::cout << std::endl << "\tString: " << word << std::endl
+              << "\tInteger vector: ";
     for(float num : nums)
     {
         std::cout << num << " ";
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 
     // Note: If you have never seen a for-each, in C++, continue exploring the
     // lessons of this module.
@@ -82,10 +94,28 @@ int main(int argc, char* argv[])
     auto diff = [] (auto const a, auto const b){return a - b;};
     // It will be applied to if the operator- is allowed
 
+    // NOTE: If a conversion is not allowed, for example, with int to int &.
+    // You can use decltype(auto) in those cases. As 'decltype' is used to
+    // inspect the declared type of an entity, for example, with labmdas or
+    // template parameters.
+
     return 0;
 }
 
-auto ex_func(auto a, auto b)
+
+/**
+ * Info #4: You can also use auto to specify the return of a function. Keep
+ * in mind that in C++11 you may need to provide an inferred type (check
+ * the comment below), but after C++14 it isn't necesary.
+ * 
+ * Simple sum function with two auto arguments.
+ * 
+ * @param a Number 1
+ * @param b Number 2
+ * 
+ * @return Sum of the nums.
+*/
+auto ex_func(auto a, auto b)  // -> int
 {
     return a + b;
 }
