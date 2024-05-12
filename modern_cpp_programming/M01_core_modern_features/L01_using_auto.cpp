@@ -34,7 +34,7 @@
  *      ./auto.out
 */
 
-#include <vector>
+#include <vector> // For using dynamic arrays.
 
 // Function prototype
 // Check the info below.
