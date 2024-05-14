@@ -20,12 +20,17 @@
  * Also, keep in mind that you cannot initialize integers or floats directly
  * with braces. And it also happens with narrowing conversions like long double
  * to float or doubles, or unscoped enumerations. 
+ * 
+ * You can run this code with:
+ * 
+ *      g++ -std=c++20 L03_uniform_initialze.cpp -o init.out
+ *      ./init.out
 */
 
 // --------------------------- INCLUDES AND DEPENDENCIES ----------------------
 
-#include <vector>
-#include <map>
+#include <vector>   // For using dynamic arrays.
+#include <map>      // For using pairs or key/value elements.
 
 // --------------------------- CUSTOMS DEFINITION -----------------------------
 class question
@@ -58,7 +63,8 @@ int main(int argc, char* argv[])
     std::string text1("direct");
     std::string text2 = "copy";
     std::cout << "Text1: " << text1 << " initialization" << std::endl
-              << "Text2: " << text2 << " initialization" << std::endl;
+              << "Text2: " << text2 << " initialization" << std::endl
+              << std::endl;
 
     // Info #2: But, we want to create uniform initializations regardless the 
     // type, so we then use braces '{}' which can be used with direct or copy 

@@ -34,12 +34,16 @@
  *      ./auto.out
 */
 
+// -------------------------------- IMPORTS AND INCLUDES ----------------------
+
 #include <vector> // For using dynamic arrays.
 
-// Function prototype
+// ------------------------------- PROTOTYPES AND DEFINITIONS -----------------
 // Check the info below.
 auto ex_func(auto a, auto b);
 
+
+// -------------------------------- MAIN IMPLEMENTATION -----------------------
 int main(int argc, char* argv[])
 {
     // Info #1: You can use auto with the types you are familiar with:
@@ -102,6 +106,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+// --------------------------------- FUNCTION DEFINITIONS ---------------------
 
 /**
  * Info #4: You can also use auto to specify the return of a function. Keep

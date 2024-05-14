@@ -24,6 +24,8 @@
  *      ./aliases.out
 */
 
+// ------------------- CUSTOM CLASSES, PROTOTYPES AND DEFINITONS --------------
+
 // Info #1: You can use alias templates of the form 
 // 'template< <params> > <id> = <type> 
 template <class T>
@@ -34,7 +36,7 @@ class custom_class { /* ... */};
 typedef unsigned int numeral;
 typedef unsigned int * numeral_ptr;
 
-
+// --------------------- MAIN IMPLEMENTATION -----------------------------------
 int main(int argc, char** argv)
 {
     // Info #3: Basic usage of type aliases: using <identifier> = <type_id>
