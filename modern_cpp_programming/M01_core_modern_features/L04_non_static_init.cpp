@@ -25,11 +25,14 @@
  * - In cases that the member has been initialized with pointer 'this'.
  * - Elements with references to each other (complementaries).
  * - Test of inputs params for checking exceptions.
+ * 
+ * When ready, you can try and explore the code with:
+ * 
+ *      g++ -std=c++20 L04_non_static_init.cpp -o non_static.out
+ *      ./non_static.out
 */
-
-#include <string>
-#include <chrono>
-#include <thread>
+// ----------------- HEADERS AND IMPORTS --------------------------------------
+#include <string>   // For string management
 
 // ------------------ TYPES AND DEFINITIONS -----------------------------------
 enum class PositionNum {One, Two, Three};
@@ -92,12 +95,12 @@ struct constructor_check
     constructor_check(constructor_check&& other) 
     { std::cout << "CC -> Move constructor" << std::endl; }
     constructor_check& operator=(constructor_check const & other) 
-    { std::cout << "CC -> Assignment" << std::endl; }
+    { std::cout << "CC -> Assignment" << std::endl; return *this; }
     constructor_check& operator=(constructor_check&& other)
-    { std::cout << "CC -> Move assignment" << std::endl; }
+    { std::cout << "CC -> Move assignment" << std::endl; return *this; }
     ~constructor_check()
     { std::cout << "CC -> Destructor" << std::endl; }
-}
+};
 
 // --------------------------- MAIN IMPLEMENTATION ----------------------------
 
@@ -115,6 +118,8 @@ int main(int argc, char* argv[])
     auto label1 { Label("Dan", 16) };
 
     // Checking constructor usage
+    std::cout << std::endl << "Now, let's experiment with constructors:" 
+              << std::endl;
     constructor_check ex1;
     constructor_check ex2{ "Hi!" };
     constructor_check ex3{ ex2 };
