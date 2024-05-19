@@ -56,6 +56,8 @@
  * 
 */
 
+// ---------------------------- CUSTOM DEFINITIONS ----------------------------
+
 // Info #1: Alignas can be used to control the alignment of a type in both,
 // class level or data member level, keep in mind it must be consistent with
 // the types you are using and the purpose of the implementation. 
@@ -70,6 +72,7 @@ struct access
     alignas(8) unsigned int id;
 };
 
+// ---------------------------------- MAIN IMPLEMENTATION --------------------- 
 
 int main(int argc, char* argv[])
 {
@@ -85,7 +88,6 @@ int main(int argc, char* argv[])
               << "\tChar: " << alignof(char) << std::endl
               << "\tInt: " << alignof(int) << std::endl
               << "\tDouble: " << alignof(double) << std::endl;
-
 
     return 0;
 }
