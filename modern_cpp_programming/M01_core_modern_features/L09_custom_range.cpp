@@ -15,6 +15,13 @@
  *  - operator*: Deferencing and access by using pointers.
  *  - operator!=: Comparation of inequality, in case of end check.
  *  - Also, you must provide free begin and end functions types.
+ * 
+ * Check the multiple implementations required, and when you are ready, you can
+ * execute and run the code with: 
+ * 
+ *      g++ -std=c++20 L09_custom_range.cpp -o cus_ran.out
+ *      ./cus_ran.out
+ *      
 */
 
 // Info #1: First, we need to create our iterable class, it can be an array,
@@ -30,6 +37,7 @@ class demo_array
 {
     // Base declaration of array with fixed size
     T data[Size] = {};
+
 public:
     /**
      * Getter of the element at the given position.
@@ -60,6 +68,10 @@ public:
     */
     size_t GetSize() const { return Size; }
 };
+
+// Info #2: Then we will have to create a iterator base class (later we will
+// define a mutable and a constant types), that has an implementation of the 
+// required operators (++ increasing one, * deferencing and != inequality).
 
 /**
  * Demo iterator types template for the demo array.
@@ -122,12 +134,35 @@ private:
     C& collection;
 };
 
-template <typename T, size_t const Size>
-using demo_array_iterator = demo_array_iterator_type<T, demo_array<T, Size>, Size>;
+// Info #3: Defining the mutable and const iterators for the range 
+// implementations.
 
+/**
+ * Definition of variable iterator for a demo array
+*/
 template <typename T, size_t const Size>
-using demo_array_const_itertor = demo_array_iterator_type <T, demo_array<T, Size> const, Size>;
+using demo_array_iterator = demo_array_iterator_type<T, 
+    demo_array<T, Size>, Size>;
 
+/**
+ * Definition of a constant iterator for a demo array
+*/
+template <typename T, size_t const Size>
+using demo_array_const_iterator = demo_array_iterator_type <T, 
+    demo_array<T, Size> const, Size>;
+
+// Info #4: Provide begin and end functions for the iterators to know about
+// the elements at the start and the end of the array. It must be implemented
+// for the mutable and const iterators.
+
+/**
+ * Define a begin for iterators of the type demo array, as it will return the
+ * first element of the array.
+ * 
+ * @param collection Demo array with a given type and size.
+ * 
+ * @return Element at the beginning of the array
+*/
 template <typename T, size_t const Size>
 inline demo_array_iterator<T, Size> begin(
     demo_array<T, Size>& collection)
@@ -135,6 +170,14 @@ inline demo_array_iterator<T, Size> begin(
     return demo_array_iterator<T, Size>(collection, 0);
 }
 
+/**
+ * Define a end for iterators of the type demo array, as it will return the
+ * last element of the array.
+ * 
+ * @param collection Demo array with a given type and size.
+ * 
+ * @return Element at the end of the array.
+*/
 template <typename T, size_t const Size>
 inline demo_array_iterator<T, Size> end(
     demo_array<T,Size>& collection)
@@ -142,34 +185,54 @@ inline demo_array_iterator<T, Size> end(
     return demo_array_iterator<T, Size>(collection, collection.GetSize());
 }
 
+/**
+ * Define a begin for iterators of the type demo array, as it will return the
+ * first element of the array.
+ * 
+ * @param collection Const demo array with a given type and size.
+ * 
+ * @return Element at the beginning of the array
+*/
 template <typename T, size_t const Size>
-inline demo_array_const_itertor<T, Size> begin(
+inline demo_array_const_iterator<T, Size> begin(
     demo_array<T, Size> const & collection)
 {
-    return demo_array_const_itertor<T, Size>(collection, 0);
+    return demo_array_const_iterator<T, Size>(collection, 0);
 }
 
+/**
+ * Define a end for iterators of the type demo array, as it will return the
+ * last element of the array.
+ * 
+ * @param collection Const demo array with a given type and size.
+ * 
+ * @return Element at the end of the array
+*/
 template <typename T, size_t const Size>
-inline demo_array_const_itertor<T, Size> end(
+inline demo_array_const_iterator<T, Size> end(
     demo_array<T, Size> const & collection)
 {
-    return demo_array_const_itertor<T, Size>(
+    return demo_array_const_iterator<T, Size>(
         collection, collection.GetSize());
 }
 
 int main(int argc, char* argv[])
 {
+    // Instance of a custom float array
     demo_array<float, 4> custom_array;
+
+    // Filling the array
     custom_array.setAt(0, 1.6);
     custom_array.setAt(1, 2.0);
     custom_array.setAt(2, 6.2);
     custom_array.setAt(3, 0.0);
 
-    std::cout << "Elements of custom array: ";
+    // Displaying the elements with a for each:
+    std::cout << "Elements of custom array: { ";
     for(auto && element : custom_array)
     {
-        std::cout << element << " ,";
+        std::cout << element << " , ";
     }
-    std::cout << std::endl;
+    std::cout << "}"<<std::endl;
     return 0;
 }
