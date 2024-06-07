@@ -46,6 +46,8 @@ auto ex_func(auto a, auto b);
 // -------------------------------- MAIN IMPLEMENTATION -----------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 1: Using auto...\n" << std::endl;
+
     // Info #1: You can use auto with the types you are familiar with:
     auto num = 16;
     auto flt = 3.1416;
@@ -104,7 +106,8 @@ int main(int argc, char* argv[])
     // template parameters.
 
     return 0;
-}
+
+} // main
 
 // --------------------------------- FUNCTION DEFINITIONS ---------------------
 

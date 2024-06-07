@@ -33,12 +33,17 @@
 #include <map>      // For using pairs or key/value elements.
 
 // --------------------------- CUSTOMS DEFINITION -----------------------------
+
+/**
+ * Simple class that has private attributes oriented to a question of an exam.
+ */
 class question
 {
 private:
     std::string q_text_;
     char correct_opt_;
 public:
+    //Let's implement some constructors
     question():q_text_(" "), correct_opt_(' ') 
     {   std::cout << "Question: Void constructor" << std::endl; }
     question(std::string q_text, char correct_opt)
@@ -58,6 +63,8 @@ void display_content(std::initializer_list<float> const);
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 3: Uniform initialization...\n" << std::endl;
+
     // Info #1: There are two types of initialization, one that is make direct
     // by using braces and other that is based on a copy.
     std::string text1("direct");

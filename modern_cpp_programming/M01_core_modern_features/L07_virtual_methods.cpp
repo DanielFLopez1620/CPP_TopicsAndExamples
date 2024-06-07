@@ -25,6 +25,7 @@
  *      ./virt.out
 */
 
+// --------------------- STRUCTU AND CLASSES DEFINITIONS -----------------------
 
 // Info #1: Down below you can see the class implementations for three elements
 // that can be related with inheritance a vehicle, a car and a sport car. In 
@@ -69,7 +70,8 @@ public:
     {
         std::cout << "The serial number is...." << std::endl;
     }
-};
+
+}; // class Vehicle
 
 /**
  * Generic car, vehicle with a motor and four tires.
@@ -101,7 +103,8 @@ public:
     {
         std::cout << "WRoom WRoom..." << std::endl;
     }
-};
+
+}; // class Car
 
 /**
  * Type of car faster and with more powerful motor.
@@ -116,10 +119,15 @@ public:
     {
         std::cout << "VROOOM....." << std::endl;
     }
-};
+
+}; // class SportCar
+
+// ---------------------- MAIN IMPLEMENTATION ---------------------------------
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 7: Virtual Methods...\n" << std::endl;
+    
     // Info #2: Explore the instance of the objects below to understand the
     // override of the inheritance methods.
     std::cout << "Vehicle object: " << std::endl;

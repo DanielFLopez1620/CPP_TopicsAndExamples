@@ -57,6 +57,8 @@ void display_grade(Grade current_grade);
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 6: Scoped enumerations..." << std::endl;
+    
     // Info # 3: Using local scoped enumerations identifier in the local scope
     using Grade::Third;
     Grade my_grade = Third;
@@ -71,7 +73,7 @@ int main(int argc, char* argv[])
     std::cout << "Static Cast of Grade Third is: " << casted << std::endl;
 
     return 0;
-}
+} // main
 
 void display_grade(Grade current_grade)
 {
@@ -90,4 +92,4 @@ void display_grade(Grade current_grade)
         default:
             std::cout << "Unknown grade" << std::endl;
     }
-}
+} // display_grade

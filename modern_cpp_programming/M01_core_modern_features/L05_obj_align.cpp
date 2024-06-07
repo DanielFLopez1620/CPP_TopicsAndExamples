@@ -76,6 +76,8 @@ struct access
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 5: Object alignment in memory...\n" << std::endl;
+    
     // Info #2: To query or get the alignment of a type, you use 'alignof'
     // operator, remember to use auto for better type deduction.
     auto double_char_align = alignof(double_char);
@@ -90,4 +92,5 @@ int main(int argc, char* argv[])
               << "\tDouble: " << alignof(double) << std::endl;
 
     return 0;
-}
+
+} // main

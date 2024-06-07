@@ -48,11 +48,17 @@
  * 
 */
 
-#include <vector>
-#include <map>
+// ------------------------- REQUIRED LIBRARIES -------------------------------
 
+#include <vector>  // For managin dynamic arrays
+#include <map>     // Pair of element that has the relation key/value
+
+
+// ------------------------- MAIN IMPLEMENTATIONS -----------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 8: Using for each\n" << std::endl;
+
     // Info #1: The implementation of the for each in C++ is:
     //     for ( <element> : <range> ) <loop_statement>
     // In the element, you have to specify a type, but you can simply use auto,

@@ -24,7 +24,8 @@ namespace
         std::cout << n1 << " + " << n2 << " = " << res << std::endl;
         return res;
     }
-}
+
+} // unnamed namespace
 
 // Custom namespace for the module
 namespace unnamed_2
@@ -35,4 +36,4 @@ namespace unnamed_2
         // Return the value returned by the second sum (and display the msg)
         return sum(n1, n2);
     }
-}
+} // namespace unnamed_2

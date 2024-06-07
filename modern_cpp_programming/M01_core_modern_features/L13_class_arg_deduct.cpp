@@ -7,17 +7,36 @@
  * It can be annoying to have to declared a specific argument for a template,
  * but after C++17 exists something called 'class template argument deduction'
  * which enables the compiler to deduce the missing template args.
+ * 
+ * You can run the code below with:
+ * 
+ *      g++ -std=c++20 L13_class_arg_deduct.cpp -o deduct.out
+ *      ./deduct.out
 */
 
-#include <vector>
-#include <functional>
-#include <utility>
-#include <mutex>
-#include <typeinfo>
+// ------------------------------ REQUIRED HEADERS ----------------------------
 
+#include <vector>      // Defines vectors class (dynamic arrays)
+#include <functional>  // For function objects oriented to operators, and more
+#include <utility>     // Utilities like pairs, relation operators and swaps
+#include <mutex>       // Lockables object to use in critical secitions
+#include <typeinfo>    // Operators related with typeid and dynamic cast
+
+// ---------------------------- CLASSES AND STRUCTS DEFINITIONS ---------------
+
+/**
+ * Structure that intends to implement a generic form to add an attribute and
+ * then obtain its id.
+ */
 template <class T>
 struct to_deduce_struct
 {
+    /**
+     * User defined constructor that assign the argument given as a attribute,
+     * then display the ID.
+     * 
+     * @param info Generic value
+     */
     to_deduce_struct(T info) : info(info) 
     {
         std::cout << "Deduction completed... Construction done" << std::endl
@@ -25,18 +44,23 @@ struct to_deduce_struct
                   << std::endl;
     }
 private:
-    T info;
-};
+    T info;  // Generic attribute
+}; // to_deduce_struct
 
+// Define concatenation operator for output stream wiith pairs.
 template <typename T1, typename T2>
 std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& p) {
     os << "(" << p.first << ", " << p.second << ")";
     return os;
-}
+} // operator<<
 
+// --------------------------- MAIN IMPLEMENTATION ----------------------------
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 13: Class and templates argument deduction:\n" 
+              << std::endl;
+
     // Info #1: Some cases where you can allow deduction are pairs, vectors
     // and less (which is a way to perform less-than comparison operations as
     // if the were ordinary functions), and many more.
@@ -58,7 +82,11 @@ int main(int argc, char* argv[])
     std::cout << std::endl << "Deduction of custom types: " << std::endl;
     auto f = new to_deduce_struct(16.20);
 
-    
+    // Info #3: The deduction also works for function-like cast expressions:
+    std::mutex mx;
+    auto lock = std::lock_guard(mx); //Deduction for mutex
+    std::vector<int> v;
+    std::fill_n(std::back_insert_iterator(v), 16, 20);
 
     return 0;
-}
+}  // main

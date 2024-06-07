@@ -41,6 +41,8 @@
 // ---------------------------- MAIN IMPLEMENTATION ---------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 11: Unnamed namespaces and usage:\n" << std::endl;
+
     // Using the first sum function
     std::cout << "First sum implementation:\n\t";
     auto v1 = unnamed_1::run_custom_sum_1(16, 20);
@@ -50,4 +52,4 @@ int main(int argc, char* argv[])
     auto v2 = unnamed_2::run_custom_sum_2(16, 20);
 
     return 0;
-}
+}  // main

@@ -24,7 +24,7 @@ namespace
         std::cout << "The sum provided results in: " << res << std::endl;
         return res;
     }
-}
+} // unnamed namespace
 
 namespace unnamed_1
 {
@@ -34,4 +34,5 @@ namespace unnamed_1
         // Return the value returned by the second sum (and display the msg)
         return sum(n1, n2);
     }
-}
+
+} // namespace unnamed_1

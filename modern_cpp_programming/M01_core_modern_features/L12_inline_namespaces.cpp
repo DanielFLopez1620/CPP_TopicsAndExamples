@@ -56,21 +56,28 @@ namespace my_geo
 {
     inline namespace two_d
     {
+        // Basic struct for a point in 2D geometry
         struct Point
         {
             float x;
             float y;
         };
 
+        /**
+         * Display a 2D point by printing x and y attributes.
+         * 
+         * @param point Reference to point of interest
+        */
         void display_point(const Point& point)
         {
             std::cout << "2D point ( " << point.x <<" ," << point.y << ") "
                       << std::endl; 
         }
-    }
+    } // namespace two_d
     
     namespace three_d
     {
+        // Basic struct for a point in 3D geometry
         struct Point
         {
             float x;
@@ -78,18 +85,24 @@ namespace my_geo
             float z;
         };
 
+        /**
+         * Display a 3D point by printing the x, y and z component
+         */
         void display_point(const Point& point)
         {
             std::cout << "3D point ( " << point.x <<" ," << point.y << " , "
                       << point.z << " ) " << std::endl; 
         }
-    }
-}// my_geo
+    } // namespace three_d/**
+
+} // namespace my_geo
 
 
 // -------------------- MAIN IMPLEMENTATION -----------------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 12: Inline namespaces...\n" << std::endl;
+
     // Testing custom library
     std::cout << "Let's try to print the versions of the custom library using"
               << "the namespaces required." << std::endl
@@ -111,9 +124,6 @@ int main(int argc, char* argv[])
     my_geo::display_point(first_point);
     std::cout << "\t2° Point: ";
     my_geo::three_d::display_point(second_point);
-
-
-    
 
     return 0;
 

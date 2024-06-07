@@ -14,6 +14,8 @@
  * initialization to resolve the args passed between a {}.
 */
 
+// --------------- CUSTOM STRUTCS AND CLASSES DEFINITIONS -----------------------
+
 // Info #1: You can use the keyword 'explicit' to create explicit constructors
 // or explicit converting operators, you justt need to add them to the
 // beginning of the definition. 
@@ -61,8 +63,12 @@ struct which_con_with_explicit
     operator bool() const { return false; }
 };
 
+// ----------------------- MAIN IMPLEMENTATION --------------------------------
+
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 10: Explicit Constructrors...\n" << std::endl;
+    
     // Let's create some objects and check constructors
     std::cout << "Which constructors objects examples: " << std::endl;
     which_con obj1;

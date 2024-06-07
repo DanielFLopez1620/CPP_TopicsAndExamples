@@ -39,6 +39,8 @@ typedef unsigned int * numeral_ptr;
 // --------------------- MAIN IMPLEMENTATION -----------------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 2: Type aliases...\n" << std::endl;
+
     // Info #3: Basic usage of type aliases: using <identifier> = <type_id>
     using opt = char;
     using proto = void(opt);
@@ -53,4 +55,4 @@ int main(int argc, char** argv)
               << "Ptr value: " << *my_ptr << std::endl;
 
     return 0;
-}
+} // main

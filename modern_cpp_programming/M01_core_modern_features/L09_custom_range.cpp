@@ -24,6 +24,9 @@
  *      
 */
 
+
+// ---------------------- STRUCT AND CLASSES DEFINITIONS ----------------------
+
 // Info #1: First, we need to create our iterable class, it can be an array,
 // a vector, a map, or any similar, but it must have a getter of the element at
 // the given position, a seter of the element at the given position and a
@@ -49,7 +52,8 @@ public:
         // Return element if it is in the range, otherwise an exception
         if (idx < Size) return data[idx];
         throw std::out_of_range("Index is out of range");
-    }
+
+    }  // GetAn
 
     /**
      * Setter of the element at the given position.
@@ -61,13 +65,15 @@ public:
     {
         if(idx < Size) data[idx] = value;
         else throw std::out_of_range("Index is out of range");
-    }
+
+    } // setAn
 
     /**
      * Getter of the size of the array.
     */
     size_t GetSize() const { return Size; }
-};
+
+}; // class demo_array
 
 // Info #2: Then we will have to create a iterator base class (later we will
 // define a mutable and a constant types), that has an implementation of the 
@@ -132,7 +138,8 @@ private:
 
     // Demo array iterator type
     C& collection;
-};
+
+}; // class demo_array_iterator_type
 
 // Info #3: Defining the mutable and const iterators for the range 
 // implementations.
@@ -168,7 +175,8 @@ inline demo_array_iterator<T, Size> begin(
     demo_array<T, Size>& collection)
 {
     return demo_array_iterator<T, Size>(collection, 0);
-}
+
+}   // demo_array_const_iterator<T, Size> begin
 
 /**
  * Define a end for iterators of the type demo array, as it will return the
@@ -183,7 +191,8 @@ inline demo_array_iterator<T, Size> end(
     demo_array<T,Size>& collection)
 {
     return demo_array_iterator<T, Size>(collection, collection.GetSize());
-}
+
+}   //demo_array_iterator<T, Size> end
 
 /**
  * Define a begin for iterators of the type demo array, as it will return the
@@ -198,7 +207,8 @@ inline demo_array_const_iterator<T, Size> begin(
     demo_array<T, Size> const & collection)
 {
     return demo_array_const_iterator<T, Size>(collection, 0);
-}
+
+} // demo_array_const_iterator<T, Size> begin
 
 /**
  * Define a end for iterators of the type demo array, as it will return the
@@ -214,10 +224,15 @@ inline demo_array_const_iterator<T, Size> end(
 {
     return demo_array_const_iterator<T, Size>(
         collection, collection.GetSize());
-}
+
+}  // demo_array_const_iterator<T, Size> end
+
+// ----------------------------- MAIN IMPLEMENTATION --------------------------
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 9: Custom range for using for each\n" << std::endl;
+    
     // Instance of a custom float array
     demo_array<float, 4> custom_array;
 
@@ -235,4 +250,4 @@ int main(int argc, char* argv[])
     }
     std::cout << "}"<<std::endl;
     return 0;
-}
+}  // main

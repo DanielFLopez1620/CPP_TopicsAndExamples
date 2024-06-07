@@ -38,6 +38,9 @@
 enum class PositionNum {One, Two, Three};
 enum class PositionLetter {F1, D2, C3};
 
+/**
+ * Basic struct with some intended attributes.
+ */
 struct BasicStruct
 {
     std::string name;
@@ -106,6 +109,8 @@ struct constructor_check
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 4: Non static initialization...\n" << std::endl;
+
     // Using our basic structure and the non static initialization
     std::cout << "Check the different constructor usage for BasicStruct: "
               << std::endl;
@@ -126,5 +131,5 @@ int main(int argc, char* argv[])
     constructor_check ex4 = ex3;
 
     return 0;
-}
+}  // main
 

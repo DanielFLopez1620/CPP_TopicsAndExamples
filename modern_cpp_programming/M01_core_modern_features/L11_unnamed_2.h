@@ -10,6 +10,7 @@ namespace unnamed_2
 {
     // Define prototype for calling second sum function designed
     int run_custom_sum_2(int n1, int n2);
-}
+    
+} // namespace unnamed_2
 
 #endif // UNNAMED2
