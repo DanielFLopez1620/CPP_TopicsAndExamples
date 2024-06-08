@@ -22,13 +22,19 @@
  *      ./init_pseudo.out
 */
 
-#include <random>     // For random number generation facilities
-#include <algorithm>  // A collection of functions to be used on ranges of elements.
-#include <array>      // For fixed-size arrays
-#include <functional> // Related with functional objects (similar sintax to func)
+// ---------------------- REQUIRED HEADERS ------------------------------------
 
+#include <random>     // For random number generation facilities
+#include <algorithm>  // A collection of functions for iterations and related
+#include <array>      // For fixed-size arrays
+#include <functional> // Related with functional objects
+
+// --------------------- MAIN IMPLEMENTATION ----------------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 4: Bit initialization for better pseudo random gen..."
+              << std::endl;
+
     // Info #1: Properly initializing a seed.
     std::random_device rand_dev;
     std::array<int, std::mt19937::state_size> seed_info{};
@@ -47,4 +53,5 @@ int main(int argc, char** argv)
     }
 
     return 0;
-}
+
+} // main
