@@ -19,7 +19,7 @@
 
 int main(int argc, char** argv)
 {
-    std::cout << "Lesson 1: Casting between numeric and string types..."
+    std::cout << "Lesson 1: Casting between numeric and string types...\n"
               << std::endl;
 
     // INFO #1: Convertion of int or float to str, by using:

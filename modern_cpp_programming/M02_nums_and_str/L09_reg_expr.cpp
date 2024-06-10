@@ -45,17 +45,22 @@
  *      
 */
 
+// ------------------------- REQUIRED HEADERS ---------------------------------
 #include <regex>   // For using standarized regular expressions in C++
 #include <string>  // Managing strings and char arrays
 #include <iomanip> // Parametric manipulators for input/output stream
 
+// ----------------------- FUNCTION PROTOTYPES --------------------------------
 bool is_valid_email_format(std::string const & email);
 void test_email_format(std::string const & email);
 
+// --------------- NAMESPACES, CLASS AND STRUCT  DEFINITIONS ------------------
 using namespace std::string_literals;
 
+// ---------------------- MAIN IMPLEMENTATION ---------------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 9: Using regex in your code...\n" << std::endl;
 
     // Info #1: Creating a simple regular expression.
     auto pattern {R"(^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$)"s};
@@ -72,9 +77,12 @@ int main(int argc, char** argv)
     test_email_format("DAN@dandomain.go.co");
     test_email_format("col@mail.co");
     test_email_format("113111@localhost");
-    return 0;
-}
 
+    return 0;
+
+} // main
+
+// ---------------------- FUNCTION DEFINITIONS --------------------------------
 
 /**
  * Check with regular expressions if the email is valid.

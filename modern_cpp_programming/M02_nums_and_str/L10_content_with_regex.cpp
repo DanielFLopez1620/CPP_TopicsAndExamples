@@ -19,13 +19,18 @@
  *      ./rep_reg.out
 */
 
-#include <regex>
-#include <string>
+// ------------------------- REQUIRED HEADERS ---------------------------------
+#include <regex>   // For using standarized regular expressions in C++
+#include <string>  // Managing strings and char arrays
 
+// ---------------- NAMESPACE, STRUCT AND CLASS DEFINITIONS -------------------
 using namespace std::string_literals;
 
+// ---------------------- MAIN IMPLEMENTATION ---------------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 10: Add content with regex...\n" << std::endl;
+
     // Info #1: Replacing an exact math.
     // The regex used:
     // \b : Word boundary anchor, and for matching a whole word.
@@ -78,4 +83,5 @@ int main(int argc, char** argv)
               << "Result: " << applied3 << std::endl;
 
     return 0;
-}
+
+} // main

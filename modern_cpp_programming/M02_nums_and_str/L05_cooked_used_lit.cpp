@@ -227,7 +227,7 @@ namespace packing
 // ------------------------------ MAIN IMPLEMENTATION -------------------------
 int main(int argc, char** argv)
 {
-    std::cout << "Lesson 5: Cooked user literals definitions..." << std::endl;
+    std::cout << "Lesson 5: Cooked user literals definitions...\n" << std::endl;
     
     // Info #1: Using literal by calling our implementation.
     using namespace bytes_related;

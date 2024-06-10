@@ -90,7 +90,7 @@ void gen_and_display(std::function<int(void)> , int const);
 // ------------------------- MAIN IMPLEMENTATION ------------------------------
 int main(int argc, char** argv)
 {
-    std::cout << "Lesson 3: Pseudo random numeric generation..." << std::endl;
+    std::cout << "Lesson 3: Pseudo random numeric generation...\n" << std::endl;
     
     // INFO #1: Let's generate a pseudo random number, do not forget to include
     // the random library from C++. The generators use distributions, so you

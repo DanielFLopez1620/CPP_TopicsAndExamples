@@ -32,8 +32,8 @@
 // --------------------- MAIN IMPLEMENTATION ----------------------------------
 int main(int argc, char** argv)
 {
-    std::cout << "Lesson 4: Bit initialization for better pseudo random gen..."
-              << std::endl;
+    std::cout << "Lesson 4: Bit initialization for better pseudo random"
+              << "generation...\n" << std::endl;
 
     // Info #1: Properly initializing a seed.
     std::random_device rand_dev;

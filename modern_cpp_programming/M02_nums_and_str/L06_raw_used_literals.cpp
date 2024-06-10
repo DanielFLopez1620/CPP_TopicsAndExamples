@@ -19,8 +19,14 @@
  * NOTE: The ellipsis ('...') used in the templates below are used to declare a
  * parameter pack, in this case, it will be a pack of char types related with 
  * ones and zeros for the bits.
+ * 
+ * When ready, you can runt his code with:
+ * 
+ *      g++ -std=c++14 L06_raw_used_literals.cpp -o raw_literals.out
+ *      ./raw_literals.out
 */
 
+// -------------------- CLASS AND STRUCT DEFINITIONS --------------------------
 
 // Info #1: Here we define a namespace 'binary' and define type aliases, we
 // want to use types like 1111_b8 or 000010100000_b16. The literal operators
@@ -90,8 +96,12 @@ namespace binary
     }
 }
 
+// -------------------------- MAIN IMPLEMENTATION -----------------------------
+
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 6: Creating raw user literals...\n" << std::endl;
+    
     // Info #2: Implementing our own raw literals, for this remember to use the
     // proper namespaces.
 
@@ -101,11 +111,13 @@ int main(int argc, char** argv)
     auto byte1 = 1001_b8;
     auto byte2 = 100010001001_b16;
 
-    std::cout << "Byte1:" << (int) byte1 << std::endl;
-    std::cout << "Byte2:" << (int) byte2 << std::endl;
-    std::cout << "For properly using raw literals you will also need to "
+    std::cout << "Example by using binary literals to indicate its size:"
+              << std::endl << "Byte1: (8 bits)" << (int) byte1 << std::endl
+              << "Byte2: (16 bits)" << (int) byte2 << std::endl 
+              << "For properly using raw literals you will also need to "
               << "override the operator<< and specify the proper string."
               << std::endl;
 
     return 0;
-}
+
+} // main

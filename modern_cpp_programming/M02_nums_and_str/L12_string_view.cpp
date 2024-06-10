@@ -33,14 +33,19 @@
  *      ./str_view.out
 */
 
-#include <string>
+// -------------------- REQUIRED HEADERS --------------------------------------
+#include <string> 
 #include <string_view>
 
+// -------------------- FUNCTION PROTOTYPES -----------------------------------
 std::string_view get_name(std::string_view word);
 std::string_view trimming(std::string_view text);
 
-int main()
+// -------- ------------- MAIN IMPLEMENTATION ---------------------------------
+int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 12: About string_view...\n" << std::endl;
+    
     // Info #1: Passing an argument as a string view. Do not forget to check 
     // Keep in mind that the path provided is for Windows as it uses "\\", you
     // can make it valid to Linux by changing it to "/".
@@ -59,7 +64,7 @@ int main()
               << "String basic: " << normal_str << std::endl << std::endl;
 
     // Info #3: You can use two addtional methods when using string_view, they
-    // are remove_prefix() and remove_suffix, illustrated below with a custom
+    // are remove_prefix() and remove_suffix(), illustrated below with a custom
     // function, so do not forget to check it.
 
     auto text_to_trim { "  trim here     " };
@@ -70,6 +75,8 @@ int main()
 
     return 0;
 }
+
+// -------------------- FUNCTION DEFINITIONS ----------------------------------
 
 /**
  * Obteain the name of a file, bu considering a windows path provided as an
@@ -85,7 +92,8 @@ std::string_view get_name(std::string_view word)
     auto const index1 {word.find_last_of(R"(\)")};
     auto const index2 {word.find_last_of('.')};
     return word.substr(index1 + 1, index2 - index1 - 1);
-}
+
+}  // get_name
 
 /**
  * Function that trimms spaces considering them suffix and prefix, so it return
@@ -102,4 +110,5 @@ std::string_view trimming(std::string_view text)
     text.remove_suffix(text.length() - end - 1);
     text.remove_prefix(ini);
     return text;
-}
+
+} // trimming

@@ -32,10 +32,12 @@
  * NOTE: Do not forget to implement <string> and <algorithm> headers.
 */
 
+// ---------------------- HEADERS REQUIRED ------------------------------------
 #include <algorithm>  // For various purposes related with seacrhing, sorting...
 #include <string>     // String and char array management
 #include <vector>     // For vector structure management
 
+// --------------------- CLASS AND STRUCTS DEFINITIONS ------------------------
 namespace string_lib
 {
     // Template for general string
@@ -56,7 +58,8 @@ namespace string_lib
         std::transform(std::begin(text), std::end(text), std::begin(text), 
             toupper);
         return text;
-    }
+
+    } // to_upper
 
     // Iteratets throught the array and convert every letter to its lowercase
     // if it is upper. Symbols and numbers remain the same.
@@ -66,7 +69,8 @@ namespace string_lib
         std::transform(std::begin(text), std::end(text), std::begin(text), 
             tolower);
         return text;
-    }
+
+    } // to_lower
 
     // Rearrange the char array or string by its reverse
     template<typename CharT>
@@ -74,7 +78,8 @@ namespace string_lib
     {
         std::reverse(std::begin(text), std::end(text));
         return text;
-    }
+
+    } // reverse
 
     // Trim the spaces at the beginning and at the end of an array.
     template<typename CharT>
@@ -83,7 +88,8 @@ namespace string_lib
         auto first{text.find_last_not_of(' ') };
         auto last{text.find_last_not_of(' ') };
         return text.substr(first, (last-first + 1));
-    }
+
+    } // trim (spaces)
 
     // Trim the spaces of a string only at the beginning.
     template<typename CharT>
@@ -91,7 +97,8 @@ namespace string_lib
     {
         auto first{ text.find_first_not_of(' ') };
         return text.substr(first, text.size() - first);
-    }
+
+    } // trim_left (spaces)
 
     // Trim the spaces of a string only at the end.
     template<typename CharT>
@@ -99,7 +106,8 @@ namespace string_lib
     {
         auto last{ text.find_last_not_of(' ') };
         return text.substr(0, last + 1);
-    }
+
+    } // trim_right (spaces)
 
     // Trim the certain pattern of chars from all the string.
     template<typename CharT>
@@ -109,7 +117,8 @@ namespace string_lib
         auto first{ text.find_first_not_of(chars) };
         auto last{ text.find_last_not_of(chars) };
         return text.substr(first, (last - first + 1));
-    }
+
+    } // trim
 
     // Trim the certain pattern of chars beginning from the left.
     template<typename CharT>
@@ -118,7 +127,8 @@ namespace string_lib
     {
         auto first{ text.find_first_not_of(chars) };
         return text.substr(first, text.size() - first);
-    }
+
+    } // trimleft
 
     // Trim the certain pattern of chars beginning from the right.
     template<typename CharT>
@@ -127,7 +137,8 @@ namespace string_lib
     {
         auto last{ text.find_last_not_of(chars) };
         return text.substr(0, last + 1);
-    }
+
+    } // trimright
 
     // Remove a letter of a string (will not be substituted)
     template<typename CharT>
@@ -140,11 +151,13 @@ namespace string_lib
             });
         text.erase(start, std::end(text));
         return text;
-    }
+
+    } // remove
 
     // Split an array by considering a delimitator
     template<typename CharT>
-    inline std::vector<tstring<CharT>> split (tstring<CharT> text, CharT const delimiter)
+    inline std::vector<tstring<CharT>> split (tstring<CharT> text, 
+        CharT const delimiter)
     {
         auto sstr = tstringstream<CharT> { text };
         auto tokens = std::vector<tstring<CharT>>{};
@@ -154,11 +167,15 @@ namespace string_lib
             if(!token.empty()) tokens.push_back(token);
         }
         return tokens;
-    }
-} 
+
+    } // split
+
+} // namespace string_lib
 
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 8: A library of string helpers...\n" << std::endl;
+    
     // Info #2: Using the library of string helpers:
 
     // Do not forget the proper namespace
@@ -191,4 +208,5 @@ int main(int argc, char** argv)
               <<  "\tTrim chars %!\\h: " << str2_tp << std::endl; 
 
     return 0;
-}
+
+} // main

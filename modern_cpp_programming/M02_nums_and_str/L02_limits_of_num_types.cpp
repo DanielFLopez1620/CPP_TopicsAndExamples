@@ -45,7 +45,7 @@ void type_properties()
 // -------------------- MAIN IMPLEMENTATION -----------------------------------
 int main(int argc, char** argv)
 {
-    std::cout << "Lesson 2: Limit of the numeric types..." << std::endl;
+    std::cout << "Lesson 2: Limit of the numeric types...\n" << std::endl;
     
     // Keep in mind, that there is no limitation on std::numerics_limits<T>, so
     // use it over C macros.

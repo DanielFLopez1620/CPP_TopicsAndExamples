@@ -42,11 +42,15 @@
  * 
 */
 
+// ---------------------- REQUIRED HEADERS ------------------------------------
 #include <regex>  // C++ Library to use regular expressions
 #include <string> // To manage strings and char arrays.
 
+// ----------------------- MAIN IMPLEMENTATION --------------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 11: Parsing with regex..\n" << std::endl;
+
     using namespace std::string_literals;
 
     // Example text that will be used for identify with regex.
@@ -126,4 +130,5 @@ int main(int argc, char** argv)
               std::ostream_iterator<std::string>(std::cout, "\n"));
 
     return 0;
-}
+    
+} // main
