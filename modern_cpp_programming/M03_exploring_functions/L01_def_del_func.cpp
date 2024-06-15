@@ -36,6 +36,7 @@
  * Now, let's mention some handler option to functions:
 */
 
+// ----------------------------- CLASS AND STRUCT DEFINITION ------------------
 
 class MySetOfFuncs
 {
@@ -67,7 +68,8 @@ public:
     // Info #4: Another definition to prevent copies (or better called a non-
     // copyable type), are:
     MySetOfFuncs& operator=(MySetOfFuncs const&) = delete;
-};
+    
+};  // class MySetOFFuncs
 
 // Info #5: You can create a non-copyable object that is still movable by 
 // declaring the 'copy-operations' as deleted, then implementing the 'move
@@ -90,6 +92,8 @@ public:
     {
         other.ex = nullptr;   
     }
+
+    // Again making sure it is movable
     NonCopyButMovable& operator=(NonCopyButMovable&& other)
     {
         if(this != std::addressof(other))
@@ -101,7 +105,7 @@ public:
         return *this;
     }
 
-};
+}; // class NonCopyButMovable
 
 // Info #6: You can use templates and then use '=delete' to prevent certain
 // types, prevent promotions or ensure you use specific types
@@ -110,13 +114,16 @@ void command(T val) = delete;
 void command(short val)  // Can only be called with short values
 {
     std::cout << std::endl << "This command works only for shorts" << std::endl;
-}
+
+} // command
  
+// ------------------------------ MAIN IMPLEMENTATION -........................
 
 // In the main we will test our implementations:
 int main(int argc, char** argv)
 {
-    std::cout << "Check the code to understand the constructor that call"
+    std::cout << "Lesson 1: Delete and defualted functions...\n" << std::endl
+              << "Check the code to understand the constructor that call"
               << " the results shown below, so you can learn about defaulted"
               << " and deleted functions" << std::endl << std::endl;
     
@@ -127,6 +134,8 @@ int main(int argc, char** argv)
     // name1 = name2            // Error, copy isn't possible
     // MySetOfFuncs dou1(1620)  // Error, double type param is disabled
 
+    std::cout << "\nAlso, let's test it with templates:" << std::endl;
     command((short) 4);
     return 0;
-}
+
+} // main

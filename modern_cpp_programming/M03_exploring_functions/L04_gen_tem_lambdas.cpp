@@ -40,16 +40,15 @@
  *      ./gen_lambda.out
 */
 
+// ---------------------- REQUIRED HEADERS ------------------------------------
 #include <vector>     // Library for using vectors (sequence containers
                       // representing arrays that can change).
-
 #include <algorithm>  // Collection of functions for range of elements.
-
 #include <utility>    // Language support and general purpose library
-
 #include <numeric>    // Common math functions and types
-
 #include <string>     // Fro string and char array management
+
+// -------------- FUNCTION AND LAMBDA DEFINITIONS -----------------------------
 
 // Info #1: Creating a lambda that can only invoked with vector types.
 std::vector<float> vec_ex {1.6, 2.0, 6.2, 2.6};
@@ -57,6 +56,8 @@ auto vector_lambda = []<typename T>(std::vector<T> const& vec)
 {
     std::cout << "Size of vector is: " << std::size(vec) << std::endl;
 };
+
+// -------------------------- STRUCT AND CLASSES DEFINITIONS ------------------
 
 // Info #2: When using lambdas, you can also use defaulted and delete
 // members to prevent certain usage or specify user defined
@@ -70,6 +71,8 @@ struct generic_sum
     generic_sum& operator=(const generic_sum&) = delete;
     ~generic_sum() = default;
 };
+
+// -------------------- MAIN IMPLEMENTATION -----------------------------------
 
 int main(int argc, char** argv)
 {
