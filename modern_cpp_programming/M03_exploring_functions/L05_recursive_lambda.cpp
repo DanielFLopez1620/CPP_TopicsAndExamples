@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code wasn't tested, oriented with g++ in C++20
+// Code was tested with C++20 for gcc
 
 #include <iostream>
 
@@ -28,18 +28,22 @@
 
 #include <functional>  // For std::function and related usage of functions
 
+// ------------------------ FUNCTION PROTOTYPES --------------------------------
 // Prototype for recursive func implementation
 constexpr int fibonacci(int const n);
 
 // Prototype for recursive lambda implementation
-void inner_lamda_fib(int num);
+void inner_lambda_fib(int num);
 
+// ------------------------- MAIN IMPLEMENTATION ------------------------------
 int main(int argc, char* argv[])
 {
-    std::cout << "Let's test fibonacci with lambda for 10:";
-    inner_lamda_fib(10);
+    std::cout << "Let's test fibonacci with lambda for 10: ";
+    inner_lambda_fib(10);
     return 0;
 }
+
+// ------------------------------- FUNCTION DEFINITIONS------------------------
 
 /**
  * Recursive function to implement fibonacci.
@@ -59,13 +63,12 @@ constexpr int fibonacci(int const n)
  * 
  * @param num Number of iterations to consider the fibonacci series.
 */
-void inner_lamda_fib(int num)
+void inner_lambda_fib(int num)
 {
-    std::function<int(int const>) lambda_fib = 
-    [&lambda_fib](int const n)
+    std::function<int(int)> lambda_fib = [&lambda_fib](int const n)
     {
         return n <= 2 ? 1 : lambda_fib(n - 1) + lambda_fib(n - 2);
-    }
+    };
     auto fnum = lambda_fib(num);
     std::cout << fnum << std::endl;
 }
