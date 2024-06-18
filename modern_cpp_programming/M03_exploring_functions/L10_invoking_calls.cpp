@@ -29,7 +29,10 @@
  * warnings.
 */
 
+// -------------------------- REQUIRED HEADERS --------------------------------
 #include <functional> // For using function objects and the standard hash func.
+
+// ------------------------- FUNCTION DEFINITIONS -----------------------------
 
 /**
  * Simple function to calculate the product of two nums
@@ -42,7 +45,10 @@
 float product(float const n1, float const n2)
 {
     return n1 * n2;
-}
+
+} // product
+
+// ----------------------- STRUCT AND CLASSES DEFINTIONS ----------------------
 
 /**
  * Structure that initialize a value, and has a method to calculate a product.
@@ -51,10 +57,13 @@ struct factor
 {
     float n1 = 16;
     void num_by(float const n2) { n1 *= n2; }
-};
+
+}; // struct factor
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 10: Invoking and calls of functions...\n" << std::endl;
+
     // Info #1: Using invoke with a function and providing the args.
     float n1 = 16.0, n2 = 20.0;
     auto call1 = std::invoke(product, n1, n2);

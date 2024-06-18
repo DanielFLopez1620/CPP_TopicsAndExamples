@@ -4,7 +4,7 @@
 #include <iostream>
 
 /**
- * Pipilining is a form of composition, it was briefly mentioned in the last
+ * Pipelining is a form of composition, it was briefly mentioned in the last
  * example of the lesson 8 of this module. But that example wasn't a proper
  * composition, here our objective will be to compose functions in order to
  * create new compositions.
@@ -23,11 +23,13 @@
  *      ./comp.out
 */
 
+// ---------------------------- REQUIRED DEPENDENCIES -------------------------
 #include <string>    // Methdos and funcs for using string and char arrays.
 #include <vector>    // For using variable size arrays
 #include <algorithm> // Contains useful algorithms for general utilities
 #include <numeric>   // For numeric operation and useful function related
 
+// --------------------------- FUNCTION DEFINITIONS ---------------------------
 // Info #1: A basic composition template is shown below:
 /**
  * Composable function.
@@ -41,7 +43,8 @@ template <typename F, typename G>
 auto compose_t1(F&& f, G&& g)
 {
     return [=](auto x){ return f(g(x)); };
-}
+
+} // compose t1
 
 // Info #2: A composition template for variadic args (funcs) implementations:
 /**
@@ -56,21 +59,8 @@ template <typename F, typename... R>
 auto compose_t1(F&& f, R&&... r)
 {
     return [=](auto x) { return f(compose_t1(r...)(x)); };
-}
 
-// Info #3: 
-/**
-template <typename F, typename G>
-auto operator*(F&&, G&& g)
-{
-    return compose_t1(std::forward<F>(f), std::forward<G>(g));
-}
-template <typename F, typename... R>
-auto operator*(F&& f, R&&... r)
-{
-    return operator*(std::forward<F>(f), r...);
-}
-*/
+} // compose_t1 (variadic args)
 
 /**
  * Map function, oriented to apply a function to all the elements of the
@@ -87,7 +77,7 @@ R mapf(F&& func, R range)
     std::transform(std::begin(range), std::end(range), std::begin(range), 
         std::forward<F>(func));
     return range;
-}
+} // mapf (ranges)
 
 /**
  * Folding left function, in order to apply a function to a range of elements
@@ -107,11 +97,13 @@ const T fold_left(F&& func, R&& range, T init)
         std::begin(range), std::end(range), std::move(init), 
         std::forward<F>(func)
     );
-}
+} // fold_left (range)
 
-
+// ---------------------------- MAIN IMPLEMENTATION ---------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 9: Function composition...\n" << std::endl;
+
     // Using first compose template for receiving a string that contains a 
     // number, so it convert it to float and then squares the value.
     auto str_float { "3.1416" };
@@ -142,4 +134,5 @@ int main(int argc, char* argv[])
               << std::endl;
 
     return 0;
-}
+
+} // main
