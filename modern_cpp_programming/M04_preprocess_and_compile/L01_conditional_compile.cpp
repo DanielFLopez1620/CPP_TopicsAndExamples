@@ -35,23 +35,28 @@
  *   #elif, but only one #else.
  * - Conditionals can be nested, but do not forget the constant expression or
  *   definition when using them.
- * - 'defined (<identifier>) cna be used to check if a identifier is defined.
+ * - 'defined (<identifier>) can be used to check if a identifier is defined.
  * - When you provide the flag -D plus the a name, you are creating a definition
  *   that will be cosnidered by the preprocessor.
  * 
  * NOTE: The debug example is only ilustrative, when you want to debug, you
  * will need to proivde the -g flag. But you can indeed add _DEBUG statements
- * to improve the debugging of your code, thatn can be ignored in normal 
+ * to improve the debugging of your code, that can be ignored in normal/usual 
  * compilation.
 */
+
+// -------------------------- MACROS AND DEFINITIONS --------------------------
 
 // Info #1: You can include directive definitions, that can be changed with the
 // bash that will be replaced for the preprocessor
 #define IMPORTANT_DEFINITION
 #define ASSIGN_VALUE 2           // cl /DASSIGN_VALUE=2
 
+// -------------------------- MAIN IMPLEMENTATION -----------------------------
+
 int main()
 {
+    std::cout << "Lesson 1: Conditional compilation...\n" << std::endl;
     // Info #2: Conditional compilations that can be managed with flags in the 
     // call of the compiler, by adding -D + the name of the conditional defintion
     #ifdef DEBUG    // g++ -DDEBUG
@@ -95,6 +100,6 @@ int main()
     #endif
     
     return 0;
-}  
+}  // main
 
 

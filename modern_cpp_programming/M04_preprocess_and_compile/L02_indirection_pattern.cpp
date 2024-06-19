@@ -19,6 +19,8 @@
  * 
 */
 
+// ------------------- MACROS AND DEFINITIONS ---------------------------------
+
 // Info #1: Here we define a macro that expands with the stringizing operator,
 // then we expands it with a macro helper:
 #define MAKE_WORD2(w)   #w
@@ -37,20 +39,28 @@
     return new x(); \
     }
     
+// ------------------------ STRUCT AND CLASSES DEFINTIIONS --------------------
+
 struct custom_t1 {};
 TYPE_CREATE(custom_t1)
 
+// ------------------------ MAIN IMPLEMENTATION -------------------------------
 int main(int argc, char* argv[])
 {
-    // Applying stringizing operator
+    std::cout << "Lesson 2: Indirection patterns for compilation...\n"
+              << std::endl;
+
+    // Info #4: Applying stringizing operator with our implementation of
+    // MAKE_WORD and MAKE_WORD2
     std::cout << "Using stringizing operator when no string is provided "
               << std::endl;
 
     std::string text1 { MAKE_WORD(no_string_provieded) };
     std::string text2 { MAKE_WORD2(no_string_provieded) };
 
-    std::cout << "MAKE_WORD: " << text1 << "\nMAKE_WORD2: " << text2 << std::endl
-              << "Now, let's take a look with a ID defined (1620): " << std::endl;
+    std::cout << "MAKE_WORD: " << text1 << "\nMAKE_WORD2: " << text2 
+              << std::endl << "Now let's take a look with a ID defined (1620):" 
+              << std::endl;
 
     #define ID 1620
     std::string text3 { MAKE_WORD(ID) };
@@ -58,7 +68,7 @@ int main(int argc, char* argv[])
 
     std::cout << "MAKE_WORD: " << text3 << "\nMAKE_WORD2: " << text4 << std::endl;
 
-    // Applying concatenation operator
+    // Info #5: Applying concatenation operator previously defined
     std::string text5 { CONCATENATE2(1,2) };
     std::cout << std::endl << "Concatenating macro of undefined 1 and 2: " 
               << text5 << std::endl << std::endl;
@@ -68,4 +78,5 @@ int main(int argc, char* argv[])
     delete cust1;
 
     return 0;
-}
+
+} // main

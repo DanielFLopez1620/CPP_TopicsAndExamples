@@ -35,8 +35,11 @@
  *      ./branches.out
 */
 
-#include <memory>
-#include <type_traits>
+// --------------------------- REQUIRED HEADERS -------------------------------
+#include <memory>       // For dynamic memory management
+#include <type_traits>  // For type usages and related operations with types
+
+// ------------------------- STRUCT AND CLASSES IMPLEMENTATION ----------------
 
 // Info #1: You can change the usage of std::enable_if and still be relying on
 // the SFINAE with a if constexpr to impose restrictions on function templates
@@ -113,19 +116,23 @@ namespace binary
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 5: Branch selection with if cosntexpr...\n" 
+              << std::endl;
     // Using getter of value that is based on if const expr
+    std::cout << "Getter of value (can be pointer or variable): " << std::endl;
     auto value1 = get_value(16.20);
-    auto ptr = std::make_unique<float>(20.16);
+    auto ptr = std::make_shared<float>(20.16);
     auto value2 = get_value(ptr);
 
-    std::cout << "Get value of var: " << value1 << std::endl
-              << "Get value of ptr: " << value2 << std::endl;
+    std::cout << "\tGet value of var: " << value1 << std::endl
+              << "\tGet value of ptr: " << value2 << std::endl;
 
     // Using binary literals
     using namespace binary;
     using namespace binary_literals;
 
+    std::cout << "\nReShaping binary literals with if constxpr.." << std::endl;
     auto my_8bit = 1100_b8;
-    std::cout << std::endl << "Byte8:" << (int) my_8bit << std::endl;
+    std::cout << "\tByte 8: " << (int) my_8bit << std::endl;
     return 0;
 }

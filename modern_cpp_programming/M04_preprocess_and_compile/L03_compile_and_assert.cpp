@@ -26,6 +26,8 @@
  * 
 */
 
+// --------------------- STRUCT AND CLASS DEFINITION --------------------------
+
 // Info #1: You can use static assertion to check the size of a type, and
 // ensure it accomplishes certain aspects.
 struct passport_t
@@ -34,7 +36,8 @@ struct passport_t
     int code;
     bool major;
     char letter;
-};
+
+}; // passport_t
 
 // Info #2: You can use static assertion to check if a class is a POD type,
 // which comes from Plain Old Data, in other words, that it doesn't have any
@@ -48,39 +51,67 @@ class pod_checker
     static_assert(std::is_pod_v<T>,
         "POD class type expected here!");
     T value;
-};
+}; // class pod_checker
 
 
 // Info #3: You can also check if hte arguments are of certain type, if not, you
 // can launch an assertion. 
+/**
+ * Simple divide function that check for integer args, but ends with a floating
+ * result.
+ * 
+ * @param n1 First integer number
+ * @parma n2 Second integer number
+ * 
+ * @return Result of the division with decimal precision
+ */
 template <typename T>
 auto divide(T const n1, T const n2)
 {
     static_assert(std::is_integral_v<T>,
         "You can only use integral numbers in this division");
     return (double) n1 / n2;
-}
+} // divide
 
 /**
  * Small class that isn't a POD type, just to test with the pod_checker.
 */
 class NonPOD {
 public:
-    NonPOD() {
+    /**
+     * Simple construct that logs its call.
+     */
+    NonPOD() 
+    {
         std::cout << "Non-POD constructor called" << std::endl;
-    }
 
-    ~NonPOD() {
+    } // NonPOD
+
+    /**
+     * Simple destructor that logs its calls
+     */
+    ~NonPOD() 
+    {
         std::cout << "Non-POD destructor called" << std::endl;
-    }
 
-    void doSomething() {
+    } // ~NonPOD
+
+    /**
+     * Function that just print something, just something.
+     */
+    void doSomething() 
+    {
         std::cout << "Doing something" << std::endl;
-    }
-};
 
+    } // Do something
+
+}; // class NonPod
+
+// --------------------------- MAIN IMPLEMENTATION ----------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 3: Assertion on compile time...\n" << std::endl;
+
     // Using as size checker
     std::cout << "Size Checker: " << std::endl
               << "Passport type has two integers, one boolean and one char "
@@ -108,4 +139,5 @@ int main(int argc, char** argv)
     // double non = divide(1.5, 2.5);
 
     return 0;
-}
+
+} // main
