@@ -24,6 +24,11 @@
 // Info #1: If you want to make sure a return value isn't discarded, you can use
 // [[nodiscard]] attribut. Or even, [[nodiscard(text)]] after C++20 when it comes
 // to use a message for better understanding.
+/**
+ * Non discard result for a getter of a letter.
+ * 
+ * @return 'd'
+ */
 [[nodiscard]] int get_letter()
 {
     return 'd';
@@ -32,6 +37,14 @@
 // Info #2: Another usage of [[nodiscard]] is related with the case of do not
 // ignore certain types of classes or enumerations.
 enum class [[nodiscard]] ErrorCode { Success, FileNotFound, InvalidInput };
+
+/**
+ * Function that returns error code in case of problems.
+ * 
+ * @param input Error code to process
+ * 
+ * @return Equivalent error.
+ */
 ErrorCode processRead(int input)
 {
     if (input < 0)
@@ -45,6 +58,9 @@ ErrorCode processRead(int input)
 // Info #3: Have you seen a code get [deprecated]? Well, now you can use the
 // attribute and implement it (wisely) in your code when the functionalities
 // are going to change in the future. It can be applied to funcs and classes.
+/**
+ * Deprecated function for getting a zero.
+ */
 [[deprecated("Use another getter")]] int old_getter()
 {
     return 0;
@@ -52,6 +68,10 @@ ErrorCode processRead(int input)
 
 // Info #4: You can use [[maybe_unused]] so the compiler doesn't emit a
 // warning when a variable isn't used. 
+/**
+ * Function with three args, but just two are used, then it has an
+ * attribute of [maybe_unused].
+ */
 void strange_display(int a, float b, [[maybe_unused]] char c)
 {
     std::cout << "Int: " << a << std::endl
@@ -61,6 +81,12 @@ void strange_display(int a, float b, [[maybe_unused]] char c)
 
 // Info #5: In case you need to "fall" of a case in a switch, you can use
 // [[fallthroug]], to indicate the intentionality of do not break.
+/**
+ * Void function that consider a switch that has a fallthrog. The swtich
+ * only intends to print messages according the integer provided (up to 3).
+ * 
+ * @param a Option considered
+ */
 void strange_switch(int a)
 {
     switch (a)
@@ -83,6 +109,8 @@ void strange_switch(int a)
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 6: Usage of metadata and attributes for compilation\n"
+              << std::endl;
     // No discard instrucction
     std::cout << std::endl << "NO DISCARD ATTRIBUTE: " << std::endl
               << "If you discard the result of the getter, you will have a "

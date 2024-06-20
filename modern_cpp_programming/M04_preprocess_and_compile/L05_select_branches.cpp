@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code wasn't tested, oriented to C++ 20
+// Code was tested with g++ for C++20
 
 #include <iostream>
 
@@ -43,7 +43,15 @@
 
 // Info #1: You can change the usage of std::enable_if and still be relying on
 // the SFINAE with a if constexpr to impose restrictions on function templates
-// for your code.
+// for your code...
+/**
+ * Simple getter function that considers if the argument passed is a variable
+ * (acces the value) or a pointer (access to the pointed value).
+ * 
+ * @param value Element of interest to obtain the value.
+ * 
+ * @return Accessed value.
+ */
 template <typename T>
 auto get_value(T value)
 {
@@ -54,11 +62,29 @@ auto get_value(T value)
 }
 
 // In constrast, you can use the enable_if command to obtain similar results:
-template <typename T, typename = typename std::enable_if_t<std::is_pointer_v<T>, T>>
+/**
+ * Getter of value that uses enable_if, just to get the value of elements by
+ * considering pointed directions.
+ * 
+ * @param value Element of interest to obtain the value (ptr)
+ * 
+ * @return Pointed value
+ */
+template <typename T, typename = typename std::enable_if_t<
+    std::is_pointer_v<T>, T>>
 auto get_value_e_p(T value)
 {
     return *value;
 }
+
+/**
+ * Getter of value that uses enable_if, just to get the value of elements by
+ * considering pointed directions.
+ * 
+ * @param value Element of interest to obtain the value (var)
+ * 
+ * @return Stored value
+ */
 template <typename T, typename = typename std::enable_if_t<!std::is_pointer_v<T>, T>>
 auto get_value_e_v(T value)
 {
@@ -135,4 +161,5 @@ int main(int argc, char* argv[])
     auto my_8bit = 1100_b8;
     std::cout << "\tByte 8: " << (int) my_8bit << std::endl;
     return 0;
-}
+
+} // main
