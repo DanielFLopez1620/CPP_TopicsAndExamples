@@ -3,13 +3,24 @@
 
 #include <iostream>
 
+/**
+ * Casting between string and nums wasn't easy before C++11, and the
+ * convertion is possible by functions in the '<string>' header.
+ * You can compile this code, with:
+ * 
+ *      g++ -std=c++11 L01_cast_str_num.cpp -o cast_str_num.out
+ *      ./cast_str_num.out
+ * 
+ * For more info, you can check on: 
+ *      https://en.cppreference.com/w/cpp/language/floating_literal
+*/
+
+// ----------------- MAIN IMPLEMENTATION --------------------------------------
+
 int main(int argc, char** argv)
 {
-    // Casting between string and nums wasn't easy before C++11, and the
-    // convertion is possible by functions in the '<string>' header.
-    // You can compile this code, with:
-    //  g++ -std=c++11 L01_cast_str_num.cpp -o L01_cast_str_num.out
-
+    std::cout << "Lesson 1: Casting between numeric and string types...\n"
+              << std::endl;
 
     // INFO #1: Convertion of int or float to str, by using:
     // - std::to_string(n) -> Convert to basic string (with char of 8-bit)
@@ -90,9 +101,7 @@ int main(int argc, char** argv)
     {
         std::cerr << "Out of bounds: " <<e.what() << '\n';
     }
-    
-    // For more info, you can check on: 
-    // https://en.cppreference.com/w/cpp/language/floating_literal
 
     return 0;
-}
+
+} // main

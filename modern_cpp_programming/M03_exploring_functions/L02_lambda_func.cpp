@@ -47,24 +47,25 @@
  * - [&this](){}   -> ERROR, pointer is always considered as copy
  * 
  * For testing, you can run this code with:
+ * 
  *      g++ -std=c++17 L02_lambda_func.cpp -o lambda.out
  *      ./lambda.out
  * 
 */
 
+// ----------------------- REQUIRED HEADERS -----------------------------------
 #include <vector>    // Library for using vectors (sequence containers
                      // representing arrays that can change).
-
 #include <algorithm> // Collection of functions for range of elements.
-
 #include <string>    // Functions and methods for string management.
-
 #include <numeric>   // Set of algorithms to perform operations on numeric val.
-
 #include <memory>    // For managing dynamic memory
 
+// ------------------------ MAIN IMPLEMENTATION -------------------------------
 int main()
 {
+    std::cout << "Lesson 2: Using lambda functions...\n" << std::endl;
+
     // Info #1: First type of lambda function, a expression for searching
     // negative numbers (anonymous).
     auto nums = std::vector<int>{0, -1, -2, 3, 4, -5, 6, -7};
@@ -75,11 +76,11 @@ int main()
     {
         nums_str += std::to_string(num) + " ,";
     }
-    std::cout << "From numers array: " << nums_str << std::endl
+    std::cout << "From numbers array: " << nums_str << std::endl
               << "How many negatives?: " << negatives << std::endl << std::endl;
     
     // Info #2: Second type of lambda function, a expression for checking
-    // approved notas (named lambda)
+    // approved notes (named lambda)
     auto notes = std::vector<float>{4.0, 1.0, 2.0, 3.5, 5.0, 4.2};
     auto is_approved = [](float const num){ return num >= 3.5; };
     auto aproveds = std::count_if(std::begin(notes), std::end(notes), 
@@ -132,4 +133,5 @@ int main()
     std::cout << "Increment using pointer and lambda: " << *ptr << std::endl;
 
     return 0;
-}
+
+} // main

@@ -43,14 +43,19 @@
  *      g++ -std=c++17 L05_cooked_used_lit.cpp -o cooked_lit.out
  *      ./cooked_lit.out
  * 
- * NOTE: Do not forget to use namespace to prevent clash.
+ * NOTE: Do not forget to use namespace to prevent name clashing and name
+ * conflicts.
 */
+
+// ------------------  REQUIRED HEADERS ---------------------------------------
 
 #include <array>   // For managing contiguous array, including operators
 #include <complex> // For using complex numbers (real and imaginary part)
 #include <chrono>  // Related with time tracking in different precisions.
 #include <string>  // Usage of string and char arrays.
 #include <codecvt> // For conversion of character strings (wide and multibyte)
+
+// ----------------- CLASS AND STRUCT DEFINITIONS -----------------------------
 
 // Info #1: Creating literal by defining const expression, for this you use a
 // constexpr and the usage of the ' operator "" ' and adding the suffix. The
@@ -69,6 +74,8 @@ namespace bytes_related
 // can check an example on the main.
 namespace packing
 {
+    // Enumeration defined for later implementation of each enumerated value
+    // with a literal.
     enum class pack
     {
         kilogram,
@@ -76,77 +83,152 @@ namespace packing
         num_elements,
     };
 
+    // Class definition as a generic implementation with a construct to assign
+    // the class quantity (corresponding to the enumerations idea).
     template <pack P>
     class quantity_pack
     {
+        // Generic value that can refer to kg, m² or #
         const double amount;
     public:
+
+        /**
+         * User defined constructor to initialize a generic amount.
+         * 
+         * @param a Amout that will be specialized later.
+         */
         constexpr explicit quantity_pack(double const a) : amount(a) {}
+
+        /**
+         * Caster definition of operator double, that just return
+         * the same amount.
+         * 
+         * @return Generic amount as a double value.
+        */
         explicit operator double() const { return amount; } 
     };
 
+    /**
+     * Define the sum of elements based on quantities that must be of the
+     * same specialization.
+     * 
+     * @param p1 Pointer to quantity pack 1
+     * @param p2 Pointer to quantity pack 2
+     * 
+     * @return A quantity pack with the amount attribute as the sum of the 
+     * two elements.
+     */
     template <pack P>
     constexpr quantity_pack<P> operator+(quantity_pack<P> const &p1, 
                                          quantity_pack<P> const &p2)
     {
         return quantity_pack<P>(
             static_cast<double>(p1) + static_cast<double>(p2));
-    }
+    } // operator+ quantity_pack
 
+    /**
+     * Define the difference of elements based on quantities that must be of 
+     * the same specialization.
+     * 
+     * @param p1 Pointer to quantity pack 1
+     * @param p2 Pointer to quantity pack 2
+     * 
+     * @return A quantity pack with the amount attribute as the difference of
+     * the two elements.
+     */
     template <pack P>
     constexpr quantity_pack<P> operator-(quantity_pack<P> const &p1,
         quantity_pack<P> const &p2)
     {
         return quantity_pack<P>(
             static_cast<double>(p1) - static_cast<double>(p2));
-    }
+    } // operator- quantity pack
 
+    /**
+     * Defintion to allow displaying of the pack by using out stream.
+     *  
+     * @param os Ostream to use for printing.
+     * @param p1 Pointer to generic quantity pack to display.
+     * 
+     * @return Ostream with the info to be displayed attached.
+     */
     template <pack P>
     std::ostream& operator<<(std::ostream& os, quantity_pack<P> const &p1)
     {
         os << static_cast<double>(p1);
         return os;
-    }
+    } // operator<< quantity pack
 
+    // Namespace for specialization with literals
     namespace quantity_pack_literals
     {
-        // Kilogram suffix for floating type
+        /*
+         * Kilogram suffix specialization for floating type
+         * 
+         * @param amount Double amount intended as kilogram.
+         * 
+         * @return Quantity pack object specialized as kilogram.
+         */
         constexpr quantity_pack<pack::kilogram> operator "" _kg (
             long double const amount)
         {
             return quantity_pack<pack::kilogram> 
                 { static_cast<double>(amount) };
-        }
 
-        // Kilogram suffix for integer type
+        } //  operator ""_kg quantity_pack
+
+        /*
+         * Kilogram suffix specialization for integer type
+         * 
+         * @param amount Long integer amount intended as kilogram.
+         * 
+         * @return Quantity pack object specialized as kilogram.
+         */
         constexpr quantity_pack<pack::kilogram> operator "" _kg (
             unsigned long long const amount)
         {
             return quantity_pack<pack::kilogram> 
                 { static_cast<double>(amount) };
-        }
 
-        // Square meters suffix for floating type
+        } // operator ""_kg quantity_pack 
+
+        /*
+         * Square meters suffix specialization for double type
+         * 
+         * @param amount Double amount intended as square meters.
+         * 
+         * @return Quantity pack object specialized as m².
+         */
         constexpr quantity_pack<pack::squared_meters> operator "" _m2 (
             long double const amount)
         {
             return quantity_pack<pack::squared_meters> 
                 { static_cast<double>(amount) };
-        }
 
-        // Pieces suffix for integer types
+        } // opeartor ""_m2 quantity_pack
+
+        /*
+         * Number of elements suffix specialization for floating type
+         * 
+         * @param amount Integer amount intended as pieces.
+         * 
+         * @return Quantity pack object specialized as pieces.
+         */
         constexpr quantity_pack<pack::num_elements> operator "" _pcs (
             unsigned long long const amount)
         {
             return quantity_pack<pack::num_elements> 
                 { static_cast<double>(amount) };
-        }
+
+        } // operator "" _psc quantity_pack
     }
 }
 
-
+// ------------------------------ MAIN IMPLEMENTATION -------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 5: Cooked user literals definitions...\n" << std::endl;
+    
     // Info #1: Using literal by calling our implementation.
     using namespace bytes_related;
     auto mb_size{ 2_MB };
@@ -218,4 +300,5 @@ int main(int argc, char** argv)
         << " ms" << std::endl;
 
     return 0;
-}
+
+} // main

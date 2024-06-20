@@ -2,6 +2,7 @@
 // Code was tested with g++ in C++14
 
 #include <iostream>
+
 /*
  * If you didn't know, it is a common application in games and cartography, and
  * if someone tell you that you can write random numbers, it isn't true as
@@ -74,6 +75,7 @@
  *      ./pseudo.out
  */
 
+// ------------------------------- REQUIRED HEADERS ---------------------------
 #include <random>     // Random (pseudo) generation utilities
 #include <chrono>     // For types that tracks time (varying precision)
 #include <functional> // For functions objects and hash function
@@ -81,10 +83,15 @@
 #include <iomanip>    // Part of the input/output library (complements for texts)
 #include <algorithm>  // Contains functions with a variety of purposes
 
+// ---------------------------- FUNCTION PROTOTYPES ---------------------------
 void gen_and_display(std::function<int(void)> , int const);
 
+
+// ------------------------- MAIN IMPLEMENTATION ------------------------------
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 3: Pseudo random numeric generation...\n" << std::endl;
+    
     // INFO #1: Let's generate a pseudo random number, do not forget to include
     // the random library from C++. The generators use distributions, so you
     // will need to pick one.
@@ -134,7 +141,8 @@ int main(int argc, char** argv)
                      iterations);
 
     return 0;
-}
+
+}  // main
 
 /**
  * Generate the graph of the distribution selected in the rank specified. Keep
@@ -194,4 +202,5 @@ void gen_and_display(std::function<int(void)> generator,
             << std::fixed << std::setprecision(1) << std::setw(3) << value.first;
     }
     std::cout << std::endl;
-}
+
+}  // gen_and_display

@@ -27,8 +27,13 @@
  * on the compiler and your code.
 */
 
+// --------------------- MAIN IMPLEMENTATION ----------------------------------
+
 int main(int argc, char** argv)
 {
+    std::cout << "Lesson 7: USing raw literals to print escape characters...\n"
+              << std::endl;
+    
     // Info #1: Printing paths (of windows) with literals.
     auto path1 { R"(C:\Users\dan\Documents\)" };
     auto path2 { R"(C:\\Users\\dan\\Downloads\\)"};
@@ -50,7 +55,8 @@ int main(int argc, char** argv)
     auto msg6 { u8R"(string)" };
     auto msg7 { UR"(u16string)" };
     
-    std::cout << "MS1: " << msg1 << std::endl
+    std::cout << "Printing messages which content is the type for each exp"
+              <<  std::endl << "MS1: " << msg1 << std::endl
               << "MS2: " << msg2 << std::endl
               << "MS3: " << msg3 << std::endl
               << "MS4: " << msg4 << std::endl
@@ -59,4 +65,5 @@ int main(int argc, char** argv)
               << "MS7: " << msg7 << std::endl;
               
     return 0;
-}
+
+} // main
