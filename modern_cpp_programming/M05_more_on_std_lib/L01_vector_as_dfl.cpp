@@ -10,7 +10,10 @@
  * adapted sequence containers such as 'stack' and 'queue'.
  * 
  * Here we will check more about vector and why it is the most common
- * implementation for containers. 
+ * implementation for containers.
+ * 
+ * For more info on vector methods, checkout the docs:
+ *      https://cplusplus.com/reference/vector/vector/ 
  */
 
 #include <vector>
@@ -60,10 +63,48 @@ int main(int argc, char* argv[])
     display_content(letter_vector2);
     std::cout << ")" << std::endl;
 
+    // Info #4: You can initialize a vector based on a list, by considering
+    // the beginning and the end of that list for creating a sort of a range.
+    std::cout << "\nVector from list:\n\tInteger list based: ("; 
     std::list<int> num_list {16, 20, 0, 1620};
     std::vector<int> num_vec2(num_list.begin(), num_list.end());
+    display_content(num_vec2);
+    std::cout << ")" << std::endl;
 
+    // Info #5: Vectors allow add, remove, insert and related operations
+    // for a more dynamic management of them. Consider the next methods:
+    // - push_back(a); -> Adds 'a' at the end of the vector.
+    // - pop_back() -> Remove the last element of the vector.
+    // - insert(a, <init>, <end>) -> Insert anywhere a given slice.
+    // - emplace_back(<struct_attr>) -> Add an object at the end of the vector.
+    // - emplace(<struct_attr>) -> Add an object anywhere in the vector.
     std::vector<int> num_vec3(5, 1);
+    std::cout << "\nVector operations:\n\tOriginal vector: (";
+    display_content(num_vec3);
+    num_vec3.push_back(16);
+    std::cout << ")\n\tVector after pushing back: (";
+    display_content(num_vec3);
+    num_vec3.pop_back();
+    std::cout << ")\n\tVector after poping back: (";
+    display_content(num_vec3);
+    std::vector<int>::iterator iter;
+    iter = num_vec3.begin();
+    iter = num_vec3.insert(iter, 32);
+    std::cout << ")\n\tVector after insert: (";
+    display_content(num_vec3);
+    std::cout << ")" << std::endl;
+
+    // Info #6: For modification you can use methods like the operator=,
+    // assign(), swap(), clear(), erase(), and many more.
+    std::cout << "\nModifying arrays:\n\tOperator=: (";
+    std::vector <int> num_vec4 = num_vec3;
+    display_content(num_vec4);
+    std::cout << ")\n\tAssign: (";
+    int num_array[] = {10, 9, 8 , 7};
+    std::vector<int> num_vec5;
+    num_vec5.assign(num_array, num_array+4);
+    display_content(num_vec5);
+    std::cout << ")" << std::endl;
 
     return 0;
 }
