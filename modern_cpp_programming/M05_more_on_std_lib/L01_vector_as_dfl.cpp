@@ -14,6 +14,32 @@
  * 
  * For more info on vector methods, checkout the docs:
  *      https://cplusplus.com/reference/vector/vector/ 
+ * 
+ * The std::vector is the most similar container to and inter-operable with
+ * arrays, it is a variable-sized sequence of element that has a guarantee
+ * of storage in contiguous memory whihc allow sa better pass to functions,
+ * some of its benefits over arrays are:
+ * 
+ * - No memory management is required.
+ * - Can modify its size.
+ * - Allow concatenation and compasison between vectors.
+ * - It is compatible with arrays and C-like APIs.
+ * - It has faster acccess to the elements (except from std::array).
+ * - Has no per-element memory overhead.
+ * 
+ * As it was mentioned, it has a variable size, this property is defined by
+ * the capacity (number of elements that can be accommodate without performing
+ * additional memory reallocations) and the size (actual number of elements).
+ * In this case, teh sie must be smaller or equal to the capacity, and in case
+ * they are equal, some modifications may need to be implemented with the
+ * array.
+ * 
+ * In case you need to free additional reserved memory, consider using the 
+ * 'shrink_to_fit' method.
+ * 
+ * 
+ * NOTE: It is not a good idea to store raw pointers in a vector, as it focus
+ * aims to store object instance, rather prefer smart pointers.
  */
 
 #include <vector>
@@ -30,7 +56,7 @@ void display_content(std::vector<T> vector)
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Lesson 1: Vecotr as the default container...\n" << std::endl;
+    std::cout << "Lesson 1: Vector as the default container...\n" << std::endl;
     
     // Info #1: Remember that we can have statically or dynamically allocated
     // arrays 
@@ -104,7 +130,27 @@ int main(int argc, char* argv[])
     std::vector<int> num_vec5;
     num_vec5.assign(num_array, num_array+4);
     display_content(num_vec5);
-    std::cout << ")" << std::endl;
+    std::cout << ")\n\tErase (at 2°): (";
+    num_vec5.erase(num_vec5.begin() + 2);
+    display_content(num_vec5);
+    std::cout << ")\n\tClear: (";
+    display_content(num_vec5);
+    std::cout << " )" << std::endl;
+
+    // Info #7: You can use pointers with vectors to, for that, you can use
+    // the methods for data(), use the ampersand with the front() or begin()
+    // method, or use the old but still valid direction of the first element.
+    // Check the proper implementations down below:
+    int const * ptr2vec1 = num_vec5.data();
+    int const * ptr2vec2 = &num_vec5[0];
+    int const * ptr2vec3 = &num_vec5.front();
+    int const * ptr2vec4 = &*num_vec5.begin();
+    std::cout << "\nPointers to num_vec5 checker: " << std::endl
+              << "\t1° Pointer: " << ptr2vec1 << std::endl
+              << "\t2° Pointer: " << ptr2vec2 << std::endl
+              << "\t3° Pointer: " << ptr2vec3 << std::endl
+              << "\t4° Pointer: " << ptr2vec4 << std::endl;
+
 
     return 0;
 }
