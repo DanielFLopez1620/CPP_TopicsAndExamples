@@ -40,11 +40,23 @@
  * 
  * NOTE: It is not a good idea to store raw pointers in a vector, as it focus
  * aims to store object instance, rather prefer smart pointers.
+ * 
+ * When ready, you can compile by using:
+ *      
+ *      g++ - std=c++20 L01_vector_as_dfl.cpp -o vector_dfl.out
+ *      ./vector_dfl.out
  */
 
-#include <vector>
-#include <list>
+// --------------------------- REQUIRED HEADERS -------------------------------
+#include <vector>  // For using dynamic and improved arrays.
+#include <list>    // For using organized lists.
 
+// ---------------------------- FUNCTION DEFINITIONS --------------------------
+/**
+ * Generic displayer of the elements of the given container. 
+ * 
+ * @param vector Generic vector of interest
+ */
 template <typename T>
 void display_content(std::vector<T> vector)
 {
@@ -52,8 +64,9 @@ void display_content(std::vector<T> vector)
     {
         std::cout << element << ", ";
     }
-}
+} // display_content
 
+// ---------------------------- MAIN IMPLEMENTATION ---------------------------
 int main(int argc, char* argv[])
 {
     std::cout << "Lesson 1: Vector as the default container...\n" << std::endl;
