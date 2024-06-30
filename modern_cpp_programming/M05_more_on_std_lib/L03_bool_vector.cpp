@@ -30,9 +30,11 @@
  * 
  */
 
-#include <vector>
-#include <algorithm>
+// ---------------------- REQUIRED HEADERS ------------------------------------
+#include <vector>    // For using dynamic array and similar types.
+#include <algorithm> // For using general puprose functions and methods.
 
+// --------------------- FUNCTION DEFINITIONS ---------------------------------
 /**
  * Generic displayer of the elements of the given container. 
  * 
@@ -47,11 +49,26 @@ void display_content(std::vector<T> vector)
     }
 } // display_content
 
+// ------------------------------ CLASS DEFINITIONS --------------------------
+
 // Info #2: 
+
+/**
+ * Wrapper that will be encapsulate std::vector<bool> implementations to be
+ * managed as bitset.
+ */
 class custom_bitvector
 {
+    // Private/Protected method.
     std::vector<bool> bool_vec;
 public:
+
+    /*
+     * Constructor that uploads the original std::vector, that uploads the
+     * std::vector definition. 
+     * 
+     * @param bool_vec Boolean vecctor of interest to convert
+     */
     custom_bitvector(std::vector<bool> const & bool_vec) : bool_vec(bool_vec)
     {}
 
@@ -86,13 +103,51 @@ public:
 
     inline custom_bitvector & remove(size_t const index)
     {
-        if (index >? bool_vec.size())
+        if (index >= bool_vec.size())
             throw std::out_of_range("Invalid Index: Out of range.");
         bool_vec.erase(bool_vec.begin() + index);
         return *this;
     }
 
-    // ...
+    inline custom_bitvector & set(bool const value = true)
+    {
+        for (size_t i = 0; i < bool_vec.size(); ++i)
+            bool_vec[i] = value;
+        return *this;
+    }
+
+    inline custom_bitvector & set(size_t const index, bool const value = true)
+    {
+        if(index >= bool_vec.size())
+            throw std::out_of_range("Invalid Index: Out of range.");
+        bool_vec[index] = value;
+        return *this;
+    }
+
+    inline custom_bitvector & reset()
+    {
+        for( size_t i = 0; i < bool_vec.size(); ++i)
+            bool_vec[i] = false;
+        return *this;
+    }
+
+    inline custom_bitvector & reset(size_t const index)
+    {
+        if(index >= bool_vec.size())
+            throw std::out_of_range("Invalid Index: Out of range.");
+        bool_vec[index] = false;
+    }
+
+    inline custom_bitvector & flip()
+    {
+        bool_vec.flip();
+        return *this;
+    }
+
+    std::vector<bool>& data()
+    {
+        return bool_vec;
+    }
 };
 
 int main(int argc, char* argv[])
@@ -118,6 +173,18 @@ int main(int argc, char* argv[])
     std::cout << "Erasing element in 2° position: (";
     display_content(bool_vec);
     std::cout << ")" << std::endl;
+
+    // Info 3: Applying our user-defined interface for the boolean vector as a
+    // bitset.
+    std::vector<bool> att_bit;
+    custom_bitvector c_bv {att_bit} ;
+    c_bv.add(true).add(true).add(false);
+    std::cout << "\nDisplaying info of std::vector considered as bitset:"
+              << std::endl << "\tVector content: ";
+    display_content(c_bv.data());
+    std::cout <<"\n\tIs there any zero?: " << c_bv.any()
+              << "\n\tHas only 1s?: " << c_bv.all()
+              << "\n\tHas only 0s?: " << c_bv.none() << std::endl;
 
     return 0;
 }
