@@ -33,12 +33,15 @@
  *      ./bitset.out 
  */
 
-#include <bitset>
-#include <string>
+// -------------------- REQUIRED HEADERS --------------------------------------
+#include <bitset>  // For using bti sequences
+#include <string>  // For managing string and functions/methods related
 
+// ---------------------- MAIN IMPLEMENTATION ---------------------------------
 int main(int argc, char* argv[])
 {
-    
+    std::cout << "Lesson 2: Using bit sequences...\n" << std::endl;
+
     using namespace std::string_literals;
     
     // Info #1: There are various forms to initialize a bit set, they can be 
@@ -89,4 +92,5 @@ int main(int argc, char* argv[])
               << std::endl;
 
     return 0;
-}
+
+} // main
