@@ -11,12 +11,30 @@
  * past-the-end structured.
  * 
  * Do not forget to import the <algorithm> header.
+ * 
+ * Most of the algorithms showcased below works with iterators that define the
+ * searchable range and return an iterator to the searched element or the 
+ * beginning of the subrange, and they can have many overloads that aren't covered
+ * here. 
+ * 
+ * Some addtional comments you should keep in mind are: 
+ * 
+ * - For std::binary_search, the iterators passed as arguments should meet the
+ *   requirement for  a forward iterator, as here we do not work with random 
+ *   access.
+ * 
+ * - They have been available since C++11, but some overloads came with C++17, 
+ *   where they allow several implemenntations for searching like the
+ *   default_searcher, the boyer_moore_searcher and the boyer_moore_horspool
+ *   algorithm. 
  */
 
-#include <algorithm>
-#include <vector>
-#include <string>
+// ------------------------------ REQUIRED HEADERS ---------------------------
+#include <algorithm>  // A collection of general utilties algorithms
+#include <vector>     // For dynamic arrays management
+#include <string>     // Related with string operations and definitions
 
+// ------------------------------ FUNCTION DEFINITIONS ------------------------
 /**
  * Generic displayer of the elements of the given container. 
  * 
@@ -31,11 +49,14 @@ void display_content(std::vector<T> vector)
     }
 } // display_content
 
+// ------------------------ NAMESPACE TO CONSIDER -----------------------------
 using namespace std::string_literals;
 
+// --------------------------- MAIN IMPLEMENTATION ----------------------------
 int main(int argc, char* argv[])
 {
-    
+    std::cout << "Lesson 5: Searching elements on a range:\n" << std::endl;
+
     // Info #1: Using std::find for getting an iterator with the value of
     // interest.
     std::vector<float> vec_flt1 {16.20, 20.16, 1.6, 2.0};
@@ -155,7 +176,8 @@ int main(int argc, char* argv[])
     // Info #6: If you want to search for adjacent elements that are equal or
     // satisfy the same condition, you can use std::adjacent_find(), if you 
     // do not pass a third arg, it will just search for equal adjacent
-    // elements.
+    // elements, also consider that there is another option for searching for
+    // n consecutive ocurrences with std::search_n().
     std::vector<int> vec_int2{14, 15, 16, 17, 14, 28, 34, 32, 30, 28};
     auto iter7 = std::adjacent_find(vec_int2.cbegin(), vec_int2.cend(),
         [](int const n1, int const n2){ return n1 % 7 == 0 && n2 % 7 == 0;} );
@@ -174,6 +196,48 @@ int main(int argc, char* argv[])
         std::cout << "False, not found." << std::endl;
     }
     
+    // Info #7: If you just want to confirm if a element is present and it
+    // doesn't matter where it is, you can consider using the 
+    // std::binary_search algorithm.
+    std::vector<char> vec_chr5 {'f', 'g', 'h', 'i', 'j'};
+    auto was_found = std::binary_search(vec_chr5.cbegin(), 
+        vec_chr5.cend(), 'i');
+    std::cout << "Binary search for confirming presence of element: " 
+              << std::endl << "\tChar sequence: (";
+    display_content(vec_chr5);
+    std::cout << ")" << std::endl << "\tHas 'i'?: " << was_found << std::endl;
     
+    // Info #8: You can also search for boundary conditions, they can be
+    // 'lower_bound' or 'upper_bound', this considers an iterator. 
+    std::vector<int> vec_int3 {10, 11 , 12, 13, 9, 20};
+    auto iter8 = std::lower_bound(vec_int3.cbegin(), vec_int3.cend(), 12);
+    std::cout << "Searching for first element that isn't less than a value "
+              << std::endl << "\tSequence considered: (";
+    display_content(vec_int3);
+    std::cout << ")"  << std::endl << "\tElement not <= 12?: ";
+    if(iter8 != vec_int3.cend())
+    {
+        std::cout << "Yes, at position: " 
+                  << std::distance(vec_int3.cbegin(), iter8) << std::endl;
+    }
+    else
+    {
+        std::cout << "No" << std::endl;
+    }
+
+    // Info #9: You can also implement a function to find a subrange that
+    // satisfies a given condition by using 'std::equa_range'.
+    std::vector<int> vec_int4 {17, 16, 16, 16, 18, 19};
+    auto subrange = std::equal_range(vec_int4.cbegin(), vec_int4.cend(), 16);
+    std::cout << "Searching for subranges that satisfy a conditions: "
+              << std::endl << "\tFor integer vector: (";
+    display_content(vec_int4);
+    std::cout << ")" << std::endl << "\tIs there multiple adjacent 16?"
+              << " Yes, between indexes: " 
+              << std::distance(vec_int4.cbegin(), subrange.first)
+              << " and " << std::distance(vec_int4.cbegin(), subrange.second)
+              << std::endl;
+
     return 0;
-}
+
+} // main
