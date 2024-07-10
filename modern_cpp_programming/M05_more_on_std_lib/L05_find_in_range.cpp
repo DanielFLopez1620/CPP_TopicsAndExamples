@@ -27,6 +27,11 @@
  *   where they allow several implemenntations for searching like the
  *   default_searcher, the boyer_moore_searcher and the boyer_moore_horspool
  *   algorithm. 
+ * 
+ * When ready, you can compile and run this code with:
+ * 
+ *      g++ -std=c++20 L05_find_in_range -o find_range.out
+ *      ./find_range.out
  */
 
 // ------------------------------ REQUIRED HEADERS ---------------------------
