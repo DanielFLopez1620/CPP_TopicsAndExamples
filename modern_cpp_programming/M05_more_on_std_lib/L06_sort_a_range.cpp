@@ -81,14 +81,58 @@ int main(int argc, char* argv[])
     display_content(vec_int1);
     std::cout << ")" << std::endl;
 
-    // Info #2: 
+    // Info #2: If the sort needs to consider equal values and subvalues, you
+    // can consider using std::stable_sort(), just remember that the struct
+    // or class you use, have to implement the overload of the comparison if
+    // it is non-trivial.
     std::vector <Phase> vec_phases
     {
         {5, "Category2"s}, {4, "Category3"s}, {5,"Category1"},
         {1, "Category5"s}, {3, "Category1"s}, {2, "Category2"}, 
     };
+    std::cout << "Stable sort that considers equal elements: " << std::endl
+              << "\tOriginal custom vector: [";
+    display_content(vec_phases);
+    std::cout << "]" << std::endl << "\tSorted vector: [";
+    std::stable_sort(vec_phases.begin(), vec_phases.end());
+    display_content(vec_phases);
+    std::cout << "]" << std::endl << "\tSorted vector (greated): [";
+    std::stable_sort(vec_phases.begin(), vec_phases.end(), 
+        std::greater<>());
+    display_content(vec_phases);
+    std::cout << "]" << std::endl;
 
-    std::cout << vec_phases[1];
+    // Info #3: If it appears the case, where you just need to order a
+    // subrange present in a range, you can consider std::partial_sort()
+    // if you want to keep the subrange sorted in the original array and
+    // std::partial_sort_copy() if you want the sorted subrange copied
+    // in another array.
+    std::vector<int> vec_int2 {20, 22, 15, 17, 16, 30, 1, 10};
+    std::cout << "Sorting subranges: " << std::endl << "\tOriginal array: (";
+    display_content(vec_int2);
+    std::cout << ")" << std::endl << "\tSorted subrange (0 - 4): (";
+    std::partial_sort(vec_int2.begin(), vec_int2.begin() + 4, vec_int2.end());
+    display_content(vec_int2);
+    std::vector<int> vec_int3(vec_int2.size());
+    std::partial_sort_copy(vec_int2.begin(), vec_int2.end(), vec_int3.begin(),
+        vec_int3.end(), std::greater<>());
+
+    // Info #4: There is a curious way for sorting a n element in the range
+    // that ensures it will be the n element ordered while the previous values
+    // are less and the later are greater without ensuring they are sorted.
+    std::vector<int> vec_int4 {9, 8, 5, 6, 2, 3, 10};
+    std::cout << "Nth element sort: " << std::endl << "\tOriginal vector: (";
+    display_content(vec_int4);
+    std::cout << ")" << std::endl << "\t2nd Sorted: (";
+    std::nth_element(vec_int4.begin(), vec_int4.begin() + 2,vec_int4.end());
+    display_content(vec_int4);
+    std::cout << ")" << std::endl;
+
+
+
+
+    
+    
 
     return 0;
 }
