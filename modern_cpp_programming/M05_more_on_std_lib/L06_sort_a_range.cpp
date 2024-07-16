@@ -62,6 +62,8 @@ using namespace std::string_literals;
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 6: Sorting the elements in a range:\n" << std::endl;
+    
     // Info #1: You can use std::sort for general sorting standard containers
     // where you can pass an additional argument for a sorting condition 
     // (ascendant or decendant). Then it allows an specified comparison.
@@ -142,7 +144,8 @@ int main(int argc, char* argv[])
     std::cout << std::distance(vec_int2.cbegin(), iter) << std::endl;
 
     return 0;
-}
+
+} // main
 
 // ------------------------------- FUNCTION DEFINITIONS -----------------------
 
