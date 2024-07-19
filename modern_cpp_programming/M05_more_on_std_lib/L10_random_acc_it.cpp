@@ -32,7 +32,9 @@
  */
 
 #include <iterator>
-
+#include <cassert>
+#include <memory>
+#include <algorithm>
 
 // Info #1: For creating your own random access iterator, you should have a 
 // custom implementation of a container, here we have the implementation for a
@@ -93,4 +95,107 @@ public:
     typedef T* pointer;
     typedef std::random_access_iterator_tag iter_category;
     typedef ptrdiff_t difference_type;
+
+private:
+    pointer ptr = nullptr;
+    size_t index = 0;
+
+    bool compatible(iter_type const & other) const
+    {
+        return ptr == other.ptr;
+    }
+
+public:
+    explicit custom_array_iterator(pointer ptr, size_t const index)
+        : ptr(ptr), index(index) {}
+
+    custom_array_iterator(custom_array_iterator const & o)
+        = default;
+
+    custom_array_iterator& operator=(custom_array_iterator const & o)
+        = default;
+
+    iter_type & operator++()
+    {
+        if (index >= Size)
+            throw std::out_of_range("Iter cannot be incremented, end reached");
+        ++index;
+        return *this;
+    }
+
+    iter_type operator++ (int)
+    {
+        iter_type tmp = *this;
+        ++*this;
+        return tmp;
+    }
+
+    bool operator== (iter_type const & other) const
+    {
+        assert(compatible(other));
+        return index == other.index;
+    }
+
+    bool operator!= (iter_type const & other) const
+    {
+        return !(*this == other);
+    }
+
+    reference operator* () const
+    {
+        if (ptr == nullptr)
+            throw std::bad_function_call();
+        return *(ptr + index)
+    }
+
+    reference operator-> () const
+    {
+        if (ptr == nullptr)
+            throw std::bad_function_call();
+        return *(ptr + index);
+    }
+
+    custom_array_iterator() = default;
+
+    iter_type & operator--()
+    {
+        if (index <= 0)
+            throw std::out_of_range("Iter cannot be decremented, begin reached");
+        
+        --index;
+        return *this;
+    }
+
+    iter_type operator--(int)
+    {
+        iter_type tmp = *this;
+        --*this;
+        return tmp;
+    }
+
+    iter_type operator+(difference_type offset) const
+    {
+        iter_type tmp = *this;
+        return tmp += offset;
+    }
+
+    iter_type operator-(difference_type offset) const
+    {
+        iter_type tmp = *this;
+        return tmp -= offset;
+    }
+
+    difference_type operator-(iter_type const & other) const
+    {
+        assert(compatible(other));
+        return (index - other.index);
+    }
+
+    difference_type operator<(iter_type const & other) const
+    {
+        assert(compatible(other));
+        return index < other.index;
+    }
+
+    
 };
