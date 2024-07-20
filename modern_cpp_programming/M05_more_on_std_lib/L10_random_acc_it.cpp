@@ -83,119 +83,204 @@ public:
      * @return Get size (in terms of variables stored inside).
      */
     size_t size() const { return SIZE; }
-};
 
-template <typename T, size_t const Size>
-class custom_array_iterator
-{
-public:
-    typedef custom_array_iterator iter_type;
-    typedef T value_type;
-    typedef T& reference;
-    typedef T* pointer;
-    typedef std::random_access_iterator_tag iter_category;
-    typedef ptrdiff_t difference_type;
-
-private:
-    pointer ptr = nullptr;
-    size_t index = 0;
-
-    bool compatible(iter_type const & other) const
+    // Info #2: Inside the container of interest, you will need to implement
+    // the iterator class, where you have to initially consider defining types
+    // for the iterator itself, the value type, the reference, the category
+    // access as public definitions.
+    template <typename T, size_t const Size>
+    class custom_array_iterator
     {
-        return ptr == other.ptr;
-    }
+    public:
+        typedef custom_array_iterator iter_type;
+        typedef T value_type;
+        typedef T& reference;
+        typedef T* pointer;
+        typedef std::random_access_iterator_tag iter_category;
+        typedef ptrdiff_t difference_type;
 
-public:
-    explicit custom_array_iterator(pointer ptr, size_t const index)
-        : ptr(ptr), index(index) {}
+    // Info #3: For the private data you will need to create a pointer (and
+    // initialize it to null) and define a start index (at 0).
+    private:
+        pointer ptr = nullptr;
+        size_t index = 0;
 
-    custom_array_iterator(custom_array_iterator const & o)
-        = default;
+        // Info #4: You need imprlement a compatible function to check if it
+        // valid to interact between to pointers. 
 
-    custom_array_iterator& operator=(custom_array_iterator const & o)
-        = default;
+        /**
+         * Validates if both type of iterators are the same to check 
+         * compatibility.
+         * 
+         * @param other Pointer to the other iterator to consider.
+         * 
+         * @return True if both iterators type are consistent, False otherwise.
+         */
+        bool compatible(iter_type const & other) const
+        {
+            return ptr == other.ptr;
+        }
 
-    iter_type & operator++()
-    {
-        if (index >= Size)
-            throw std::out_of_range("Iter cannot be incremented, end reached");
-        ++index;
-        return *this;
-    }
-
-    iter_type operator++ (int)
-    {
-        iter_type tmp = *this;
-        ++*this;
-        return tmp;
-    }
-
-    bool operator== (iter_type const & other) const
-    {
-        assert(compatible(other));
-        return index == other.index;
-    }
-
-    bool operator!= (iter_type const & other) const
-    {
-        return !(*this == other);
-    }
-
-    reference operator* () const
-    {
-        if (ptr == nullptr)
-            throw std::bad_function_call();
-        return *(ptr + index)
-    }
-
-    reference operator-> () const
-    {
-        if (ptr == nullptr)
-            throw std::bad_function_call();
-        return *(ptr + index);
-    }
-
-    custom_array_iterator() = default;
-
-    iter_type & operator--()
-    {
-        if (index <= 0)
-            throw std::out_of_range("Iter cannot be decremented, begin reached");
+    public:
+        // Info #5: 
         
-        --index;
-        return *this;
-    }
+        explicit custom_array_iterator(pointer ptr, size_t const index)
+            : ptr(ptr), index(index) {}
 
-    iter_type operator--(int)
+        custom_array_iterator(custom_array_iterator const & o)
+            = default;
+
+        custom_array_iterator& operator=(custom_array_iterator const & o)
+            = default;
+
+        iter_type & operator++()
+        {
+            if (index >= Size)
+                throw std::out_of_range("Iter cannot be incremented, end reached");
+            ++index;
+            return *this;
+        }
+
+        iter_type operator++ (int)
+        {
+            iter_type tmp = *this;
+            ++*this;
+            return tmp;
+        }
+
+        bool operator== (iter_type const & other) const
+        {
+            assert(compatible(other));
+            return index == other.index;
+        }
+
+        bool operator!= (iter_type const & other) const
+        {
+            return !(*this == other);
+        }
+
+        reference operator* () const
+        {
+            if (ptr == nullptr)
+                throw std::bad_function_call();
+            return *(ptr + index);
+        }
+
+        reference operator-> () const
+        {
+            if (ptr == nullptr)
+                throw std::bad_function_call();
+            return *(ptr + index);
+        }
+
+        custom_array_iterator() = default;
+
+        iter_type & operator--()
+        {
+            if (index <= 0)
+                throw std::out_of_range("Iter cannot be decremented, begin reached");
+            
+            --index;
+            return *this;
+        }
+
+        iter_type operator--(int)
+        {
+            iter_type tmp = *this;
+            --*this;
+            return tmp;
+        }
+
+        iter_type operator+(difference_type offset) const
+        {
+            iter_type tmp = *this;
+            return tmp += offset;
+        }
+
+        iter_type operator-(difference_type offset) const
+        {
+            iter_type tmp = *this;
+            return tmp -= offset;
+        }
+
+        difference_type operator-(iter_type const & other) const
+        {
+            assert(compatible(other));
+            return (index - other.index);
+        }
+
+        bool operator<(iter_type const & other) const
+        {
+            assert(compatible(other));
+            return index < other.index;
+        }
+
+        bool operator>(iter_type const & other) const
+        {
+            return other < *this;
+        }
+
+        bool operator<=(iter_type const & other) const
+        {
+            return !(other < * this);
+        }        
+
+        bool operator>=(iter_type const & other) const
+        {
+            return !(*this < other);
+        }
+
+        iter_type & operator+=(difference_type const offset)
+        {
+            if(index + offset < 0 || index + offset > Size)
+                throw std::out_of_range("Iterator out of bounds");
+            index += offset;
+            return *this;
+        }
+
+        iter_type & operator-=(difference_type const offset)
+        {
+            return *this += -offset;
+        }
+
+        value_type & operator[](difference_type const offset)
+        {
+            return (*(*this + offset));
+        }
+
+        value_type const & operator[](difference_type const offset)
+        const
+        {
+            return (*(*this + offset));
+        }
+
+    };
+
+    typedef custom_array_iterator<Type, SIZE> iterator;
+    typedef custom_array_iterator<Type const, SIZE> constant_iterator;
+
+    iterator begin()
     {
-        iter_type tmp = *this;
-        --*this;
-        return tmp;
+        return iterator(data, 0);
     }
 
-    iter_type operator+(difference_type offset) const
+    iterator end()
     {
-        iter_type tmp = *this;
-        return tmp += offset;
+        return iterator(data, SIZE);
     }
 
-    iter_type operator-(difference_type offset) const
+    constant_iterator begin() const 
     {
-        iter_type tmp = *this;
-        return tmp -= offset;
+        return constant_iterator(data, 0);
     }
 
-    difference_type operator-(iter_type const & other) const
+    constant_iterator end() const
     {
-        assert(compatible(other));
-        return (index - other.index);
+        return constant_iterator(data, SIZE);
     }
-
-    difference_type operator<(iter_type const & other) const
-    {
-        assert(compatible(other));
-        return index < other.index;
-    }
-
-    
 };
+
+int main(int argc, char* argv[])
+{
+    return 0;
+}
