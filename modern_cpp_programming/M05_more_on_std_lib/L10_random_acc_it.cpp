@@ -29,6 +29,15 @@
  * 
  * For more information on iterators go an check:
  *      https://cplusplus.com/reference/iterator/
+ * 
+ * NOTE: Here we have to make an important highlight, it is about rvalues and
+ * lvalues. Lvalues represents an object that is present in a location in memory 
+ * (you can adress it) while rvalues are temporary objects that do not persist 
+ * more than the expression they are used:
+ * 
+ *      int x = 16; // x is an lvalue
+ *      int y = 20; // 20 is an rvalue
+ *      
  */
 
 #include <iterator>
@@ -122,25 +131,70 @@ public:
         }
 
     public:
-        // Info #5: 
-        
+        // Info #5: Do not forget to consider an explicit constructor for the
+        // iterator class.
+
+        /**
+         * Explicit constructor that defines an iterator by providing the 
+         * pointed memory and the initial index.
+         * 
+         * @param ptr Pointer that points to the start of a container.
+         * @param index First value of the index to consider.  
+         */        
         explicit custom_array_iterator(pointer ptr, size_t const index)
             : ptr(ptr), index(index) {}
 
+        // Info #6: The next step implies to work with a proper implementation,
+        // that meet the requirements of an iterator, then it should consider
+        // to implement a copy constructor, a copy assignment, a destruction
+        // implementation, a prefix and a post increment.
+
+        /**
+         * Default constructor implementation by considering copy
+         * 
+         * @param o Other iterator that can be used as the base to construct
+         *          another.
+         */
         custom_array_iterator(custom_array_iterator const & o)
             = default;
 
+        /**
+         * Define a copy assignation and set it to default.
+         * 
+         * @param o Other iterator to use as a copy base for the assignation.
+         */
         custom_array_iterator& operator=(custom_array_iterator const & o)
             = default;
 
+        /**
+         * Default destructor is used.
+         */
+        ~custom_array_iterator() = default;
+
+        /**
+         * Postincrement implementation for the iteration index.
+         * 
+         * @return Pointer to the current object.
+         * 
+         * @throw std::out_of_range if increment is out of bounds
+         */
         iter_type & operator++()
         {
             if (index >= Size)
-                throw std::out_of_range("Iter cannot be incremented, end reached");
+                throw std::out_of_range(
+                    "Iter cannot be incremented, end of container reached");
             ++index;
             return *this;
         }
 
+        /**
+         * Posincrement implementation of the value considered at the current
+         * index of the container.
+         * 
+         * @param - Integer value considered at increment
+         * 
+         * @return Pointer to the current iterator.
+         */
         iter_type operator++ (int)
         {
             iter_type tmp = *this;
@@ -148,17 +202,48 @@ public:
             return tmp;
         }
 
+        // Info #7: Do not forget that for usages in loops and conditions, the
+        // iterator must have equality and inequallity comparison.
+
+        /**
+         * Define equaility operator by first considering if both of the
+         * elements are compatible and then checking their indexes.
+         * 
+         * @param other Element to compare equaillity
+         * 
+         * @return True, if indexes are equal, False otherwise.
+         * 
+         * @throw Generic exception if elements aren't compatible.
+         */
         bool operator== (iter_type const & other) const
         {
             assert(compatible(other));
             return index == other.index;
         }
 
+        /**
+         * Define inequaility operator by first considering if both of the
+         * elements are compatible and then checking their indexes.
+         * 
+         * @param other Element to compare equaillity
+         * 
+         * @return True, if indexes aren't equal, False otherwise.
+         * 
+         * @throw Generic exception if elements aren't compatible.
+         */
         bool operator!= (iter_type const & other) const
         {
             return !(*this == other);
         }
 
+        /**
+         * Deferencing operator definition to check the value that the 
+         * iterator allows to point. 
+         * 
+         * @return Value stored in the container at the direction of the iter.
+         * 
+         * @throw std::bad_function_call if the deferencing isn't proper.
+         */
         reference operator* () const
         {
             if (ptr == nullptr)
@@ -166,6 +251,14 @@ public:
             return *(ptr + index);
         }
 
+        /**
+         * Operator for accesing to the given elemet at the index specified by
+         * the iterator. 
+         * 
+         * @return Value stored in the container at the direction of the iter.
+         * 
+         * @throw std::bad_function_call if the access isn't proper.
+         */
         reference operator-> () const
         {
             if (ptr == nullptr)
@@ -173,8 +266,25 @@ public:
             return *(ptr + index);
         }
 
+        // Info #8: You have to include a default constructor to meet the
+        // forward iterator requirements.
+        
+        /**
+         * Default construction for the iterator.
+         */
         custom_array_iterator() = default;
 
+        // Info #9: As we mentioned in the intro, we have to also consider the
+        // bidirectional iterator requirements to achieve our random access.  Then,
+        // do not forget to add decrement operators.
+
+        /**
+         * Postdecrement implementation for the iteration index.
+         * 
+         * @return Pointer to the current object.
+         * 
+         * @throw std::out_of_range if increment is out of bounds
+         */
         iter_type & operator--()
         {
             if (index <= 0)
@@ -184,6 +294,14 @@ public:
             return *this;
         }
 
+        /**
+         * Posdecrement implementation of the value considered at the current
+         * index of the container.
+         * 
+         * @param - Integer value considered at increment
+         * 
+         * @return Pointer to the current iterator.
+         */
         iter_type operator--(int)
         {
             iter_type tmp = *this;
@@ -191,6 +309,19 @@ public:
             return tmp;
         }
 
+        // Info #10: Finally we need to add dependencies oriented to the 
+        // random access iterator, for thsi consider add and substract,
+        // comparison, compound assignments and offset deference.
+
+        /**
+         * Arithmetic add by considering pointed element by the iterator index
+         * and the offset of other element.
+         *
+         * 
+         * @param offset Element to consider for the sum.
+         * 
+         * @return Final sum stored in the original pointer object.
+         */
         iter_type operator+(difference_type offset) const
         {
             iter_type tmp = *this;
