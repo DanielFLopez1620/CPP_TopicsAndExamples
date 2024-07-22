@@ -25,7 +25,9 @@
  * - Bidirectional: They are like forward iteratros that can also go 
  *   backwards.
  * - Random-access: They are like bidirectional iterators with the ability to
- *   access ranges non-sequentially
+ *   access ranges non-sequentially, then they implement arithmethic operations
+ *   like '+', '-', compund assignments '+=', '-='. Also, they have comparison
+ *   operators.
  * 
  * For more information on iterators go an check:
  *      https://cplusplus.com/reference/iterator/
@@ -40,13 +42,16 @@
  *      
  */
 
-#include <iterator>
-#include <cassert>
-#include <memory>
-#include <algorithm>
+// ----------------------------- REQUIRED HEADERS -----------------------------
+
+#include <iterator>  // Oriented to the usage of iterators and related methods.
+#include <cassert>   // For assertion based on C
+#include <memory>    // For dynamic memory usage 
+#include <algorithm> // Colletion of general purpose algorithms and functions.
+
+// ----------------------------- CLASS AND STRUCT DEFINITIONS -----------------
 
 // Info #1: For creating your own random access iterator, you should have a 
-// custom implementation of a container, here we have the implementation for a
 // custom array class, that initially just have defined the operations for
 // initialize, and get the size and elements. 
 template <typename Type, size_t const SIZE>
@@ -77,8 +82,6 @@ public:
      * @param index Index in array of interest
      * 
      * @return Element present in the given index
-     * 
-     * @throw std::out_of_range if index is not in range.
      */
     Type const & operator[](size_t const index) const
     {
@@ -328,39 +331,85 @@ public:
             return tmp += offset;
         }
 
+        /**
+         * Arithmetic substraction by considering pointed element by the
+         * iterator index and the offset of other element.
+         * 
+         * @param offset Element to consider for the substraction.
+         * 
+         * @return Final differenc estored in the original pointer object.
+         */
         iter_type operator-(difference_type offset) const
         {
             iter_type tmp = *this;
             return tmp -= offset;
         }
 
+        /**
+         * Substraction for indexex between iterators.
+         * 
+         * @param other Other iterator to consider for the substraction.
+         * 
+         * @return Iterator result after substract of indexes.
+         */
         difference_type operator-(iter_type const & other) const
         {
             assert(compatible(other));
             return (index - other.index);
         }
 
+        /**
+         * Comparison less operator by checking first compatibility and then
+         * making the index comparison for the iterators.
+         * 
+         * @param other Other iterator to consider for the comparison.
+         * 
+         * @return True, if the current iterator index is less, False otherwise
+         */
         bool operator<(iter_type const & other) const
         {
             assert(compatible(other));
             return index < other.index;
         }
 
+        /*
+         * Comparion greater operator by implementing the negation of the
+         * less than operator.
+         * 
+         * @param other Other iterator to consider for the comparison.
+         * 
+         * @return True, if the current iterator index is greater, False
+         *         otherwise.
+         */
         bool operator>(iter_type const & other) const
         {
             return other < *this;
         }
 
+        /**
+         * Comparison less or equal than that implements the negation of the
+         * contrary case of less comparison ( other is less than current 
+         * iterator)
+         * 
+         * @param other Other iterator to consider for the comparison.
+         * 
+         * @return True if the current element is less or equal than the other,
+         *         False, otherwise.
+         */
         bool operator<=(iter_type const & other) const
         {
             return !(other < * this);
         }        
 
-        bool operator>=(iter_type const & other) const
-        {
-            return !(*this < other);
-        }
-
+        /**
+         * Comparison greater or equal than that implements the negation of the
+         * contrary case of less comparison ( current is less than other
+         * iterator)
+         * 
+         * @param other Other iterator to consider for the comparison.
+         *
+         * @return Pointer to the iterator with the summed index
+         */
         iter_type & operator+=(difference_type const offset)
         {
             if(index + offset < 0 || index + offset > Size)
@@ -368,17 +417,41 @@ public:
             index += offset;
             return *this;
         }
-
+        
+        /**
+         * Decrement self by operator that checks if the diff of the indexes
+         * is between zero and the real size of the container. 
+         * 
+         * @param offset Offset to consider for the substraction
+         * 
+         * @return Pointer to the iterator with the differenced index
+         */
         iter_type & operator-=(difference_type const offset)
         {
             return *this += -offset;
         }
 
+        /**
+         * Getter by using the iterator of the current index, it can consider
+         * an offset.
+         * 
+         * @param offset Distance to the index of interesst
+         * 
+         * @return Valee stored by the container in the given position
+         */
         value_type & operator[](difference_type const offset)
         {
             return (*(*this + offset));
         }
-
+        
+        /**
+         * Constant getter by using the iterator of the current index, it can 
+         * consider an offset.
+         * 
+         * @param offset Distance to the index of interesst
+         * 
+         * @return Valee stored by the container in the given position
+         */
         value_type const & operator[](difference_type const offset)
         const
         {
@@ -387,29 +460,57 @@ public:
 
     };
 
+    // Info #11: Do not forget to add the type defintions for a mutable and a
+    // constant iterator.
     typedef custom_array_iterator<Type, SIZE> iterator;
     typedef custom_array_iterator<Type const, SIZE> constant_iterator;
 
+    // Info #12: As you may remember, some importante implementation related to
+    // iterators are the begin() and end() for a given container, that
+    // definition is provided below.
+
+    /**
+     * Begin method to obtain the iterator at the first position for 
+     * a mutable custom defined array.
+     * 
+     *  @return Iterator with index pointing to position 0.
+     */
     iterator begin()
     {
         return iterator(data, 0);
     }
 
+    /**
+     * End method to obtain the iterator at the last plus one position of the
+     * container for a custom defined array.
+     */
     iterator end()
     {
         return iterator(data, SIZE);
     }
 
+    /**
+     * Begin method to obtain the iterator at the first position for 
+     * a custom defined array, by providing a constant iterator.
+     * 
+     *  @return Iterator with index pointing to position 0.
+     */
     constant_iterator begin() const 
     {
         return constant_iterator(data, 0);
     }
 
+    /**
+     * End method to obtain the iterator at the last plus one position of the
+     * container for a custom defined array.
+     */
     constant_iterator end() const
     {
         return constant_iterator(data, SIZE);
     }
 };
+
+// ---------------------- MAIN IMPLEMENTATION ---------------------------------
 
 int main(int argc, char* argv[])
 {
