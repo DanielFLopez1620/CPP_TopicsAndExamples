@@ -39,6 +39,15 @@
  * 
  *      int x = 16; // x is an lvalue
  *      int y = 20; // 20 is an rvalue
+ * 
+ * NOTE: Do not forget to also include definition of cbegin()/cend(), that are
+ * constant iterators; rbegin()/rend, that are mutable revese iterators and their
+ * const counterparts.
+ * 
+ * When ready, you can run the code with:
+ *  
+ *      g++ -std=c++20 L10_random_acc_it.cpp -o rnd_access_it.out
+ *      ./rnd_access_it.out
  *      
  */
 
@@ -74,7 +83,7 @@ public:
     {
         if (index < SIZE) return data[index];
         throw std::out_of_range("Index out of bounds");
-    }
+    } // operator[]
 
     /**
      * Getter of the element at the given index.
@@ -87,7 +96,7 @@ public:
     {
         if(index < SIZE) return data[index];
         throw std::out_of_range("Index out of bounds");
-    }
+    } // operator[]
 
     /**
      * Getter of the size of the array.
@@ -131,7 +140,7 @@ public:
         bool compatible(iter_type const & other) const
         {
             return ptr == other.ptr;
-        }
+        } // compatible()
 
     public:
         // Info #5: Do not forget to consider an explicit constructor for the
@@ -188,7 +197,7 @@ public:
                     "Iter cannot be incremented, end of container reached");
             ++index;
             return *this;
-        }
+        } // operator++ 
 
         /**
          * Posincrement implementation of the value considered at the current
@@ -203,7 +212,7 @@ public:
             iter_type tmp = *this;
             ++*this;
             return tmp;
-        }
+        } // operator++(int)
 
         // Info #7: Do not forget that for usages in loops and conditions, the
         // iterator must have equality and inequallity comparison.
@@ -222,7 +231,7 @@ public:
         {
             assert(compatible(other));
             return index == other.index;
-        }
+        } // operator==
 
         /**
          * Define inequaility operator by first considering if both of the
@@ -237,7 +246,7 @@ public:
         bool operator!= (iter_type const & other) const
         {
             return !(*this == other);
-        }
+        } // operator!=
 
         /**
          * Deferencing operator definition to check the value that the 
@@ -252,7 +261,7 @@ public:
             if (ptr == nullptr)
                 throw std::bad_function_call();
             return *(ptr + index);
-        }
+        } // operator*
 
         /**
          * Operator for accesing to the given elemet at the index specified by
@@ -267,7 +276,7 @@ public:
             if (ptr == nullptr)
                 throw std::bad_function_call();
             return *(ptr + index);
-        }
+        } // operator->
 
         // Info #8: You have to include a default constructor to meet the
         // forward iterator requirements.
@@ -295,7 +304,7 @@ public:
             
             --index;
             return *this;
-        }
+        } // operator--
 
         /**
          * Posdecrement implementation of the value considered at the current
@@ -310,7 +319,7 @@ public:
             iter_type tmp = *this;
             --*this;
             return tmp;
-        }
+        } // operator-- (int)
 
         // Info #10: Finally we need to add dependencies oriented to the 
         // random access iterator, for thsi consider add and substract,
@@ -329,7 +338,7 @@ public:
         {
             iter_type tmp = *this;
             return tmp += offset;
-        }
+        } // operator+ (iter_type)
 
         /**
          * Arithmetic substraction by considering pointed element by the
@@ -343,7 +352,7 @@ public:
         {
             iter_type tmp = *this;
             return tmp -= offset;
-        }
+        } // operator- (iter_type)
 
         /**
          * Substraction for indexex between iterators.
@@ -356,7 +365,7 @@ public:
         {
             assert(compatible(other));
             return (index - other.index);
-        }
+        } // operator- (diffrence_type)
 
         /**
          * Comparison less operator by checking first compatibility and then
@@ -370,7 +379,7 @@ public:
         {
             assert(compatible(other));
             return index < other.index;
-        }
+        } // operator<
 
         /*
          * Comparion greater operator by implementing the negation of the
@@ -384,7 +393,7 @@ public:
         bool operator>(iter_type const & other) const
         {
             return other < *this;
-        }
+        } // operator>
 
         /**
          * Comparison less or equal than that implements the negation of the
@@ -399,7 +408,7 @@ public:
         bool operator<=(iter_type const & other) const
         {
             return !(other < * this);
-        }        
+        } // operator<=     
 
         /**
          * Comparison greater or equal than that implements the negation of the
@@ -416,7 +425,7 @@ public:
                 throw std::out_of_range("Iterator out of bounds");
             index += offset;
             return *this;
-        }
+        } // operator+=
         
         /**
          * Decrement self by operator that checks if the diff of the indexes
@@ -429,7 +438,7 @@ public:
         iter_type & operator-=(difference_type const offset)
         {
             return *this += -offset;
-        }
+        } // operator-=
 
         /**
          * Getter by using the iterator of the current index, it can consider
@@ -442,7 +451,7 @@ public:
         value_type & operator[](difference_type const offset)
         {
             return (*(*this + offset));
-        }
+        } // operator []
         
         /**
          * Constant getter by using the iterator of the current index, it can 
@@ -456,9 +465,9 @@ public:
         const
         {
             return (*(*this + offset));
-        }
+        }  // const operator[]
 
-    };
+    }; // class custom_array_iterator
 
     // Info #11: Do not forget to add the type defintions for a mutable and a
     // constant iterator.
@@ -478,7 +487,7 @@ public:
     iterator begin()
     {
         return iterator(data, 0);
-    }
+    } // begin()
 
     /**
      * End method to obtain the iterator at the last plus one position of the
@@ -487,7 +496,7 @@ public:
     iterator end()
     {
         return iterator(data, SIZE);
-    }
+    } // end()
 
     /**
      * Begin method to obtain the iterator at the first position for 
@@ -498,7 +507,7 @@ public:
     constant_iterator begin() const 
     {
         return constant_iterator(data, 0);
-    }
+    } // begin() const
 
     /**
      * End method to obtain the iterator at the last plus one position of the
@@ -507,12 +516,38 @@ public:
     constant_iterator end() const
     {
         return constant_iterator(data, SIZE);
-    }
+    } // end() const
 };
 
 // ---------------------- MAIN IMPLEMENTATION ---------------------------------
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 10: Creating a random access iterator:\n" << std::endl;
+
+    custom_array<float, 4> cus_example;
+    cus_example[0] = 1.6;
+    cus_example[1] = 6.2;
+    cus_example[2] = 2.0;
+    cus_example[3] = 1.0;
+
+    std::cout << "With basic types:"<< std::endl << "\tArray content: (";
+    for(auto const & element : cus_example)
+    {
+        std::cout << element << ", ";
+    }
+    std::cout << ")" << std::endl;
+
+    std::transform(cus_example.begin(), cus_example.end(), cus_example.begin(),
+        [](int const num) { return num + 1;} );
+
+    std::cout << "\tModified array content: (";
+    for(auto const & element : cus_example)
+    {
+        std::cout << element << ", ";
+    }
+    std::cout << ")" << std::endl;
+
     return 0;
-}
+
+} // main
