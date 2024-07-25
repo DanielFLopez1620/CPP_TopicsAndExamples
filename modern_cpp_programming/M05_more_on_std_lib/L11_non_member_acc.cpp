@@ -59,9 +59,6 @@ public:
      * Getter of the element at the given index.
      * 
      * @param index I
-    // Info #12: As you may remember, some importante implementation related to
-    // iterators are the begin() and end() for a given container, that
-    // definition is provided below.ndex in array of interest
      * 
      * @return Element present in the given index
      */
@@ -71,12 +68,51 @@ public:
         throw std::out_of_range("Index out of bounds");
     } // operator[]
 
-    /**
-     * Getter of the size of the array.
-     * 
-     * @return Get size (in terms of variables stored inside).
-     */
-    size_t size() const { return SIZE; }
+    
+    // ------------------------------------------------------------------------
+    // Info #1: Here are members definitions of the size(), data()
+    // and empty(), later you can check for the non-member implementations.
+    // ------------------------------------------------------------------------
+
+    // /**
+    //  * Getter of the size of the array.
+    //  * 
+    //  * @return Get size (in terms of variables stored inside).
+    //  */
+    // size_t size() const 
+    // {
+    //     return SIZE; 
+    // }
+
+    // /**
+    //  * Check if the arrays is empty or if it has content.
+    //  * 
+    //  * @return True if it is void, False otherwise.
+    //  */
+    // bool empty() const
+    // {
+    //     return SIZE == 0;
+    // }
+
+    // /**
+    //  * Obtain the direction in memory of an array (begin).
+    //  * 
+    //  * @return Pointed memory.
+    //  */
+    // Type* data()
+    // {
+    //     return data;
+    // }
+
+    // /**
+    //  * Obtain the direction in memory of a constant array (begin)
+    //  * 
+    //  * @return Pointed memory.
+    //  */
+    // Type const* data() const
+    // {
+    //     return data;
+    // }
 
     template <typename T, size_t const Size>
     class custom_array_iterator
@@ -107,13 +143,8 @@ public:
         } // compatible()
 
     public:
-        /**
-         * Explicit constructor that defines an iterator by providing the 
-         * pointed memory and the initial index.
-         * 
-         * @param ptr Pointer that points to the start of a container.
-         * @param index First value of the index to consider.  
-         */        
+        /**modern_cpp_programming/M05_more_on_std_lib/L11_non_member_acc.cpp:509:14: error: expected unqualified-id before ‘inline’
+  509 | constexpr T* inline begin(T (&array)[N])   
         explicit custom_array_iterator(pointer ptr, size_t const index)
             : ptr(ptr), index(index) {}
 
@@ -145,9 +176,6 @@ public:
          * 
          * @return Pointer to the current object.
          * 
-    // Info #12: As you may remember, some importante implementation related to
-    // iterators are the begin() and end() for a given container, that
-    // definition is provided below.
          * @throw std::out_of_range if increment is out of bounds
          */
         iter_type & operator++()
@@ -240,9 +268,6 @@ public:
          */
         custom_array_iterator() = default;
 
-        // Info #9: As we mentioned in the intro, we have to also consider the
-        // bidirectional iterator requirements to achieve our random access.  Then,
-        // do not forget to add decrement operators.
 
         /**
          * Postdecrement implementation for the iteration index.
@@ -461,7 +486,103 @@ public:
     {
         return constant_iterator(data, SIZE);
     } // end() const
-};
+
+}; // custom_array
+
+template<class C>
+constexpr auto inline begin(C& c) -> decltype(c.end())
+{
+    return c.begin();
+}
+
+template<class C>
+constexpr auto inline end(C& c) -> decltype(c.end())
+{
+    return c.end();
+}
+
+template<class T, std::size_t N>
+constexpr T* begin(T (&array)[N])
+{
+    return array;
+}
+
+template<class T, std::size_t N>
+constexpr T* begin(T (&array)[N])
+{
+    return array+N;
+}
+
+template <class C>
+constexpr auto data(C& c) -> decltype(c.data())
+{
+    return c.data();
+}
+
+template <class C>
+constexpr auto data(const C& c) -> decltype(c.data())
+{
+    return c.data();
+}
+
+template <class T, std::size_t N>
+constexpr T* data(T (&array)[N]) noexcept
+{
+    return array;
+}
+
+template <class E>
+constexpr const E* data(std::initializer_list<E> il) noexcept
+{
+    return il.begin();
+}
+
+template <class C>
+constexpr auto size(const C& c) -> decltype(c.size())
+{
+    return c.size();
+}
+
+template <class T, std::size_t N>
+constexpr std::size_t size(const T (&array)[N]) noexcept
+{
+    return N;
+}
+
+template <class C>
+constexpr auto empty(const C& c) -> decltype(c.empty())
+{
+    return c.empty();
+}
+
+
+template <class T, std::size_t N>
+constexpr bool empty(const T(&array)[N]) noexcept
+{
+    return false;
+}
+
+template <class E>
+constexpr bool empty(std::initializer_list<E> il) noexcept
+{
+    return il.size() == 0;
+}
+
+template <class C>
+constexpr auto ssize(const C& c) 
+    -> std::common_type<std::ptrdiff_t, std::make_signed_t<decltype(c.size())>>
+{
+    using R = std::common_type_t<std::ptrdiff_t,
+        std::make_signed_t<decltype(c.size())>>;
+    
+    return static_cast<R>(c.size());
+}
+
+template <class T, std::ptrdiff_t N>
+constexpr std::ptrdiff_t ssize(const T(&array)[N]) noexcept
+{
+    return N;
+}
 
 // --------------------------- MAIN IMPLEMENTATION ----------------------------
 
@@ -504,13 +625,13 @@ int main(int argc, char* argv[])
     cus_example[2] = 2.0;
     cus_example[3] = 1.0;
     auto s_v3 = std::size(cus_example);
-    // auto e_v3 = std::empty(cus_example);
-    // auto d_v3 = std::data(cus_example);
+    auto e_v3 = std::empty(cus_example);
+    auto d_v3 = std::data(cus_example);
 
     std::cout << "Using custom_array: " << std::endl
               << "\tSize: " << s_v3 << std::endl 
-              // << "\tIs empty?: " << e_v3 << std::endl
-              // << "\tData:" << d_v3 << std::endl
+              << "\tIs empty?: " << e_v3 << std::endl
+              << "\tData:" << d_v3 << std::endl
               << "\nHere, we didn't defined data or empty (yet)..."
               << "\tContent: (";
     for(auto const & element : cus_example)
