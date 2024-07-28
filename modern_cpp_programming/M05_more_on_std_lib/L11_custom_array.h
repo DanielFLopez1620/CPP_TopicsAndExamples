@@ -1,3 +1,12 @@
+/**
+ * This code is based on the dummy_array from the book "Modern C++ Programming
+ * Cookbook", but implements some name changes and additional comments for
+ * better understanding to the context of this repository.
+ * 
+ * Additional notes can be found on: M05_more_on_std_lib/L10_random_acc_it.cpp
+ */
+
+// ------------------------------ REQUIRED HEADERS ----------------------------
 #include <iterator>  // Oriented to the usage of iterators and related methods.
 #include <cassert>   // For assertion based on C
 #include <memory>    // For dynamic memory usage 

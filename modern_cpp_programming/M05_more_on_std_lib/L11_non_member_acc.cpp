@@ -33,28 +33,16 @@ void display_content(std::vector<T> vector);
 
 
 template<typename T, size_t N>
-T* data(custom_array<T, N>& arr)
-{
-    return arr.begin() == arr.end() ? nullptr : &*arr.begin();
-}
+T* std::data(custom_array<T, N>& arr);
 
 template<typename T, size_t N>
-const T* data(const custom_array<T, N>& arr)
-{
-    return arr.begin() == arr.end() ? nullptr : &*arr.begin();
-}
+const T* std::data(const custom_array<T, N>& arr);
 
 template<typename T, size_t N>
-constexpr size_t size(const custom_array<T, N>&)
-{
-    return N;
-}
+constexpr size_t std::size(const custom_array<T, N>&);
 
 template<typename T, size_t N>
-constexpr bool empty(const custom_array<T, N>&)
-{
-    return N == 0;
-}
+constexpr bool std::empty(const custom_array<T, N>&);
 
 
 // --------------------------- MAIN IMPLEMENTATION ----------------------------
@@ -133,5 +121,27 @@ void display_content(std::vector<T> vector)
     }
 } // display_content
 
+template<typename T, size_t N>
+T* std::data(custom_array<T, N>& arr)
+{
+    return arr.begin() == arr.end() ? nullptr : &*arr.begin();
+}
 
+template<typename T, size_t N>
+const T* std::data(const custom_array<T, N>& arr)
+{
+    return arr.begin() == arr.end() ? nullptr : &*arr.begin();
+}
+
+template<typename T, size_t N>
+constexpr size_t std::size(const custom_array<T, N>&)
+{
+    return N;
+}
+
+template<typename T, size_t N>
+constexpr bool std::empty(const custom_array<T, N>&)
+{
+    return N == 0;
+}
 
