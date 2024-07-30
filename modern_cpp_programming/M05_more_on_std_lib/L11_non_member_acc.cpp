@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code wasm't tested for C++20
+// Code was tested for C++20 with g++
 
 #include <iostream>
 
