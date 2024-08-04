@@ -10,6 +10,37 @@
  * use the std::chrono namespace, so go to the code belows and let's explore
  * what it can offer. 
  * 
+ * Here we work with durations they defines a number of ticks (increment
+ * between two moments in time) over a time unit which is retrieved by the
+ * method count, and the precision may depend on that ratio.
+ * 
+ * In C++ 11, chrono was added, but after C++14, there was an additional option
+ * using user-defined literals to make a better and more intutitive usage of 
+ * the precisions, the namespace that contains this definitions is:
+ * 
+ *      using namespace std::chrono_literals;
+ * 
+ * Another thing to keep in mind is that all arithmathic operations are
+ * available to the duration class, but you should keep in mind that if you}
+ * combine two types of durations, you will get the result in the duration type
+ * with more precision, for example, if you sum hours and minutes, the result
+ * will be in minutes. But you can use a std::chrono::duration_cast() to obtain
+ * a conversion from a higher precision to a lower one.
+ * 
+ * Additional posbilities were added with C++17 when several non-members
+ * conversions were added like floor(), ceil() and round().
+ * 
+ * When you are ready you can use this code, with:
+ * 
+ *      g++ -std=c++20 L01_chrono_durations.cpp -o chrono_dur.out
+ *      ./chrono_dur.out
+ * 
+ * NOTE: Prefer to just add namespaces for user-defined literals in the desired
+ * scope to prevent conflicts with operators and similar namespaces.
+ * 
+ * NOTE: If you want to use dates, you can use a client library from
+ * Howard Hinnat which was the foundation for the C++20 chrono additions:
+ * https://github.com/HowardHinnant/date
  */
 
 #include <chrono>
@@ -21,7 +52,8 @@ std::ostream& operator<<(std::ostream& os,
 
 int main(int argc, char* argv[])
 {
-    
+    std::cout << "Lesson 1: Using chrono durations:\n" << std::endl;
+
     // Info #1: You can use std::chrono::duration typedefs for defining 
     // different precisions of time units, also do not forget to check the
     // implementation of the operator<< for printing the durations.
@@ -96,6 +128,15 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+/**
+ * Added operator<< to print a suffix according the chrono duration, as this is
+ * a generic implementation to provide a easy way for visualizing them.
+ * 
+ * @param os Output stream
+ * @param d Chrono duration definition to print with suffix
+ * 
+ * @return Stream to display with std::cout
+ */
 template <typename Rep, typename Period>
 std::ostream& operator<<(std::ostream& os,
     const std::chrono::duration<Rep, Period>& d) 
