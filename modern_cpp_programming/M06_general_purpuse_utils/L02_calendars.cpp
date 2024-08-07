@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code wasn't tested but intended with g++ in C++20
+// Code was tested with g++ in C++20
 
 #include <iostream>
 
@@ -12,53 +12,46 @@
  */
 
 #include <chrono>
-#include <iomanip>
-#include <sstream>
 
-using namespace std::chrono;
 using namespace std::chrono_literals;
 
-// Enumeration to represent the date format
-enum class DateFormat { YMD, DMY, MDY };
+namespace std::chrono 
+{
+    std::ostream& operator<<(std::ostream& os, const year& y) 
+    {
+        return os << int(y);
+    }
 
-std::string print_date(const year_month_day& ymd, DateFormat format);
+    std::ostream& operator<<(std::ostream& os, const month& m) 
+    {
+        return os << unsigned(m);
+    }
+
+    std::ostream& operator<<(std::ostream& os, const day& d) 
+    {
+        return os << unsigned(d);
+    }
+
+    std::ostream& operator<<(std::ostream& os, const year_month_day& ymd) 
+    {
+        return os << ymd.year() << '/' << ymd.month() << '/' << ymd.day();
+    }
+}
 
 int main(int argc, char* argv[])
 {
     // Info #1: You can use Gregorian representation for different formats, by
-    // using type year_month_day and separating the elements with a slah '/',
-    // like the examples belows:
-    year_month_day date_ymd = 2024y / 8 / 5;
-    year_month_day date_dmy = 5d / 8 / 2024;
-    year_month_day date_mdy = August / 5 / 2024;
+    // here you can consider using two forms of creation:
+    constexpr auto date_ymd_1 = std::chrono::year_month_day(2024y,
+        std::chrono::August, 7d);
+    const std::chrono::year_month_day date_ymd_2 = 2024y / 8 / 7;
+    std::cout << date_ymd_1 << std::endl << date_ymd_2 << std::endl;
 
-    // Print dates based on their formats
-    std::cout << "YMD format: " << print_date(date_ymd, DateFormat::YMD) << "\n";
-    std::cout << "DMY format: " << print_date(date_dmy, DateFormat::DMY) << "\n";
-    std::cout << "MDY format: " << print_date(date_mdy, DateFormat::MDY) << "\n";
+    // Info #2: You can define the date in the format you want, like DMY, YMD
+    // or MDY, and the chrono library will unified it:
+
 
     return 0;
 }
 
-std::string print_date(const year_month_day& ymd, DateFormat format)
-{
-    std::ostringstream oss;
-    switch (format) {
-        case DateFormat::YMD:
-            oss << ymd.year() << '/'
-                << std::setw(2) << std::setfill('0') << static_cast<unsigned>(ymd.month()) << '/'
-                << std::setw(2) << std::setfill('0') << static_cast<unsigned>(ymd.day());
-            break;
-        case DateFormat::DMY:
-            oss << std::setw(2) << std::setfill('0') << static_cast<unsigned>(ymd.day()) << '/'
-                << std::setw(2) << std::setfill('0') << static_cast<unsigned>(ymd.month()) << '/'
-                << ymd.year();
-            break;
-        case DateFormat::MDY:
-            oss << std::setw(2) << std::setfill('0') << static_cast<unsigned>(ymd.month()) << '/'
-                << std::setw(2) << std::setfill('0') << static_cast<unsigned>(ymd.day()) << '/'
-                << ymd.year();
-            break;
-    }
-    return oss.str();
-}
+
