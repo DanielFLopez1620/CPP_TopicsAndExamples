@@ -46,9 +46,14 @@ namespace std::chrono
         auto week_num = unsigned(ymdw.index());
         auto day_num = unsigned(ymdw.weekday().iso_encoding());
 
-        // auto calendar_day = year_month_day { ymdw.year(), ymdw.month(), day{1}};
-        // auto real_date_days = calendar_day + day{day_num} + (week_num * day{7});
-        // os << unsigned(real_date_days.day());
+        auto date_ymd = ymdw.year() / ymdw.month() / day{1}; 
+        auto first_wd = weekday{date_ymd};
+        auto first_wd_num = unsigned(first_wd.iso_encoding());
+        auto weekday_diff = (day_num - first_wd_num + 7) % 7;
+        auto proper_date = ymdw.year() / ymdw.month() / day{1 + weekday_diff + (week_num - 1) * 7};
+        // auto proper_day = day{1} + weekday_diff + days{(ymdw.weekday_indexed().index() -1 ) * 7}
+        
+        os << unsigned(proper_date.day()) << '/';
 
         switch (day_num)
         {
