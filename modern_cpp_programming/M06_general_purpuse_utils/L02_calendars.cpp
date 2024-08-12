@@ -51,7 +51,6 @@ namespace std::chrono
         auto first_wd_num = unsigned(first_wd.iso_encoding());
         auto weekday_diff = (day_num - first_wd_num + 7) % 7;
         auto proper_date = ymdw.year() / ymdw.month() / day{1 + weekday_diff + (week_num - 1) * 7};
-        // auto proper_day = day{1} + weekday_diff + days{(ymdw.weekday_indexed().index() -1 ) * 7}
         
         os << unsigned(proper_date.day()) << '/';
 
@@ -95,7 +94,8 @@ int main(int argc, char* argv[])
     // Info #1: You can use Gregorian representation for different formats, by
     // here you can consider using two forms of creation (you can use 
     // namespaces to avoid long definitons, here they are used to tell you
-    // more about them in a proper way):
+    // more about them in a proper way ando do not forget to check the 
+    // the overload of the operator<< to make possible print):
     constexpr auto date_ymd_1 = 
         std::chrono::year_month_day(2024y, std::chrono::August, 7d);
     const std::chrono::year_month_day date_ymd_2 = 2024y / 8 / 7;
@@ -116,10 +116,39 @@ int main(int argc, char* argv[])
 
     // Info #3: Other possible definitons are related with 
     // std::chrono::year_month_weekday in case you do not know the exact day
-    // but you have a specific day name in a certain week.
+    // but you have a specific day name in a certain week. (Do not forget to
+    // check the overload of the operator<< to make the print possible)
     std::chrono::year_month_weekday tentative_date =
         2024y / std::chrono::August / std::chrono::Wednesday[3];
-    std::cout << tentative_date << std::endl;
+    std::cout << "Considering weeday:\n\tFor the third Wednesday of Aug 2023: " 
+              << tentative_date << std::endl;
+
+    // Info #4: You can also take the current day, and use it to specify
+    // the previous and next day, by considering 
+    // std::chrono::system_clock_now() and using conversions of days and ymd:
+    auto today = 
+        std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now());
+    auto tomorrow = today + std::chrono::days{ 1 };
+    auto yesterday = today - std::chrono::days{ 1 };
+    std::chrono::year_month_day today_ymd = today;
+    std::chrono::year_month_day tomorrow_ymd = tomorrow;
+    std::chrono::year_month_day yesterday_ymd = yesterday;
+
+    std::cout << "Relative dates: " << std::endl
+              << "\tToday: " << today_ymd << std::endl
+              << "\tYesterday: " << yesterday_ymd << std::endl
+              << "\tTomorrow: " << tomorrow_ymd << std::endl;
+
+    // Info #5: Another useful thing is to determinate the first and last day
+    // of the given month and year, by using the number 1 to obtain the first
+    // day and 'last' for the last one, as follows:
+
+    auto first_day_cm = today_ymd.year() / today_ymd.month() / 1;
+    auto last_day_cm = today_ymd.year() / today_ymd.month() / std::chrono::last;
+    std::cout << "Obtaining first and last day of the current month:" 
+              << std::endl << "\tFirst day of this month: " << first_day_cm
+              << std::endl << "\tLast day of this month: " << last_day_cm
+              << std::endl;
 
     return 0;
 }
