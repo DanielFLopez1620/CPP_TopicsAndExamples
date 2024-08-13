@@ -133,7 +133,6 @@ int main(int argc, char* argv[])
     std::chrono::year_month_day today_ymd = today;
     std::chrono::year_month_day tomorrow_ymd = tomorrow;
     std::chrono::year_month_day yesterday_ymd = yesterday;
-
     std::cout << "Relative dates: " << std::endl
               << "\tToday: " << today_ymd << std::endl
               << "\tYesterday: " << yesterday_ymd << std::endl
@@ -142,13 +141,36 @@ int main(int argc, char* argv[])
     // Info #5: Another useful thing is to determinate the first and last day
     // of the given month and year, by using the number 1 to obtain the first
     // day and 'last' for the last one, as follows:
-
     auto first_day_cm = today_ymd.year() / today_ymd.month() / 1;
     auto last_day_cm = today_ymd.year() / today_ymd.month() / std::chrono::last;
     std::cout << "Obtaining first and last day of the current month:" 
               << std::endl << "\tFirst day of this month: " << first_day_cm
               << std::endl << "\tLast day of this month: " << last_day_cm
               << std::endl;
+
+    // Info #6: If you need to consider the differences of some dates in days,
+    // you can consider using the counter by considering a conversion from the
+    // year_month_day to sys_days, and make the difference
+    auto date_1 = 2024y / 1 / 10;
+    auto date_2 = 2024y / 4 / 10;
+    std::chrono::sys_days sys_date_1 = date_1;
+    std::chrono::sys_days sys_date_2 = date_2;
+    std::chrono::days difference = sys_date_2 - sys_date_1;
+    std::cout << "Difference in days of dates: " << std::endl
+              << "\tDate 1: " << date_1 << std::endl
+              << "\tDate 2: " << date_2 << std::endl
+              << "\tDifference in days: " << difference.count() << std::endl;
+
+    // Info #7: There is also a validation method to check if a date is valid
+    // and properly defined, and it is the ok() method.
+    auto wrong_date = 2020y / 2 / 30;
+    std::cout << "Checking if a date is correct: " << std::endl
+              << "\t" << date_1 << "?: " << date_1.ok() << std::endl
+              << "\t" << date_2 << "?: " << date_2.ok() << std::endl
+              << "\t" << wrong_date << "?: " << wrong_date.ok() << std::endl;
+
+    // Info #8: You can consider durations of days in terms of hours in clock,
+    // you can use...
 
     return 0;
 }
