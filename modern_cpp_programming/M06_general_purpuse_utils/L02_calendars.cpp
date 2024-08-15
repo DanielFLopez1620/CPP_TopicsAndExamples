@@ -12,6 +12,7 @@
  */
 
 #include <chrono>
+#include <iomanip>
 
 using namespace std::chrono_literals;
 
@@ -86,7 +87,33 @@ namespace std::chrono
         return os;
     }
 
+    template <typename Duration>
+    std::ostream& operator<<(std::ostream& os, const hh_mm_ss<Duration>& hms) 
+    {
+        if (!hms.is_negative()) {
+            os << std::setw(2) << std::setfill('0') << hms.hours().count() << ":"
+            << std::setw(2) << std::setfill('0') << hms.minutes().count() << ":"
+            << std::setw(2) << std::setfill('0') << hms.seconds().count();
+            if constexpr (hh_mm_ss<Duration>::fractional_width > 0) {
+                os << "." << std::setw(hh_mm_ss<Duration>::fractional_width) << std::setfill('0') << hms.subseconds().count();
+            }
+        } else {
+            os << "-";
+            os << std::setw(2) << std::setfill('0') << -hms.hours().count() << ":"
+            << std::setw(2) << std::setfill('0') << -hms.minutes().count() << ":"
+            << std::setw(2) << std::setfill('0') << -hms.seconds().count();
+            if constexpr (hh_mm_ss<Duration>::fractional_width > 0) {
+                os << "." << std::setw(hh_mm_ss<Duration>::fractional_width) << std::setfill('0') << -hms.subseconds().count();
+            }
+        }
+
+        return os;
+    }
+
 }
+
+
+
 
 
 int main(int argc, char* argv[])
@@ -170,7 +197,21 @@ int main(int argc, char* argv[])
               << "\t" << wrong_date << "?: " << wrong_date.ok() << std::endl;
 
     // Info #8: You can consider durations of days in terms of hours in clock,
-    // you can use...
+    // you can use time of day (Duration) class template, it can even fit
+    // when the minutes and seconds exceed 60:
+    auto time_od1 = std::chrono::hh_mm_ss(16h + 15min + 20s);
+    auto time_od2 = std::chrono::hh_mm_ss(32h + 67min + 1620s);
+    std::cout << "Interacting with time of days: " << std::endl
+              << "\tTime 1 in format hours:minutes:seconds : " << time_od1 
+              << std::endl << "\tTime 1 just hours: " 
+              << time_od1.hours().count() << std::endl
+              << "\tTime 1 just minutes: " << time_od1.minutes().count()
+              << std::endl << "\tTime 1 just seconds: " 
+              << time_od1.seconds().count() << std::endl
+              << "\tTime 2 that passed limits 60min, 60sec : "
+              << time_od2 <<std::endl;
+
+
 
     return 0;
 }
