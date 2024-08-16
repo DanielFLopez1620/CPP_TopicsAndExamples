@@ -9,6 +9,9 @@
  * time points and durations, however there is more like times and dates which
  * wwas extended in C++20 to add support with time zones, times of day and more
  * types of clocks.
+ * 
+ * For more info, you can consider checking:
+ *      https://www.modernescpp.com/index.php/c20-time-of-day/
  */
 
 #include <chrono>
@@ -110,6 +113,31 @@ namespace std::chrono
         return os;
     }
 
+    template <typename Clock, typename Duration>
+    std::ostream& operator<<(std::ostream& os, const time_point<Clock, Duration>& tp) 
+    {
+
+        // Extract the time_point as sys_time and floor it to the nearest second
+        auto tp_seconds = time_point_cast<seconds>(tp);
+
+        // Extract the date part
+        auto dp = floor<days>(tp_seconds);
+        year_month_day ymd{dp};
+
+        // Extract the time part (hours, minutes, seconds)
+        auto time_since_midnight = tp_seconds - dp;
+        auto h = duration_cast<hours>(time_since_midnight);
+        auto m = duration_cast<minutes>(time_since_midnight - h);
+        auto s = duration_cast<seconds>(time_since_midnight - h - m);
+
+        // Print the date and time
+        os << ymd << ' '
+        << std::setfill('0') << std::setw(2) << h.count() << ':'
+        << std::setfill('0') << std::setw(2) << m.count() << ':'
+        << std::setfill('0') << std::setw(2) << s.count();
+
+        return os;
+    }
 }
 
 
@@ -209,8 +237,14 @@ int main(int argc, char* argv[])
               << std::endl << "\tTime 1 just seconds: " 
               << time_od1.seconds().count() << std::endl
               << "\tTime 2 that passed limits 60min, 60sec : "
-              << time_od2 <<std::endl;
+              << time_od2 <<std::endl << "\tIs it am?: "
+              << std::chrono::is_am(time_od2.hours()) << std::endl;
 
+    // Info #9: You can combine date (year_month_day) with time parts (hours,
+    // minutes and seconds).
+    auto time_point = std::chrono::sys_days{2024y / 8 / 16} + 12h + 30min + 45s;
+    std::cout << "Using time points (year_month_day_hours_minutes_seconds:" 
+              << std::endl << "Date 1:" << time_point << std::endl;
 
 
     return 0;
