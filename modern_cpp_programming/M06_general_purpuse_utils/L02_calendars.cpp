@@ -10,13 +10,64 @@
  * wwas extended in C++20 to add support with time zones, times of day and more
  * types of clocks.
  * 
+ * The chrono library added some types to support calendars, which are:
+ * 
+ * - day : A day of a month
+ * - month : A mont of a year
+ * - year : A year in the Gregorian calendar
+ * - weekday : A day of the week in the Gregorian calendar
+ * - weeday_indexed : The nth weekday of a month [1, 5]
+ * - weekday_last : The last weekday of a month
+ * - month_day: A specific day of a specific month
+ * - month_day_last : The last day of a specific month
+ * - month_weekday : The nth weekday of a specific month
+ * - month_weekday_last : The last weekday of a specific month
+ * - year_month : A specific month of a specific year
+ * - year_month_day : A specific year, month and day
+ * - year_month_day_last : The last day of a specific year and month
+ * - year_month_weekday : The nth weeday of a specific year and month
+ * - year_month_weekday_last : The last weeday of a specific year and month
+ * 
+ * The types listed have:
+ * - A default constructor (unitialized)
+ * - Member functions to access the parts of the entity
+ * - .ok() method to check if it is valid
+ * - non-member comparison operator to compare the value types
+ * - Most of them have the operator/ to indicate Gregorian division
+ *   which can be in Y/M/D, M/D/Y and D/M/Y.
+ * 
+ * Other things to keep in mind are: 
+ * - A day must be between 1 and 31 (but depends on the month)
+ * - std::chrono::last indicates the last day of a month
+ * - weekday[n] inidcates the wee of the month (1 to 5)
+ * - weekday[std::chrono::last] indicates the last week
+ * - When defining gregorian dates it is recommended to differentatie form the
+ *   format by providing user-defined literals like ""y and ""d to specify
+ *   in whihc position is the day or/and the year.
+ * - You can add months with std::chrono::<month> were month can be
+ *   January, February and so on.
+ * - You can add the weekday with std::chrono::<weekday> where it can be
+ *   Sunday, Monday, Tuesday...
+ * - The year_month_day has a implicit conversion from/to std::chrono::sys_days
+ *   and std::chrono::time_point. 
+ * - You can use std::chrono::system_clock, since C++20 it is based on the
+ *   Unix time whihc is 00:00:00 UTC on January 1st of 1970.
+ * 
+ * Check out the calendars implementations, in the next lesson we will explore
+ * about time zones. You can use this code with:
+ * 
+ *      g++ -std=c++20 L02_calendars.cpp -o cal.out
+ *      ./cal.out
+ * 
  * For more info, you can consider checking:
  *      https://www.modernescpp.com/index.php/c20-time-of-day/
  */
 
+// --------------------------- REQUIRED HEADERS -------------------------------
 #include <chrono>
 #include <iomanip>
 
+// --------------------------- NAMESPACES CONSIDERATIONS ----------------------
 using namespace std::chrono_literals;
 
 namespace std::chrono 
@@ -24,22 +75,26 @@ namespace std::chrono
     std::ostream& operator<<(std::ostream& os, const year& y) 
     {
         return os << int(y);
-    }
+
+    } // operator<< (year)
 
     std::ostream& operator<<(std::ostream& os, const month& m) 
     {
         return os << unsigned(m);
-    }
+
+    } // operator<< (month)
 
     std::ostream& operator<<(std::ostream& os, const day& d) 
     {
         return os << unsigned(d);
-    }
+
+    } // operator<< (day)
 
     std::ostream& operator<<(std::ostream& os, const year_month_day& ymd) 
     {
         return os << ymd.year() << '/' << ymd.month() << '/' << ymd.day();
-    }
+
+    } // operator<< (year_month_day)
 
     std::ostream& operator<<(std::ostream& os, const std::chrono::year_month_weekday& ymdw) 
     {
@@ -88,7 +143,7 @@ namespace std::chrono
         os << " week " << week_num << " ]";
 
         return os;
-    }
+    } // operator<< (year_month_weekday)
 
     template <typename Duration>
     std::ostream& operator<<(std::ostream& os, const hh_mm_ss<Duration>& hms) 
@@ -111,16 +166,15 @@ namespace std::chrono
         }
 
         return os;
-    }
+
+    } // operator<< (hh_mm_ss)
 
     template <typename Clock, typename Duration>
     std::ostream& operator<<(std::ostream& os, const time_point<Clock, Duration>& tp) 
     {
 
-        // Extract the time_point as sys_time and floor it to the nearest second
-        auto tp_seconds = time_point_cast<seconds>(tp);
-
-        // Extract the date part
+        // Extract * - year_month_day
+ * - year_month_weekday the date part
         auto dp = floor<days>(tp_seconds);
         year_month_day ymd{dp};
 
@@ -137,12 +191,12 @@ namespace std::chrono
         << std::setfill('0') << std::setw(2) << s.count();
 
         return os;
-    }
-}
+    
+    } // operator<<(time_point)
 
+} // namespace std::chrono
 
-
-
+// --------------------------- MAIN IMPLEMENTATION ----------------------------
 
 int main(int argc, char* argv[])
 {
@@ -197,7 +251,8 @@ int main(int argc, char* argv[])
     // of the given month and year, by using the number 1 to obtain the first
     // day and 'last' for the last one, as follows:
     auto first_day_cm = today_ymd.year() / today_ymd.month() / 1;
-    auto last_day_cm = today_ymd.year() / today_ymd.month() / std::chrono::last;
+    auto last_day_cm = today_y * - year_month_day
+ * - year_month_weekdaymd.year() / today_ymd.month() / std::chrono::last;
     std::cout << "Obtaining first and last day of the current month:" 
               << std::endl << "\tFirst day of this month: " << first_day_cm
               << std::endl << "\tLast day of this month: " << last_day_cm
@@ -246,8 +301,6 @@ int main(int argc, char* argv[])
     std::cout << "Using time points (year_month_day_hours_minutes_seconds:" 
               << std::endl << "Date 1:" << time_point << std::endl;
 
-
     return 0;
-}
 
-
+} // main
