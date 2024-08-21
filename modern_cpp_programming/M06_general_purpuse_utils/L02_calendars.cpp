@@ -64,55 +64,117 @@
  */
 
 // --------------------------- REQUIRED HEADERS -------------------------------
-#include <chrono>
-#include <iomanip>
+#include <chrono>  // Time management with different precisions
+#include <iomanip> // Allow manipulation and control of output streams
 
 // --------------------------- NAMESPACES CONSIDERATIONS ----------------------
-using namespace std::chrono_literals;
+using namespace std::chrono_literals; // For chrono user defined literals
 
+/**
+ * The definitions presented below are overrides of the operator<< for different
+ * types of the chrono library in order to print them, as currently with g++20 
+ * and g++23 on Ubuntu 22.04 I wasn't able to print them with the original 
+ * operator.
+ */
 namespace std::chrono 
 {
+    /**
+     * Output stream to display years
+     * 
+     * @param os Ostream considered
+     * @param y Years chrono type
+     * 
+     * @return Formatted ostream to print years
+     */
     std::ostream& operator<<(std::ostream& os, const year& y) 
     {
         return os << int(y);
 
     } // operator<< (year)
 
+    /**
+     * Output stream to display months
+     * 
+     * @param os Ostream considered
+     * @param m Months chrono type
+     * 
+     * @return Formatted ostream to print months
+     */
     std::ostream& operator<<(std::ostream& os, const month& m) 
     {
         return os << unsigned(m);
 
     } // operator<< (month)
 
+    /**
+     * Output stream to display days
+     * 
+     * @param os Ostream considered
+     * @param y Days chrono type
+     * 
+     * @return Formatted ostream to print days
+     */
     std::ostream& operator<<(std::ostream& os, const day& d) 
     {
         return os << unsigned(d);
 
     } // operator<< (day)
 
+    /**
+     * Output stream for printing gregorian dates that contains year, month and 
+     * day in a valid way. It uses the overloads of the operator<< for year,
+     * month and day.
+     * 
+     * @param os Ostream considered
+     * @param ymd Gregorian date
+     * 
+     * @return os Date in format Year/Month/Day
+     */
     std::ostream& operator<<(std::ostream& os, const year_month_day& ymd) 
     {
         return os << ymd.year() << '/' << ymd.month() << '/' << ymd.day();
 
     } // operator<< (year_month_day)
 
-    std::ostream& operator<<(std::ostream& os, const std::chrono::year_month_weekday& ymdw) 
+    /**
+     * Output stream for printing gregorian days that contains year, month and 
+     * day given by the day of a given (number) week. It uses the overlaods of
+     * operator<< for year and month, while making an stimate considering the 
+     * first day of the month, and cheking if the date is valid.
+     * 
+     * @param os Ostream considered
+     * @param ymd Gregorian date
+     * 
+     * @return os Date in format Year/Month/Day
+     */
+    std::ostream& operator<<(std::ostream& os, 
+        const std::chrono::year_month_weekday& ymdw) 
     {
 
+        // Obtain year and month to os
         os << int(ymdw.year()) << '/';
         os << unsigned(ymdw.month()) << '/';
 
+        // Get week index 
         auto week_num = unsigned(ymdw.index());
         auto day_num = unsigned(ymdw.weekday().iso_encoding());
 
+        // Obtain the first day of the month and the first week
         auto date_ymd = ymdw.year() / ymdw.month() / day{1}; 
         auto first_wd = weekday{date_ymd};
         auto first_wd_num = unsigned(first_wd.iso_encoding());
+
+        // Stimate the difference in weeks and days to the desired weekday
         auto weekday_diff = (day_num - first_wd_num + 7) % 7;
-        auto proper_date = ymdw.year() / ymdw.month() / day{1 + weekday_diff + (week_num - 1) * 7};
+
+        // Format the date
+        auto proper_date = ymdw.year() / ymdw.month() / day{1 + 
+            weekday_diff + (week_num - 1) * 7};
         
+        // Obtain day to os
         os << unsigned(proper_date.day()) << '/';
 
+        // Determinate the weekday
         switch (day_num)
         {
         case 0:
@@ -140,28 +202,48 @@ namespace std::chrono
             os << " Error day ";
             break;
         };
+
+        // Add the week number
         os << " week " << week_num << " ]";
 
         return os;
     } // operator<< (year_month_weekday)
 
+    /**
+     * Template overwrite to print hours format of the structure hh:mm:ss
+     * 
+     * @param os Ostream considered
+     * @param hms Duration passed
+     * 
+     * @return Formatted hour:minute:seconds time
+     */
     template <typename Duration>
     std::ostream& operator<<(std::ostream& os, const hh_mm_ss<Duration>& hms) 
     {
-        if (!hms.is_negative()) {
+        // Verify if number aren't negative
+        if (!hms.is_negative()) 
+        {
+            // Use ionmaip library for better formatting of single digit hours
             os << std::setw(2) << std::setfill('0') << hms.hours().count() << ":"
             << std::setw(2) << std::setfill('0') << hms.minutes().count() << ":"
             << std::setw(2) << std::setfill('0') << hms.seconds().count();
-            if constexpr (hh_mm_ss<Duration>::fractional_width > 0) {
-                os << "." << std::setw(hh_mm_ss<Duration>::fractional_width) << std::setfill('0') << hms.subseconds().count();
+            if constexpr (hh_mm_ss<Duration>::fractional_width > 0) 
+            {
+                os << "." << std::setw(hh_mm_ss<Duration>::fractional_width) 
+                   << std::setfill('0') << hms.subseconds().count();
             }
-        } else {
+        } 
+        else 
+        {
+            // If they are negatives consider -1 multiplication
             os << "-";
-            os << std::setw(2) << std::setfill('0') << -hms.hours().count() << ":"
-            << std::setw(2) << std::setfill('0') << -hms.minutes().count() << ":"
-            << std::setw(2) << std::setfill('0') << -hms.seconds().count();
-            if constexpr (hh_mm_ss<Duration>::fractional_width > 0) {
-                os << "." << std::setw(hh_mm_ss<Duration>::fractional_width) << std::setfill('0') << -hms.subseconds().count();
+            os << std::setw(2) << std::setfill('0') << -hms.hours().count() 
+               << ":" << std::setw(2) << std::setfill('0') << -hms.minutes().count() 
+               << ":" << std::setw(2) << std::setfill('0') << -hms.seconds().count();
+            if constexpr (hh_mm_ss<Duration>::fractional_width > 0) 
+            {
+                os << "." << std::setw(hh_mm_ss<Duration>::fractional_width) 
+                   << std::setfill('0') << -hms.subseconds().count();
             }
         }
 
@@ -169,12 +251,23 @@ namespace std::chrono
 
     } // operator<< (hh_mm_ss)
 
+    /**
+     * Template for displaying time points
+     * It considers year, month, day, hours, minutes and seconds.
+     * 
+     * @param os Output stream considered
+     * @param time_point Time with YY/MM/DD HH:MM:SS
+     * 
+     * @return Formatted output
+     */
     template <typename Clock, typename Duration>
     std::ostream& operator<<(std::ostream& os, const time_point<Clock, Duration>& tp) 
     {
 
-        // Extract * - year_month_day
- * - year_month_weekday the date part
+        // Extract the time_point as sys_time and floor it to the nearest second
+        auto tp_seconds = time_point_cast<seconds>(tp);
+
+        // Extract the date part
         auto dp = floor<days>(tp_seconds);
         year_month_day ymd{dp};
 
@@ -251,8 +344,7 @@ int main(int argc, char* argv[])
     // of the given month and year, by using the number 1 to obtain the first
     // day and 'last' for the last one, as follows:
     auto first_day_cm = today_ymd.year() / today_ymd.month() / 1;
-    auto last_day_cm = today_y * - year_month_day
- * - year_month_weekdaymd.year() / today_ymd.month() / std::chrono::last;
+    auto last_day_cm = today_ymd.year() / today_ymd.month() / std::chrono::last;
     std::cout << "Obtaining first and last day of the current month:" 
               << std::endl << "\tFirst day of this month: " << first_day_cm
               << std::endl << "\tLast day of this month: " << last_day_cm
@@ -299,7 +391,7 @@ int main(int argc, char* argv[])
     // minutes and seconds).
     auto time_point = std::chrono::sys_days{2024y / 8 / 16} + 12h + 30min + 45s;
     std::cout << "Using time points (year_month_day_hours_minutes_seconds:" 
-              << std::endl << "Date 1:" << time_point << std::endl;
+              << std::endl << "\tDate 1:" << time_point << std::endl;
 
     return 0;
 
