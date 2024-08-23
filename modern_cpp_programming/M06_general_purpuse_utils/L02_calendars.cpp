@@ -293,6 +293,8 @@ namespace std::chrono
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 2: Using chrono calendars:\n" << std::endl;
+    
     // Info #1: You can use Gregorian representation for different formats, by
     // here you can consider using two forms of creation (you can use 
     // namespaces to avoid long definitons, here they are used to tell you
