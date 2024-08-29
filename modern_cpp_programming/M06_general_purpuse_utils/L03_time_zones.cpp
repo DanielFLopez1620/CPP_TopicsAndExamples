@@ -25,6 +25,15 @@
  *      std::chrono::locate_zone("America/Los_Angeles"), 
  *      ny_time) : Convert from time zones a time
  * 
+ * The system maintains a copy of the IANA Time zone database, which is 
+ * read-only for the user with functions like std::chrono::tzdb() or
+ * std::chrono::get_tzdb_list(). When you retrieve info of a time zone, you
+ * retrive a "time_zone" object, a full list of tz database time zones can
+ * be found here:
+ *      https://en.wikipedia.org/wiki/List_of_tz_database_time_zones.
+ * 
+ * In the case of std::chrono::zoned_time it can be created from a sys_time, a
+ * local_time or another zoned_time (which means a time zone conversion).
  * 
  * However, this may not be available for your compiler on C++20, for that 
  * reason we will use the Howard Hinnant Date Library, which you can check on
@@ -54,35 +63,54 @@
  * NOTE: Check https://howardhinnant.github.io/date/tz.html#Installation
  */
 
+// ------------------------ REQUIRED STANDARD LIBRARIES -----------------------
 
-#include "date/tz.h"
-#include <chrono>
-#include <locale>
+#include "date/tz.h"  // Custom date library by Howard Hinnat
+#include <chrono>     // Time library for different precisions
+#include <locale>     // Localization of time formats
 
-using namespace std::chrono_literals;
+// ----------------------- NAMESPACE CONSIDERATIONS----------------------------
+using namespace std::chrono_literals;  // For user-defined chrono literals
 
+// ----------------------- MAIN IMPLEMENTATION --------------------------------
 int main(int argc, char *argv[])
 {
-    std::cout << "Lesson 3: Time zones with chrono:\n" << std::endl;
+    std::cout << "Lesson 3: Times zones with Howard Hinnats Date Library:\n"
+              << std::endl;
 
     // Info #1: Obtaining current local time
     auto now = std::chrono::system_clock::now();
     auto cur_loc_time = date::make_zoned(date::current_zone(), now);
-    std::cout << "Local time:" << cur_loc_time << std::endl;
+    std::cout << "Obtaining time in the current time zone:" << std::endl
+              << "\tLocal time:" << cur_loc_time << std::endl;
 
     // Info #2: Obtaining current local time in another time zone
     auto now_it = date::make_zoned(date::locate_zone("Europe/Rome"), now);
-    std::cout << "Time in Rome, Italy: " << now_it << std::endl;
+    std::cout << "Obtaining time in another time zone: " << std::endl
+              << "\tTime in Rome, Italy: " << now_it << std::endl;
 
     // Info #3: Formatting output according a time zone
     // For this make sure you have installed:
     //      sudo locale-gen de_DE.UTF-8
     //      sudo update-locale
     auto now_rom = date::make_zoned(date::current_zone(), now);
-    std::cout << "Time now in German format: "
+    std::cout << "Formatting according a region: " << std::endl
+              << "\tTime now in German format: "
               << date::format(std::locale{"de_DE.UTF-8"}, "%c", now_rom) 
               << std::endl;
 
+    // Info #4: You can create time points and convert them among time zones:
+    auto current = std::chrono::system_clock::now();
+    auto local_cur = date::make_zoned(date::current_zone(), current);
+    auto ny_cur = date::make_zoned(date::locate_zone("America/New_York"), 
+        current);
+    auto rome_cur = date::make_zoned(date::locate_zone("Europe/Rome"), 
+        ny_cur.get_sys_time());
+    std::cout << "Changing form time zones:" << std::endl
+              << "\tLocal time: " << local_cur << std::endl
+              << "\tNew York Time: " << ny_cur << std::endl
+              << "\tRome time: " << rome_cur << std::endl;
 
     return 0;
-}
+
+} // main()
