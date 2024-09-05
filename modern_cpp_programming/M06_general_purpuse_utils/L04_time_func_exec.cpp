@@ -65,6 +65,8 @@ void do_something(int);
 // -------------------------- MAIN IMPLEMENTATION -----------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 4: Measuring execution time\n" << std::endl;
+    
     // Info #1: You can use the high resolution clock to obtain the times just
     // before and just after the time execution to calculate the difference,
     // then obtaining the time execution.
