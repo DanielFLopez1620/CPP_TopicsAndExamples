@@ -11,20 +11,40 @@
  * 
  * For using std::any, you will have to include the <any> header.
  * 
+ * But what is exactly a std::any? It is a type safe container that can hold 
+ * any value that is copy constructible. But it is not possible to read 
+ * directly the value, and you will need the 'std::any_cast()' to cast the 
+ * stored value into a specified one, just be careful and do not proveke a
+ * std::bad_any_cast exception.
  * 
+ * If you need to, you can check the type, by using the function memeber
+ * 'type()', if it is empty it returns a typeid(void) and also you can check if
+ * it is empty by checking it with 'hast_value' member function.
+ * 
+ * As a final and important note, you can create arrays and vectors of multiple
+ * types by using std::vector with std::any and it will even work with a for
+ * each.
+ * 
+ * When ready, you can run the code with:
+ * 
+ *      g++ -std=c++20 L06_std_any.cpp -o anything.out
+ *      ./anything.out
  */
 
+// ---------------------------------- REQUIRED HEADERS ------------------------
 #include <any>
 
-using namespace std::string_literals;
+// ---------------------------------- NAMESPACES REQUIRED --------------------
+using namespace std::string_literals;  // String literals 's'
 
+// ---------------------------------- FUNCTION PROTOTYPES ---------------------
 void print_any(const std::any& anything);
 
+// --------------------------------- MAIN IMPLEMENTATION ----------------------
 int main(int argc, char* argv[])
 {
     std::cout << "Lesson 6: Store any value:\n " << std::endl;
     
-
     // Info #1: You can use any to store any standard type, but for printing
     // you will need to implement some trick, for now, just check the assigns:
     std::any value(1620);
@@ -87,16 +107,40 @@ int main(int argc, char* argv[])
     std::any test1;
     std::any test2(42);
     std::cout << "Checking if std::any stores a value: " << std::endl
-              << "Any 1: ";
+              << "\tAny 1: ";
     any_has_value(test1);
-    std::cout << "Any 2: ";
+    std::cout << "\tAny 2: ";
     any_has_value(test2);
+
+    // Info #5: You can modify the values of a std::any with the member
+    // the member functions emplace(), reset() or swap():
+    std::any value_for_mod = 16;
+    std::cout << "Modifying the value of a  std::any: " << std::endl
+              << "\tOriginal value: ";
+    print_any(value_for_mod); 
+    value_for_mod.emplace<std::string>("Emplaced");
+    std::cout << "\n\tAfter emplaced: ";
+    print_any(value_for_mod);
+    value_for_mod.swap(value);
+    std::cout << "\n\tAfter swap with first any defined: ";
+    print_any(value_for_mod);
+    value_for_mod.reset();
+    std::cout << "\n\tIs empty after reset?: "
+              << value_for_mod.has_value() ? 1 : 0; 
+    std::cout << std::endl;
     
- 
-
     return 0;
-}
+} // main()
 
+// ------------------------- FUNCTION DEFINTIONS ------------------------------
+
+/**
+ * Function that interprets the type of a std::any to check if it is a int,
+ * double or string and covert it to a proper print, however, if it is not
+ * the previous type just answer that it is a unsopported type.
+ * 
+ * @param anything Literaly anything as it is a std::any arg.
+ */
 void print_any(const std::any& anything)
 {
     if (anything.type() == typeid(int))
