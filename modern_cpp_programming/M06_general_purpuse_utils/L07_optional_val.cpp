@@ -18,12 +18,26 @@
  */
 
 #include <optional>
+#include <string>
+#include <map>
+
 
 struct custom_struct
 {
     int num;
     char letter;
 };
+
+struct game
+{
+    std::string title;
+    std::optional<std::string> developers;
+    std::string console;
+    std::optional<int> stimated_hours;
+};
+
+template <typename K, typename V>
+std::optional<V> find_in_map(int const key, std::map<K,V> const & map);
 
 int main(int argc, char *argv[])
 {
@@ -59,5 +73,45 @@ int main(int argc, char *argv[])
               << "\topt_num5: " << opt_num5.value_or(0) << std::endl
               << "\topt_str1: " << opt_str.value_or("Empty") << std::endl;
 
+    // Info #4: If you need a boolean validation to check if a std::optional
+    // has a value, you can use the member function has_value()
+    std::cout << "Checking if a std::optional has a value: " << std::endl
+              << "\topt_num4 has value?: " << opt_num4.has_value() << std::endl
+              << "\topt_num5 has value?: " << opt_num5.has_value() << std::endl;
+
+    // Info #5: Similar to the std::any, you can use emplace(), reset() and 
+    // swap() member functions.
+    std::cout << "Using emplaced, reset and swap: " << std::endl;
+    std::optional<std::string> opt;
+    std::optional<std::string> for_swap("Wait, was I swaped?");
+    opt.emplace("Hi! Emplaced 1");
+    std::cout << "\tValue after 1° Emplace: " << *opt << std::endl;
+    opt.emplace("Emplaced 2");
+    std::cout << "\tValue after 2° Emplace: " << *opt << std::endl;
+    opt.swap(for_swap);
+    std::cout << "\tValue after swap: " << *opt << std::endl;
+    opt.reset();
+    std::cout << "\tValue after reset... Does it have a value?: " 
+              << opt.has_value() << std::endl; 
+
     return 0;
+}
+
+template <typename K, typename V>
+std::optional<V> find_in_map(int const key, std::map<K,V> const & map)
+{
+    auto pos = map.find(key);
+    if (pos != map.end())
+    {
+        return pos->second;
+    }
+    return {};
+}
+
+std::string extract_from_str(std::string const &text, std::optional<int> start,
+    std::optional<int> end)
+{
+    auto s = start.value_or(0);
+    auto e = end.value_or(text.length());
+    return text.substr(s, e - s);
 }
