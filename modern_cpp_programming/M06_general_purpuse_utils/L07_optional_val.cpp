@@ -13,21 +13,55 @@
  * was added to store values that may or may not exist. It is present
  * in the <optional> header.
  * 
+ * In this template, there are no heap allocations or pointer involment,
+ * and its implementation can be like the one below:
  * 
+ *      template <typename T>
+ *      class optional
+ *      {
+ *        bool _initialized;
+ *        std::aligned_storage_t<sizeof(t), alignof(T)> _storage;
+ *      };
+ * 
+ * Where the std::aligned_storage_t is an alias template that allows the 
+ * creation  of unintialized chunks of memory that can hold objects of the
+ * specified types. It will not have a value (std::optional) if you use the
+ * default constructor, a copy of a void std::optional or from a std::nullopt_t
+ * 
+ * When using std::optional keep in mind that even if you do not pass the arg,
+ * it may make some copies of the empty std::optional value, for that, you muss
+ * consider a proper way of calling the args, for example, if you pass a
+ * non-std::optional value to an std::optional arg, you will inquire in a copy.
+ * 
+ * NOTE: The implementation of optional can be checked in other programming
+ * languages under the name "nullable".
+ * 
+ * NOTE: std::optional cannot be used to return polymorphic types. If you need
+ * a factory method, it is better to use return pointers.
+ * 
+ * When ready, you can compile and run the code with:
+ * 
+ *      g++ -std=c++20 L07_optional_val.cpp -o opt.out
+ *      ./opt.out
  * 
  */
 
-#include <optional>
-#include <string>
-#include <map>
+// ------------------- REQUIRED HEADERS ---------------------------------------
+#include <optional>  // For usage of optional type
+#include <string>    // String management and operations
+#include <map>       // For using pair like struct
 
+// -------------------- STRUCT DEFINITIONS ------------------------------------
 
+// Custom struct to check that it can be used with optional values.
 struct custom_struct
 {
     int num;
     char letter;
 };
 
+// Unused struct, just added to confirm that you can use optional values in
+// custom structs. Check more info below.
 struct game
 {
     std::string title;
@@ -36,11 +70,18 @@ struct game
     std::optional<int> stimated_hours;
 };
 
+// --------------------------- FUNCTION PROTOTYPES ----------------------------
 template <typename K, typename V>
 std::optional<V> find_in_map(int const key, std::map<K,V> const & map);
 
+std::string extract_from_str(std::string const &text, std::optional<int> start,
+    std::optional<int> end);
+
+// -------------------------- MAIN IMPLEMENTATION ----------------------------
 int main(int argc, char *argv[])
 {
+    std::cout << "Using optional values...\n" << std::endl;
+    
     // Info #1: You can create an optional value by using assing, the 
     // default constructor and the copy constructor, just remember that for
     // printing you have to use the member function value():
@@ -94,9 +135,39 @@ int main(int argc, char *argv[])
     std::cout << "\tValue after reset... Does it have a value?: " 
               << opt.has_value() << std::endl; 
 
-    return 0;
-}
+    // Info #6: Check the functions definitons to learn about what can you do
+    // with std::optional. Here we will showcase their usage.
+    std::map<int, char> my_letter_map{ {1, 'a'}, {2, 'b'}, {3, 'c'}};
+    auto value = find_in_map(3, my_letter_map);
+    std::cout << "Searching for a value in a map: " << std::endl;
+    if (value) 
+    {
+        std::cout << "\tValue found: " << *value << std::endl;
+    }
+    else
+    {
+        std::cout << " \tValue not found... " << std::endl;
+    }
+    auto uncut_message = extract_from_str("cut_everyhing", {}, {});
+    auto cut_message = extract_from_str("cut_everything", 3, {});
+    std::cout << "Giving optional arguments for functions: " << std::endl
+              << "\tMessage with default args: " << uncut_message << std::endl
+              << "\tTrimmed message: " << cut_message << std::endl;
 
+    return 0;
+} // main()
+
+// --------------------------- FUNCTION DEFINITIONS ---------------------------
+
+/**
+ * Generic function to check that search for the pair of a key (the value) in a
+ * map, it considers an optional return.
+ * 
+ * @param key elemento to search for the paier
+ * @param map Map of interest
+ * 
+ * @return Optional value, the value if the key is found, nothing otherwise.
+ */
 template <typename K, typename V>
 std::optional<V> find_in_map(int const key, std::map<K,V> const & map)
 {
@@ -106,12 +177,24 @@ std::optional<V> find_in_map(int const key, std::map<K,V> const & map)
         return pos->second;
     }
     return {};
-}
 
+} // find_in_map()
+
+/**
+ * Simple function to trim a string by considering optional values of the
+ * beginning and the end of the array.
+ * 
+ * @param text String of interest
+ * @param start Optional value to consider as the start
+ * @param end Optional vlaue to consider as the end
+ * 
+ * @return Extracted part of the string.
+ */
 std::string extract_from_str(std::string const &text, std::optional<int> start,
     std::optional<int> end)
 {
     auto s = start.value_or(0);
     auto e = end.value_or(text.length());
     return text.substr(s, e - s);
-}
+
+} // extract_from_str()
