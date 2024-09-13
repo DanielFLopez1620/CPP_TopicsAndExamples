@@ -1,0 +1,81 @@
+// BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
+// Code was tested with g++ in C++20
+
+#include <iostream>
+
+/**
+ * std::variant was based on the boost.variant library and aims for a type-safe
+ * union that holds the value of one of its alternatives.
+ * 
+ * Previously we used the std::variant with POD-types, but they were created
+ * for more, then, here our focus will be to use non-polymorphic and non-POD 
+ * types to check more complex, real examples.
+ * 
+ * Do not forget to include the <variant> header.
+ * 
+ * 
+ */
+
+#include <chrono>
+#include <variant>
+#include <vector>
+
+// For this examples we will use the USB case where it can store a movie, a
+// album music and a software. We will create three structs for trelated them.
+enum class Genre {Drama, Action, Comedy, Horror};
+
+struct Movie
+{
+    std::string name;
+    std::chrono::minutes duration;
+    std::vector<Genre> genre;
+};
+
+struct Song
+{
+    std::string name;
+    std::chrono::seconds duration;
+};
+
+struct Album
+{
+    std::string name;
+    std::string artist;
+    std::vector<Song> songs;
+};
+
+struct Software
+{
+    std::string name;
+    std::string company;
+};
+
+using usb_device = std::variant<Movie, Album, Software>;
+using namespace std::chrono_literals;
+
+int main(int argc, char* argv[])
+{
+    std::vector<usb_device> usbs_list
+    {
+        Movie{ "Star Wars: A new Hop", 2h + 8min, {Genre::Action} },
+        Album{ "Evolve", "Imagine Dragons", {{"Believer", 3min + 24s }, {"Thnder", 3min + 7s}}},
+        Software{ "Matlab", "Mathworks"}
+    };
+
+    std::cout << "Displaying USB elements in store: " << std::endl;
+    auto i = 1;
+    for (auto const & usb : usbs_list)
+    {
+        std::cout << "\tElement #" << i << ": ";
+        i++;
+        std::visit([](auto&& variant)
+            {std::cout << variant.name << std::endl; }, usb);
+    }
+
+
+    return 0;
+}
+
+
+
+

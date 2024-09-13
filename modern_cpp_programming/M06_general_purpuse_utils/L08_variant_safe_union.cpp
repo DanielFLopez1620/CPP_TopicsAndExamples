@@ -42,8 +42,11 @@
  *      ./variant.out
  */
 
-#include <variant>
+// ---------------------- REQUIRED HEADERS ------------------------------------
 
+#include <variant>   // For using type-safe unions
+
+// ---------------------- STRUCT DEFINITIONS ----------------------------------
 struct showcase
 {
     char letter;
@@ -51,6 +54,7 @@ struct showcase
     explicit showcase(char const l) : letter(l) {}
 };
 
+// ---------------------- MAIN IMPLEMENTATION --------------------------------
 int main(int argc, char* argv[])
 {
     // Info #1: You can declare a std::variant, by using the template
@@ -132,6 +136,6 @@ int main(int argc, char* argv[])
         {std::cout << "Using lambda with std::visit...\n\tValue:" << arg << std::endl; }, 
         variant_d1);
     
-
     return 0;
-}
+
+} // main()
