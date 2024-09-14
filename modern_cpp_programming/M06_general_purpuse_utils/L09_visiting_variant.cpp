@@ -50,6 +50,40 @@ struct Software
     std::string company;
 };
 
+struct variant_visitor
+{
+    void operator()(Movie const &arg) const
+    {
+        std::cout << "Displaying info of movie: " << std::endl
+                  << "\tName: " << arg.name << std::endl
+                  << "\tDuration: " << arg.duration.count() << " minutes"
+                  << std::endl;
+    }
+
+    void operator()(Album const &arg) const
+    {
+        std::cout << "Displaying info of album: " << std::endl
+                  << "\tName: " << arg.name << std::endl
+                  << "\tArtist: " << arg.artist << std::endl
+                  << "\tList of songs: " << std::endl;
+        int i = 1;
+        for(auto const & song : arg.songs)
+        {
+            std::cout << "\t Song #" << i << ":" << std::endl
+                      << "\t\tName: " << song.name << std::endl
+                      << "\t\tDuration: " << song.duration.count()
+                      << std::endl;
+        }
+    }
+
+    void operator()(Software const & arg) const
+    {
+        std::cout << "Displaying info of Software:" << std::endl
+                  << "\tName: " << arg.name << std::endl
+                  << "\tCompany: " << arg.company << std::endl;
+    }
+};
+
 using usb_device = std::variant<Movie, Album, Software>;
 using namespace std::chrono_literals;
 
@@ -70,6 +104,24 @@ int main(int argc, char* argv[])
         i++;
         std::visit([](auto&& variant)
             {std::cout << variant.name << std::endl; }, usb);
+    }
+
+    for(auto const & usb : usbs_list)
+    {
+        usb_device obtained = std::visit(
+            [](auto && arg) -> usb_device 
+            {
+                auto aux {arg};
+                aux.name = to_upper(aux.name);
+                return cpy
+            },
+            usb);
+        std::visit (
+            [](auto&& arg) 
+            {
+                std::cout << arg.name << std::endl;
+            },
+            obtained);
     }
 
 
