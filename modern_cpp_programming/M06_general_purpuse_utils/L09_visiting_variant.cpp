@@ -16,9 +16,14 @@
  * 
  */
 
-#include <chrono>
 #include <variant>
+#include <iostream>
+#include <string>
 #include <vector>
+#include <type_traits>
+#include <iomanip>
+#include <chrono>
+#include <algorithm>
 
 // For this examples we will use the USB case where it can store a movie, a
 // album music and a software. We will create three structs for trelated them.
@@ -112,8 +117,10 @@ int main(int argc, char* argv[])
             [](auto && arg) -> usb_device 
             {
                 auto aux {arg};
-                aux.name = to_upper(aux.name);
-                return cpy
+                std::transform(aux.name.begin(), aux.name.end(), 
+                    aux.name.begin(), [](unsigned char l)
+                        {return std::toupper(l); });
+                return aux;
             },
             usb);
         std::visit (
@@ -124,6 +131,41 @@ int main(int argc, char* argv[])
             obtained);
     }
 
+    for (auto const & usb : usbs_list)
+    {
+        std::visit([](auto&& arg)
+            {
+                using T = std::decay_t<decltype(arg)>;
+                if constexpr (std::is_same_v<T, Movie>)
+                {
+                    std::cout << "Displaying info of movie: " << std::endl
+                              << "\tName: " << arg.name << std::endl    
+                              << "\tDuration: " << arg.duration.count()
+                              <<  " minutes" <<std::endl;
+                }
+                else if constexpr (std::is_same_v<T,Album>)
+                {
+                    std::cout << "Displaying info of album: " << std::endl
+                              << "\tName:" << arg.name << std::endl
+                              << "\tArtist: " << arg.artist << std::endl;
+                    int i = 0;
+                    for (auto const & song : arg.songs)
+                    {
+                        std::cout << "\tSong #" << i << std::endl
+                                  << "\t\tName: " << song.name << std::endl
+                                  << "\t\tDuration: "  << song.duration.count()
+                                  << " seconds" << std::endl;
+                    }
+                }
+                else if constexpr (std::is_same_v<T, Software>)
+                {
+                    std::cout << "Displaying info of Software: " << std::endl
+                              << "\tName: " << arg.name << std::endl
+                              << "\tCompany: " << arg.company << std::endl;
+                }
+            },
+            usb);
+    }
 
     return 0;
 }
