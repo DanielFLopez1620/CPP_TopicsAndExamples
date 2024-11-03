@@ -12,6 +12,39 @@
  * it in a buffer that can be an array, a std::vector or a std::array. For
  * this purpose we will use ofstream and ifstream classes that are available in
  * the std namespace of the <fstream> header.
+ * 
+ * You already know some elements like cin, cout for I/O operations.But there
+ * are more like:
+ * 
+ * - cin/wcin: Input stream typically used for reading inputs from the keyboard,
+ *   and its wide-character version for non-ASCII characters.
+ * - cout/wcout: Output stream used to display information on the console, and
+ *   its wide-character version.
+ * - cerr/wcerr: Error stream, messages that aren't buffered and go immediately
+ *   to the console, and its wide-character variant.
+ * - clog/wclog: Logging stream, which means that it can accumulate messages
+ *   and output them in bulk for better performance. Also with its wide-
+ *   character version.
+ * 
+ * However, there are streams for files too, which can be implemented based on
+ * the following class templates:
+ * 
+ * - basic_filebuf: Implements I/O operations for a raw file, similar to the C
+ *   FILE stream.
+ * - basic_ifstream: Oriented for high-level stream input operations.
+ * - basic_ofstream: Oriented for high-level stream output operations.
+ * - basic_fstream: Implements high-level stream input and output.
+ * 
+ * The implementations that we are going to use are ofstream and ifstream,
+ * present on the <fstream> header under the std namespace.
+ * 
+ * To wirte data into a file you need to instantiate an std::ofstream where you
+ * need to pass the name of the file and the open mode. In this case, we are
+ * going to use the std::ios::binary to indicate that we are working in the
+ * binary mode, which discards the previous content when opening it.
+ * 
+ * NOTE: For better understanding on file stream, check the image:
+ * https://static.packt-cdn.com/products/9781800208988/graphics/Images/B15880_07_01.png
  */
 
 #include <fstream>
