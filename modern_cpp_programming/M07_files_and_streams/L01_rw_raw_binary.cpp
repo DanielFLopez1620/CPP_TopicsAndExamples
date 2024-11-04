@@ -38,10 +38,63 @@
  * The implementations that we are going to use are ofstream and ifstream,
  * present on the <fstream> header under the std namespace.
  * 
- * To wirte data into a file you need to instantiate an std::ofstream where you
+ * OUTPUT STREAM (Write):
+ * 
+ * To write data into a file you need to instantiate an std::ofstream where you
  * need to pass the name of the file and the open mode. In this case, we are
  * going to use the std::ios::binary to indicate that we are working in the
  * binary mode, which discards the previous content when opening it.
+ * 
+ * If you want to use a file (open it) with th existing content, you should
+ * consider using the flag 'std::ios::app' (which traslates to 
+ * std::ios::app | std::ios::binary), this operations call the open() method
+ * internally. 
+ * 
+ * Remember to check that the file is open (and ready) before you start
+ * using the stream. For that you can use the class member 'is_open()'. After
+ * this check, you should be able to use 'write()' class member to modify and
+ * write content to the file. 'write()' only accepts pointers to string, so if
+ * you do not use a string, then you need to use a 'reinterpret_cast'. Also,
+ * when writing a file, you should check and prevent errors, then a exception
+ * you should know is 'std::ios_base::failure'.
+ * 
+ * INPUT STREAM (Read):
+ * 
+ * To read data you will also need a stream, but in this case a 'std::ifstream'
+ * and you muss open the file and check it is open like in a writting
+ * operation. 
+ * 
+ * A highlight to mention here is that you can also open the file (with the
+ * class member open()) with the option std::ios::binary.
+ * 
+ * One of the most important thing to consider when using a file with content
+ * is to determinate the size of the file and how is the data structured. In 
+ * the case presented below, we already know the type (check below to see
+ * the std::vector implementation), but we need the size, for that reason
+ * we use pointers with the method 'seekg()', which allow us to move through
+ * the text; and 'tellg()' that tells our current position that can be
+ * understood as bit size we have to interpretate to determinate the size of
+ * the file.
+ * 
+ * After this you should be able to read the file (with the class member 
+ * 'read()' ), which will create a string pointer to the content. As the 
+ * stream works with characters you should use 'reinterpret_cast' in case
+ * you need to convert the data to a different format you may need.
+ * 
+ * An additional comment, is that yoou can open the file and move directly to
+ * the end by using 'std::ios:ate' as an argument when opening the file. Also,
+ * you can check the number of characters succesfully read by using the
+ * 'gcount()' method.
+ * 
+ * Now go and check the code, you can compile and run it with:
+ * 
+ *      g++ -std=c++17 L01_rm_raw_binary -o read_write_bin.out
+ *      ./read_write_bin.out
+ * 
+ * Before finishing, you should consider that there is more than one way of
+ * reading a file. Some of them will be explored throuhgout the module, but
+ * it will depend on your preferences and your application.
+ * 
  * 
  * NOTE: For better understanding on file stream, check the image:
  * https://static.packt-cdn.com/products/9781800208988/graphics/Images/B15880_07_01.png
