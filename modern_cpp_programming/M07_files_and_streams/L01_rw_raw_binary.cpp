@@ -169,6 +169,43 @@ int main(int argc, char* argv[])
         std::cout << "\tClosed stream..." << std::endl;
     }
 
+    // Info #13: You can open the file to directly initialize a std::vector
+    // using 'std::istreambuf_iterator' iterators (which can be used with
+    // std::string too).
+    std::vector<unsigned char> chr_input;
+    std::ifstream in_file2("my_bin.bin", std::ios::binary);
+    if(in_file2.is_open())
+    {
+        chr_input = std::vector<unsigned char>(
+            std::istreambuf_iterator<char>(in_file2),
+            std::istreambuf_iterator<char>());
+        std::cout << "Opening file content additional way 2: Direct init:" 
+                  << std::endl;   
+        in_file2.close();
+    }
+    std::cout << "\tDisplaying content: ";
+    for (auto let : chr_input)
+    {
+        std::cout << static_cast<int>(let);
+    }
+    std::cout << std::endl;
+
+    // Info #14: Another form is by using the std::vector for assignation
+    // from std::istreambuf_iterator.
+    std::vector<unsigned char> chr_content;
+    std::ifstream in_file3("my_bin.bin");
+    if(in_file3.is_open())
+    {
+        in_file3.seekg(0, std::ios_base::end);
+        auto len3 = in_file3.tellg();
+        in_file3.seekg(0, std::ios_base::beg);
+        chr_content.reserve(static_cast<size_t>(len3));
+        chr_content.assign(
+            std::istreambuf_iterator<char>(in_file3),
+            std::istreambuf_iterator<char>());
+        in_file3.close();
+    }
+
     
     return 0;
 }
