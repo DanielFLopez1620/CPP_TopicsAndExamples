@@ -102,6 +102,13 @@
 
 #include <fstream>
 #include <vector>
+#include <functional>
+
+bool custom_write_data(char const * const filename,
+    char const * const data, size_t const size);
+size_t custom_read_data (char const * filename,
+    std::function<char*(size_t const)> allocator);
+
 
 int main(int argc, char* argv[])
 {
@@ -196,6 +203,8 @@ int main(int argc, char* argv[])
     std::ifstream in_file3("my_bin.bin");
     if(in_file3.is_open())
     {
+        std::cout << "Opening file content additional way 2: Assign:" 
+                  << std::endl;
         in_file3.seekg(0, std::ios_base::end);
         auto len3 = in_file3.tellg();
         in_file3.seekg(0, std::ios_base::beg);
@@ -205,7 +214,51 @@ int main(int argc, char* argv[])
             std::istreambuf_iterator<char>());
         in_file3.close();
     }
+    std::cout << "\tDisplaying content: ";
+    for (auto let : chr_content)
+    {
+        std::cout << static_cast<int>(let);
+    }
+    std::cout << std::endl;
 
+    // Info #15: Another option is to copy the content of the file stream by
+    // using std::istreambuf_iterator iterators and std::back_inserter to
+    // write to the end of the vector.
+    std::vector<unsigned char> chr_cop;
+    std::ifstream in_file4("my_bin.bin", std::ios::binary);
+    if(in_file4.is_open())
+    {
+        std::cout << "Opening file content addional way 3: Copying:"
+                  << std::endl;
+        in_file4.seekg(0, std::ios_base::end);
+        auto len4 = in_file4.tellg();
+        in_file4.seekg(0, std::ios_base::beg);
+        chr_cop.reserve(static_cast<size_t>(len4));
+        std::copy(std::istreambuf_iterator<char>(in_file4),
+            std::istreambuf_iterator<char>(),
+            std::back_inserter(chr_cop));
+        in_file4.close();
+    }
+    std::cout << "\tDisplaying content: ";
+    for (auto let : chr_cop)
+    {
+        std::cout << static_cast<int>(let);
+    }
+    std::cout << std::endl << "Do not forget the next notes:" << std::endl
+              << "\tThe first open/read option is the fastest one" << std::endl
+              << "\tCheck the function implementations for r/w" << std::endl;
     
     return 0;
+}
+
+bool custom_write_data(char const * const filename,
+    char const * const data, size_t const size)
+{
+    return 0;
+}
+
+size_t custom_read_data (char const * filename,
+    std::function<char*(size_t const)> allocator)
+{
+    return 10;
 }
