@@ -100,16 +100,20 @@
  * https://static.packt-cdn.com/products/9781800208988/graphics/Images/B15880_07_01.png
  */
 
-#include <fstream>
-#include <vector>
-#include <functional>
+// -------------------- REQUIRED LIBRARIES ------------------------------------
+
+#include <fstream>    // File stream library
+#include <vector>     // For dynamic arrays
+#include <functional> // Related with functions and args
+
+// ---------------------- FUNCTION PROTOTYPES --------------------------------
 
 bool custom_write_data(char const * const filename,
     char const * const data, size_t const size);
 size_t custom_read_data (char const * filename,
     std::function<char*(size_t const)> allocator);
 
-
+// ------------------------ MAIN IMPLEMENTATION -------------------------------
 int main(int argc, char* argv[])
 {
     std::cout << "Lesson 1: Reading and writing raw data from/to binary files"
@@ -249,16 +253,69 @@ int main(int argc, char* argv[])
               << "\tCheck the function implementations for r/w" << std::endl;
     
     return 0;
-}
 
+} // main()
+
+// ---------------------------- FUNCTION DEFINITIONS --------------------------
+
+/**
+ * Write the data provided to the specified file in binary mode
+ * 
+ * @param filename Output file
+ * @param data Data to write
+ * @param size Size of the data considered
+ * 
+ * @return True if the writting was succesful, False otherwise.
+ */
 bool custom_write_data(char const * const filename,
     char const * const data, size_t const size)
 {
-    return 0;
-}
+    auto success = false;
+    std::ofstream out_file(filename, std::ios::binary);
+    if(out_file.is_open())
+    {
+        try
+        {
+            out_file.write(data, size);
+            success = true;
+        }
+        catch(const std::ios_base::failure &e)
+        {
+            std::cerr << e.what() << std::endl;
+        }
+        out_file.close();
+    }
+    return success;
+} // custom_write_data()
 
+/**
+ * Read the content of the given file and return it.
+ * 
+ * @param filename Input file
+ * @param allocator Function for allocation process
+ * 
+ * @return Read bytes.
+ */
 size_t custom_read_data (char const * filename,
     std::function<char*(size_t const)> allocator)
 {
-    return 10;
-}
+    size_t readbytes = 0;
+    std::ifstream in_file(filename, std::ios::ate | std::ios::binary);
+    if(in_file.is_open())
+    {
+        auto length = static_cast<size_t>(in_file.tellg());
+        in_file.seekg(0, std::ios_base::beg);
+        auto buffer = allocator(length);
+        try
+        {
+            in_file.read(buffer, length);
+            readbytes = static_cast<size_t>(in_file.gcount());
+        }
+        catch(std::ios_base::failure &e)
+        {
+            std::cerr << e.what() << std::endl;
+        }
+        in_file.close();        
+    }
+    return readbytes;
+} // custom_read_data()
