@@ -9,13 +9,40 @@
  * we work with structured data that should be persisted in files. Also, the
  * previous lesson only works with POD data, then for new objects we must
  * explicitly decide what to write or read, and how to do it. 
+ * 
+ * For this you can still use "ofstream" (output file stream) and "ifstream"
+ * (input file stream) present in the <fstream> header to write/read files, but
+ * as will check later, you will have to know the structure of the elements
+ * present in the file, in this cases with a class (and its attributes) or a
+ * struct, where you should consider the size of each reading and reinterpret
+ * the cast in order to make it compatible with the reading/writting operation.
+ * 
+ * This process is called serialization and deserialization, and you should not
+ * do it with pointers as they change in processes even some moments later,
+ * then they become meaningless. But you should write data referred by a
+ * pointer and read data into an object referred by a pointer. Also, you should
+ * consider versioning the data in the process of serialization/deserialization
+ * if it is open to change over time.
+ * 
+ * Also, down below you will discover how to override operators << >> to write
+ * the content to files, which allow a more generic code for interacting with
+ * streams.
+ * 
+ * NOTE: Remember to read until the file ends or when you receive a exception,
+ * always consider this exception management to avoid corruption or reading
+ * external directions of your objective. The end of the file is marked with
+ * the eofbit of the stream.
  */
 
 #include <vector>
 #include <fstream>
 
-bool write_nonpod(std::ofstream& out_file);
-bool read_nonpod(std::ifstream& in_file);
+struct pod_msg_to_file
+{
+    int num;
+    char priority;
+    char content[2];
+};
 
 class msg_to_file
 {
@@ -42,14 +69,53 @@ public:
         return !(*this == rhv);
     }
 
+    bool write_nonpod(std::ofstream& out_file) const
+    {
+        out_file.write(reinterpret_cast<const char*>(&num), sizeof(num));
+        out_file.write(&priority, sizeof(priority));
+        auto size = static_cast<int>(msg.size());
+        out_file.write(reinterpret_cast<char*>(&size), sizeof(size));
+        out_file.write(msg.data(), msg.size());
+        return !out_file.fail();
+
+    }
+
+    bool read_nonpod(std::ifstream& in_file)
+    {
+        in_file.read(reinterpret_cast<char*>(&num), sizeof(num));
+        in_file.read(&priority, sizeof(priority));
+        auto size {0};
+        in_file.read(reinterpret_cast<char*>(&size), sizeof(size));
+        msg.resize(size);
+        in_file.read(reinterpret_cast<char*>(&msg.front()), size);
+        return !in_file.fail();
+    }
+
+    friend std::ofstream& operator<<(std::ofstream& out_file, msg_to_file const& msg);
+    friend std::ifstream& operator>>(std::ifstream& in_file, msg_to_file& msg);
 };
 
-struct pod_msg_to_file
+
+std::ofstream& operator<<(std::ofstream& out_file, msg_to_file const& msg)
 {
-    int num;
-    char priority;
-    char content[2];
-};
+    out_file.write(reinterpret_cast<const char*>(&msg.num), sizeof(msg.num));
+    out_file.write(&msg.priority, sizeof(msg.priority));
+    auto size = static_cast<int>(msg.msg.size());
+    out_file.write(reinterpret_cast<char*>(&size), sizeof(size));
+    out_file.write(msg.msg.data(), msg.msg.size());
+    return out_file;
+}
+
+std::ifstream& operator>>(std::ifstream& in_file, msg_to_file& msg)
+{
+    in_file.read(reinterpret_cast<char*>(&msg.num), sizeof(msg.num));
+    in_file.read(&msg.priority, sizeof(msg.priority));
+    auto size { 0 };
+    in_file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    msg.msg.resize(size);
+    in_file.read(reinterpret_cast<char*>(&msg.msg.front()), size);
+    return in_file;
+}
 
 bool operator==(pod_msg_to_file const & f1, pod_msg_to_file const & f2)
 {
@@ -101,26 +167,4 @@ int main(int argc, char* arv[])
     // same order. Check the write_nonpod and read_nonpod function implementations.
 
     return 0;
-}
-
-bool write_nonpod(std::ofstream& out_file) const
-{
-    out_file.write(reinterpret_cast<const char*>(&num), sizeof(num));
-    out_file.write(&priority, sizeof(priority));
-    auto size = static_cast<int>(msg.size());
-    out_file.write(reinterpret_cast<char*>(&size), sizeof(size));
-    out_file.write(msg.data(), msg.size());
-    return !out_file.fail();
-
-}
-
-bool read_nonpod(std::ifstream& in_file)
-{
-    in_file.read(reinterpret_cast<char*>(&i), sizeof(i));
-    in_file.read(&priority, sizeof(priority));
-    auto size {0};
-    in_file.read(reinterpret_cast<char*>(&size), sizeof(size));
-    msg.resize(size);
-    in_file.read(interpret_cast<char*>(&msg.front()), size);
-    return !in_file.fail();
 }
