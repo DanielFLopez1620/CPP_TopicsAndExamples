@@ -34,9 +34,13 @@
  * the eofbit of the stream.
  */
 
-#include <vector>
-#include <fstream>
+// ------------------------------ REQUIRED LIBRARIES --------------------------
+#include <vector>   // For dynamic-memory arrays
+#include <fstream>  // For file streams management
 
+// ---------------------------- STRUCTURE DEFINITIONS ------------------------
+
+// POD type structure which is inteded to be save in a file
 struct pod_msg_to_file
 {
     int num;
@@ -44,31 +48,71 @@ struct pod_msg_to_file
     char content[2];
 };
 
+// -------------------------- CLASS DEFINITIONS -----------------------------
+
+/**
+ * Class non-pod oriented to test writing and reading in files.
+ */
 class msg_to_file
 {
-    int num;
-    char priority;
-    std::string msg;
+    int num;         // Number of message
+    char priority;   // Priority letter
+    std::string msg; // Content
 
 public:
+    /**
+     * User defined construtor that initialize the attributes with a default
+     * value, if there aren't arguments passed during the call.
+     * 
+     * @param num Number of message
+     * @param priority Letter that indicates priority
+     * @param msg String with the content of the message
+     */
     msg_to_file(int const num = 0, char const priority = '0',
         std::string const & msg = {}) : num(num), priority(priority), msg(msg)
     {}
 
+    // Default copy constructor
     msg_to_file(msg_to_file const &) = default;
     
-    msg_to_file& operator=(msg_to_file const &)  = default;
+    // Default copy constructor
+    msg_to_file& operator=(msg_to_file const &) = default;
     
+    /**
+     * Equality operator that checks each attribute in order to validate the
+     * comparation.
+     * 
+     * @param rhv Right hand element to compare.
+     * 
+     * @return True if all the attributes are equal, False otherwise.
+     */
     bool operator==(msg_to_file const & rhv) const
     {
         return num == rhv.num && priority == rhv.priority && msg == rhv.msg;
-    }
+    } // operator==
 
+    /**
+     * Inequality operator that checks each attribute in order to validate the
+     * comparation.
+     * 
+     * @param rhv Right hand element to compare.
+     * 
+     * @return True if the attributes (at least one) is different, False 
+     *         otherwise.
+     */
     bool operator!=(msg_to_file const & rhv) const
     {
         return !(*this == rhv);
-    }
+    } // operator!=
 
+    /**
+     * Write method for file out streams to write the content as the class
+     * attributes aren't pod types.
+     * 
+     * @param out_file Output file stream considered.
+     * 
+     * @return True if the operation ends succesfully, false otherwise.
+     */
     bool write_nonpod(std::ofstream& out_file) const
     {
         out_file.write(reinterpret_cast<const char*>(&num), sizeof(num));
@@ -77,9 +121,17 @@ public:
         out_file.write(reinterpret_cast<char*>(&size), sizeof(size));
         out_file.write(msg.data(), msg.size());
         return !out_file.fail();
+    } // write_nonpod
 
-    }
-
+    /**
+     * Read method for file input streams, in order to enter the content
+     * of the file (that is formatted properly for this class) without
+     * errors.
+     * 
+     * @param in_file Input file stream
+     * 
+     * @return True if the reading was succesful, false otherwise.
+     */
     bool read_nonpod(std::ifstream& in_file)
     {
         in_file.read(reinterpret_cast<char*>(&num), sizeof(num));
@@ -89,13 +141,32 @@ public:
         msg.resize(size);
         in_file.read(reinterpret_cast<char*>(&msg.front()), size);
         return !in_file.fail();
-    }
+    } // read_nonpod()
 
-    friend std::ofstream& operator<<(std::ofstream& out_file, msg_to_file const& msg);
-    friend std::ifstream& operator>>(std::ifstream& in_file, msg_to_file& msg);
-};
+    // Friend member declaration
+    // They can access private and protected data of the classes in which they
+    // are declared friends.
 
+    // Override of operator<< to write into a file
+    friend std::ofstream& operator<<(std::ofstream& out_file, 
+        msg_to_file const& msg);
+    // Override of operator>> to read a file
+    friend std::ifstream& operator>>(std::ifstream& in_file, 
+        msg_to_file& msg);
 
+}; // class msg_to_file
+
+// ----------------------------- FUNCTION DEFINITIONS -------------------------
+
+/**
+ * Override to write the content (attributes) of the msg_to_file class to
+ * a file.
+ * 
+ * @param out_file Output stream
+ * @param msg Pointer to obj with the msg to insert in the file.
+ * 
+ * @return Output stream after sending the content.
+ */
 std::ofstream& operator<<(std::ofstream& out_file, msg_to_file const& msg)
 {
     out_file.write(reinterpret_cast<const char*>(&msg.num), sizeof(msg.num));
@@ -104,8 +175,17 @@ std::ofstream& operator<<(std::ofstream& out_file, msg_to_file const& msg)
     out_file.write(reinterpret_cast<char*>(&size), sizeof(size));
     out_file.write(msg.msg.data(), msg.msg.size());
     return out_file;
-}
+} // operator<<
 
+/**
+ * Override to read the content (attributes, if formatted was properly made) 
+ * of the msg_to_file class to the current program.
+ * 
+ * @param in_file Input stream
+ * @param msg Pointer to object where the content is goint to be read.
+ * 
+ * @return Input stream after reading the content.
+ */
 std::ifstream& operator>>(std::ifstream& in_file, msg_to_file& msg)
 {
     in_file.read(reinterpret_cast<char*>(&msg.num), sizeof(msg.num));
@@ -115,15 +195,26 @@ std::ifstream& operator>>(std::ifstream& in_file, msg_to_file& msg)
     msg.msg.resize(size);
     in_file.read(reinterpret_cast<char*>(&msg.msg.front()), size);
     return in_file;
-}
+} // operator>>
 
+/**
+ * Adding operator of equality for custom pod struct that was previously
+ * defined.
+ * 
+ * @param f1 First element to compare
+ * @param f2 Second element to compare
+ * 
+ * @return True if all the pair elements are equal, false otherwise.
+ */
 bool operator==(pod_msg_to_file const & f1, pod_msg_to_file const & f2)
 {
     return f1.num == f2.num &&
            f1.priority == f2.priority &&
            f1.content[0] == f2.content[0] &&
            f1.content[1] == f2.content[1];
-}
+} // operator==
+
+// ------------------------------ MAIN IMPLEMENTATION -------------------------
 
 int main(int argc, char* arv[])
 {
