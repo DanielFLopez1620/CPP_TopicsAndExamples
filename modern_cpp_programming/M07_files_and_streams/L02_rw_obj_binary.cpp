@@ -28,6 +28,11 @@
  * the content to files, which allow a more generic code for interacting with
  * streams.
  * 
+ * When ready, you can run this code with:
+ * 
+ *      g++ -std=c++17 L02_rw_obj_binary.cpp -o rw_bin.out
+ *      ./rw_bin.out
+ * 
  * NOTE: Remember to read until the file ends or when you receive a exception,
  * always consider this exception management to avoid corruption or reading
  * external directions of your objective. The end of the file is marked with
@@ -219,13 +224,13 @@ bool operator==(pod_msg_to_file const & f1, pod_msg_to_file const & f2)
 int main(int argc, char* arv[])
 {
     std::vector<pod_msg_to_file> pod_content {
-        {16, '1', {'2', '0'}},
-        {20, '2', {'1', '6'}}};
+        { 16, '1', {'2', '0'} },
+        { 20, '2', {'1', '6'} }};
 
     // Info #1: To serailize/deserialize POD types that doesn't have pointers,
     // you can use ofstream::write() and ifstream::read() as it was shown in
     // the previuos lesson.
-    std::ifstream out_file1("L02_example.bin", std::ios::binary);
+    std::ofstream out_file1("L02_example1.bin", std::ios::binary);
     if(out_file1.is_open())
     {
         for(auto const & value : pod_content)
@@ -236,7 +241,7 @@ int main(int argc, char* arv[])
         out_file1.close();
     }
     std::vector<pod_msg_to_file> pod_review;
-    std::ifstream in_file1("L02_example.bin", std::ios::binary);
+    std::ifstream in_file1("L02_example1.bin", std::ios::binary);
     if(in_file1.is_open())
     {
         while(true)
@@ -256,6 +261,37 @@ int main(int argc, char* arv[])
     // the value of the data members to a file. And in case of reading and
     // deserialize, you have to read from the file to the data members in the
     // same order. Check the write_nonpod and read_nonpod function implementations.
+    auto msg_example = msg_to_file{16, '2', "Message"};
+    std::ofstream out_file2("L02_example2.bin", std::ios::binary);
+    if(out_file2.is_open())
+    {
+        msg_example.write_nonpod(out_file2);
+        out_file2.close();
+    }
+    auto read_msg = msg_to_file{};
+    std::ifstream in_file2("L02_example2.bin", std::ios::binary);
+    if(in_file2.is_open())
+    {
+        msg_example.read_nonpod(in_file2);
+        in_file2.close();
+    }
+
+    // Info #3: You can also do the out/in stream by overriding operators
+    // << and >>, as shown in the friend definitions.
+    auto msg_example2 = msg_to_file{16, '2', "Message <<"};
+    std::ofstream out_file3("L02_example3.bin", std::ios::binary);
+    if(out_file3.is_open())
+    {
+        out_file3 << msg_example2;
+        out_file3.close();
+    }
+    auto read_msg2 = msg_to_file{};
+    std::ifstream in_file3("L02_example3.bin", std::ios::binary);
+    if(in_file3.is_open())
+    {
+        in_file3 >> read_msg2;
+        in_file3.close();
+    }
 
     return 0;
 }

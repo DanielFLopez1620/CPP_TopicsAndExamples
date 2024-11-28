@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
 
     // Info #1: Open a file stream for writing a binary file, 
     // with std::ofstream
-    std::ofstream out_file("my_bin.bin", std::ios::binary);
+    std::ofstream out_file("L01_my_bin.bin", std::ios::binary);
     std::cout << "Writing operations with files..." << std::endl
               << "\tOpened ofstream for my_bin.bin ..." << std::endl;
 
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 
     // Info #6: For reading a file you will need a ifstream (input stream)
     // rather than a output stream. Which is like the next one:
-    std::ifstream in_file("my_bin.bin", std::ios::binary);
+    std::ifstream in_file("L01_my_bin.bin", std::ios::binary);
     std::cout << "Reading operations with files..." << std::endl
               << "\tOpened ifstream for my_bin.bin" << std::endl;
 
