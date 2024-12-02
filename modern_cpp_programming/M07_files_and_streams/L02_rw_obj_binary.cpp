@@ -223,6 +223,9 @@ bool operator==(pod_msg_to_file const & f1, pod_msg_to_file const & f2)
 
 int main(int argc, char* arv[])
 {
+    std::cout << "Lesson 2: Reading/Writting object in binary files"
+              << std::endl;
+    
     std::vector<pod_msg_to_file> pod_content {
         { 16, '1', {'2', '0'} },
         { 20, '2', {'1', '6'} }};
