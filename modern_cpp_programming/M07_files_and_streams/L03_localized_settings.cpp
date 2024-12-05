@@ -56,11 +56,13 @@
  * 
  */
 
-#include <chrono>
-#include <locale>
-#include <algorithm>
-#include <iomanip>
+// --------------------------- REQUIRED LIBRARIES -----------------------------
+#include <chrono>    // For time management with different precisions
+#include <locale>    // Localization and formats according region
+#include <algorithm> // General utility algorithms
+#include <iomanip>   // Input/output formatting iwth manipulators
 
+// -------------------------- MAIN IMPLEMENTATION -----------------------------
 int main(int argc, char *argv[])
 {
     std::cout << "Lesson 3: Use localization based formats" << std::endl;
@@ -97,5 +99,15 @@ int main(int argc, char *argv[])
               << std::endl << "\tNames: ";
     sort_and_display(name_collection, location);
     std::cout << std::endl;
+
+    auto location2 = std::locale::classic();
+    std::cout.imbue(location2);
+    std::cout << "C Standard display settings:" << std::endl
+              << "\tCurrency: " << std::put_money(216.20) << std::endl
+              << "\tCurrent time: " << std::put_time(local_time, "%c")
+              << std::endl << "\tNames: ";
+    sort_and_display(name_collection, location);
+    std::cout << std::endl;
     return 0;
-}
+
+} // main()
