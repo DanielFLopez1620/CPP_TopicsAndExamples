@@ -17,9 +17,36 @@
  * when you want to achieve a index from a book in a ordered way.
  */
 
-#include <ios>
-#include <iomanip>
 
+// --------------------- REQUIERED LIBRARIES ----------------------------------
+#include <ios>      // Input/Output stream library
+#include <iomanip>  // Input/output stream manipulators
+#include <vector>   // 
+
+// -------------------- STRUCTS CONSIDERED -----------------------------------
+struct Element
+{
+    int id;
+    std::string name;
+    int minutes;
+};
+
+struct Group
+{
+    std::string name;
+    std::vector<Element> elements;
+};
+
+struct DisplayGroup
+{
+    std::string name;
+    std::vector<Group> groups;
+};
+
+// ------------------------- FUNCTION PROTOTYPES ------------------------------
+void display_organized_group(DisplayGroup display_group);
+
+// --------------------- MAIN IMPLEMENTATION ----------------------------------
 int main(int argc, char* argv[])
 {
     // Info #1: Tired of using the ternary operator to display 'false' or 
@@ -61,10 +88,73 @@ int main(int argc, char* argv[])
               << "Fill right" << std::endl;
 
     // Info #6: If you want a certain precision (number of decimal units)
-    // you cna use std::setprecision().
+    // you can use std::setprecision().
     std::cout << "Using different precisions with floats: " << std::endl
               << "\tNumber: " << dan_flt << std::endl << "\t2 precision: "
               << std::fixed << std::setprecision(dan_flt) << std::endl;
     
+    // Info #7: A Display example
+    std::cout << "\nLet's check a formatted example" << std::endl;
+
+    auto starwars_group = DisplayGroup
+    {
+        "Star Wars Collection",
+        {
+            {
+                "Movies",
+                {
+                    {1, "The Phantom Menace", 2 * 60 + 17},
+                    {2, "Attack of the Clones", 2 * 60 + 23},
+                    {3, "Revenge of the Sith", 2 * 60 + 21},
+                    {4, "A New Hope", 2 * 60 + 5},
+                    {5, "The Empires Strike Back", 2 * 60 + 8},
+                    {6, "The Return of the Jedi", 2 * 60 + 16},
+                },
+            },
+            {
+                "Series",
+                {
+                    {1, "Star Wars: The Clone Wars", 54 * 60 + 21},
+                    {2, "Star Wars: Rebels", 28 * 60 + 21},
+                    {3, "The Mandalorian", 16 * 60 + 39},
+                    {4, "The Bad Batch", 14 * 60 + 53},
+                    {5, "Ahsoka", 5 * 60 + 53},
+                    {6, "The Book of Boba Fett", 5 * 60 + 28},
+                }
+            }
+        }
+    };
+    display_organized_group(starwars_group);
+
     return 0;
+
+} // main()
+
+// ------------------------------- FUNCTION DEFINITIONS -----------------------
+/**
+ * Display format for a collection of elements that has a duration and are
+ * correlated.
+ * 
+ * @param display_group Custom struct with general group, groups and elements.
+ */
+void display_organized_group(DisplayGroup display_group)
+{
+    std::cout << "Section: " << display_group.name << std::endl;
+    for (auto const & group : display_group.groups)
+    {
+        std::cout << std::left << std::setw(15) << std::setfill(' ')
+                  << group.name << std::endl;
+        std::cout << std::left << std::setw(15) << std::setfill('-')
+                  << "-" << std::endl;
+
+        for(auto const & element : group.elements)
+        {
+            std::cout << std::right << std::setw(4) << std::setfill(' ')
+                      << element.id << " ";
+            std::cout << std::left << std::setw(35) << std::setfill('_')
+                      << element.name;
+            std::cout << std::right << std::setw(8) << std::setfill('_')
+                      << element.minutes << " min." << std::endl;
+        }
+    }
 }
