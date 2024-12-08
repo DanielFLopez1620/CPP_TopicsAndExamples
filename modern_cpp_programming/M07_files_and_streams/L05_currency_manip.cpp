@@ -30,6 +30,8 @@
 // ---------------------------- MAIN IMPLEMENTATION -------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 5: Currency stream manipulators...\n" << std::endl;
+
     // Info #1: You can display the format by considering a localization, then
     // using 'imbue' and 'std::put_money'. Something similar is present in the
     // previous lesson. 

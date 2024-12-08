@@ -49,6 +49,8 @@ void display_organized_group(DisplayGroup display_group);
 // --------------------- MAIN IMPLEMENTATION ----------------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 4: String and stream manipulators...\n " << std::endl;
+
     // Info #1: Tired of using the ternary operator to display 'false' or 
     // 'true' when using booleans, say no more to that and start using
     // 'std::boolalpha' and 'std::noboolalpha'.
