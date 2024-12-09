@@ -13,14 +13,24 @@
  * idea of manipulation present here follow some aspects of the previous
  * manipulators lesson, so keep in mind to check them too.
  * 
- *  
+ * The steps are almost the same based on previously lessons, where you should
+ * consider the proper region/locale and use std::cout or a input stream to
+ * interpret the time format coming from a std::put_time() or a std::get_time()
+ * respectively.
+ * 
+ * When ready, check the code and compile it:
+ * 
+ *      g++ -std=c++17 L06_time_manip -o time_man.out
+ *      ./time_man.out
  */
 
-#include <ctime>
-#include <chrono>
-#include <iomanip>
-#include <sstream>
+// --------------------------- REQUIRED LIBRARY -------------------------------
+#include <ctime>    // C standard library for time
+#include <chrono>   // Time library for working with different precisions
+#include <iomanip>  // I/O Stream Manipulators
+#include <sstream>  // String streams library
 
+// ------------------------- MAIN IMPLEMENTATION ------------------------------
 int main(int argc, char* argv[])
 {
     std::cout << "Lesson 6: Time stream manipulators...\n" << std::endl; 
@@ -55,7 +65,7 @@ int main(int argc, char* argv[])
     auto read_time = std::tm {};
     std::istringstream inp_str("Sun 08 Dec 2016 12:20:20 JST");
     inp_str.imbue(std::locale("en_US.utf8"));
-    inp_str >> std::get_time(&read_time, "%c");
+    inp_str >> std::get_time(&read_time, "%a %d %b %Y %H:%M:%S %Z");
     if (!inp_str.fail())
     {
         std::cout << "Reading time considering US Region:" << std::endl 
@@ -67,6 +77,5 @@ int main(int argc, char* argv[])
         std::cout << "Time reading failed..." << std::endl;
     }
     
-    
     return 0;
-}
+}  // main()
