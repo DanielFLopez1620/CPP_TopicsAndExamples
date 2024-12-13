@@ -79,7 +79,74 @@ int main(int argc, char* argv[])
         std::cout << "Symlink created successfully..." << std::endl;
     }
 
+    // Info #6: For deleting, similar to the case of rm, you can erase a empty
+    // folder with 'remove()', but for the case of a folder and you want to delete
+    // it recursively, you have to use 'remove_all()'.
+    auto del_path = desired_path /"tmp16";
+    suc_create = my_machine::remove_all(del_path, err) != 
+        static_cast<std::uintmax_t>(-1);
+    if(!suc_create)
+    {
+        std::cout << "Couldn't delete temporal path...: " << err.message() 
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "Temportal path dirs were deleted!" << std::endl; 
+    }
 
+    // Info #7: You can also perform operation with files, for example, copy 
+    // perations with 'copy()' or 'copy_file()'.
+    suc_create = my_machine::copy_file(txtfile_path, 
+        current_path / "08_copied_file.txt", err);
+    if(suc_create)
+    {
+        std::cout << "Copied file 08_sample.txt to current destination" 
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "Copy of file 08_sample.txt failed..." << std::endl;
+    }
 
+    // Info #8: Similar to what happens with dirs, you can rename and mvoe 
+    // files with 'rename()'.
+    auto moved_file_path = current_path / "08.log";
+    my_machine::rename(txtfile_path, moved_file_path, err);
+    if (err)
+    {
+        std::cout << "Couldn't move/rename the file 08_sample.txt: "
+                  << err.message() << std::endl;    
+    }
+    else
+    {
+        std::cout << "File 08_sample.txt moved and renamed..." << std::endl;
+    }
+
+    // Info #9: You can also create symboloic links for files with 
+    // 'create_symlink()':
+    auto link_path = desired_path / "text_link.txt";
+    my_machine::create_symlink(moved_file_path, link_path, err);
+    if(err)
+    {
+        std::cout << "Couln't create symlink for file: " << err.message()
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "Symlink fro fiel created" << std::endl;
+    }
+
+    // Info #10: Finally, you can also remove files.
+    suc_create = my_machine::remove(mov_path, err);
+    if (!suc_create)
+    {
+        std::cout << "File wasn't removed, error: " << err.message()
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "File removed succesfully..." << std::endl;
+    }
     return 0;
 }
