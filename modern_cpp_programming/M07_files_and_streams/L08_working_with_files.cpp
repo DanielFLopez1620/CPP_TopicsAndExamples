@@ -8,16 +8,56 @@
  * isn't it only focus as you can copy, move and delete files or directories,
  * no matter if it is Windows or POXIS filesystem.
  * 
+ * The filesystem functions, members and methods allow to interact with files
+ * and dirs, also the functions can be classified in two groups:
+ * 
+ * - Overloads that take a reference to a 'std::error_code' which allow for
+ *   handling errors without exceptions (noexcept).
+ * - Overloads that do not handle 'std::error_code' and throws 
+ *   'std::filesystem::filesystem_error' or 'std::bad_alloc'.
+ * 
+ * Check which functions return a boolean as it can be helpful to notice if an
+ * action was completed or not (in cases where no error/exception is thrown).
+ * Also, you should note the difference between the functions that are for
+ * dirs and the ones for files as the management can be different and can
+ * result in errors if they are done wrong. (Do not forget to implement the
+ * proper try-catch if using these)
+ * 
+ * When making copies, review which 'copy_option' is better for you
+ * as they are:
+ * 
+ * - 0 = none (Follow symbolic link)
+ * - 1 = skip_existing
+ * - 2 = overwrite_existing
+ * - 4 = update_existing
+ * - 8 = recursive (copy subdirectories and their contents)
+ * - 16 = copy_symlinks (make the copy as symlink)
+ * - 32 = skip_symlinks (Ignore symbolic links)
+ * - 64 = directories_only
+ * - 128 = create_symlinks (Make symlinks instead of copying files)
+ * - 265 = create_hard_links (Hard links instaed of copies and symlinks)
+ * 
+ * Finally, check below for operations like copying, moving, renaming and deleting file
+ * and directories.
+ * 
+ * When ready you can compile this with:
+ * 
+ *      g++ -std=c++17 L08_working_with_files.cpp -o file_systems.out
+ *      ./file_systems.out
+ * 
  * NOTE: Where you compile the code, must have the /08_temp/08_text elements,
  * by default we are considering the path to the repository in the localtion
  * of the Module 7.
  */
 
-#include <filesystem>
-#include <iomanip>
+// ----------------------------- REQUIRED LIBRARIES ---------------------------
+#include <filesystem>  // Management of the file system
+#include <iomanip>     // Input/Output manipulators
 
+// -------------------------- NAMESPACES CONSIDERED ---------------------------
 namespace my_machine = std::filesystem;
 
+// -------------------------- MAIN IMPLEMENTATION -----------------------------
 int main(int argc, char* argv[])
 {
     // Info #1: You can access to your current location and part from them to
@@ -125,8 +165,8 @@ int main(int argc, char* argv[])
 
     // Info #9: You can also create symboloic links for files with 
     // 'create_symlink()':
-    auto link_path = desired_path / "text_link.txt";
-    my_machine::create_symlink(moved_file_path, link_path, err);
+    auto link_file_path = desired_path / "text_link.txt";
+    my_machine::create_symlink(moved_file_path, link_file_path, err);
     if(err)
     {
         std::cout << "Couln't create symlink for file: " << err.message()
@@ -148,5 +188,6 @@ int main(int argc, char* argv[])
     {
         std::cout << "File removed succesfully..." << std::endl;
     }
+
     return 0;
-}
+} // main()
