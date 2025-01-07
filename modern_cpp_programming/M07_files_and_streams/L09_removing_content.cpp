@@ -22,9 +22,23 @@
  * from a C++ code, so check the L09_remove_part.txt file. Make sure you pass
  * the correct path to the file.
  * 
+ * The pattern should work also on binary files. Here we are reading lines with
+ * std::getline() until no more lines are available, which allow to separate the
+ * content and process it in phases. Keep in mind that when reading the content
+ * on a file, you can replace the original file, copy the content to another
+ * folder or rename the file (change extension or move to tmp file).
+ * 
+ * 
  * Compile and run this code from the base workspace of this repo:
  * 
+ *      cd ./<path_to_workspace>
+ *      g++ -std=c++17 modern_cpp_proamming/M07_files_and_streams/
+ *          L09_removing_content.cpp -o rm_content.out
+ *      ./rm_content.out
  * 
+ * NOTE: std::filesystem::temp_directory_path works differntly depending on the
+ * OS. On Windows, it will return the GetTempPath(), however, on POSIX system
+ * it return the path specified for the TMPDIR environment variable.
  */
 
 // ------------------------ REQUIRED LIBRARIES ------------------------------
