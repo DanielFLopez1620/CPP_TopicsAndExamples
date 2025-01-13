@@ -66,5 +66,59 @@ int main(int argc, char* argv[])
         std::cerr << "An error ocurred: " << e.what() << '\n';
     }
 
+    // Info #2: We can iterate the content of a directory (no recursively),
+    // by using 'directory_iterator'.
+    if (my_machine::exists(base_path) && my_machine::is_directory(base_path))
+    {
+        for (auto const & entry : my_machine::directory_iterator(base_path))
+        {
+            auto filename = entry.path().filename();
+            if(my_machine::is_directory(entry.status()))
+            {
+                std::cout << "[dir]: " << filename << std::endl;
+            }
+            else if(my_machine::is_symlink(entry.status()))
+            {
+                std::cout << "[sym]: " << filename << std::endl;
+            }
+            else if(my_machine::is_regular_file(entry.status()))
+            {
+                std::cout << "[file]: " <<  filename << std::endl;
+            }
+            else
+            {
+                std::cout << "[?]: " << filename << std::endl;
+            }
+        }
+    }
+
+    // Info #3: Howevere, you can go iteratively in the subdirectories of a
+    // directory and then iterate over them while making the list with
+    // 'recursive_directory_iterator()'.
+    if(my_machine::exists(base_path) && my_machine::is_directory(base_path))
+    {
+        for(auto const & entry : 
+            my_machine::recursive_directory_iterator(base_path))
+        {
+            auto filename = entry.path().filename();
+            if(my_machine::is_directory(entry.status()))
+            {
+                std::cout << "[dir]: " << filename << std::endl;
+            }
+            else if(my_machine::is_symlink(entry.status()))
+            {
+                std::cout << "[sym]: " << filename << std::endl;
+            }
+            else if(my_machine::is_regular_file(entry.status()))
+            {
+                std::cout << "[file]: " <<  filename << std::endl;
+            }
+            else
+            {
+                std::cout << "[?]: " << filename << std::endl;
+            }
+        }
+    }
+
     return 0;
 }
