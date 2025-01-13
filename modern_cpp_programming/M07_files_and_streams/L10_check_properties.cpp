@@ -10,14 +10,51 @@
  * dirs available according to the permissions of the execution. However, you
  * can check the existance and propierties of these elements, including
  * permissions.
+ * 
+ * Most of the functions are easy to understand, they are presented below in
+ * the main. However, keep in mind the next points:
+ * 
+ * - You can check if a file exists with 'exists()' and a path, or a
+ *   'std::filesystem::file_status' retrieved previosly using 'status()'.
+ * - The 'equivalent()' function checks that two filesystem objects have
+ *   the smae status result.
+ * - 'file_
+ *      size' only works with files and symbolic links that target to files,
+ *   otherwise it will return a -1 if an error occurred.
+ * - 'last_write_time()' has two overloads, one to get and other to set the
+ *   last time of modification, which is of type 
+ *   'std::filesystem::file_time_type'.
+ * - 'status()' determines the type and permissions of a filesystem object, but
+ *   in the case of a symbolic link, it will return the target files
+ *   properties. So to retrieve the status of a symbolic link you have to use
+ *   'symlink_status()'.
+ * - Permissions are defined as an enumeration, to set or remove perms you have
+ *   to use 'add_perms' and 'remove_perms':
+ * 
+ *          my_machine::permissions(
+ *              <path>,
+ *              my_machine::perms::add_perms |
+ *              my_machine::perms::owner_all |
+ *              my_machine::perms::group_all,
+ *              err
+ *          )
+ * When ready, you can compile and run this code with:
+ * 
+ *      g++ -std=c++17 
+ *          modern_cpp_programming/M07_files_and_streams/L10_check_properties.cpp
+ *          -o check_file.out
+ *      ./check_file.out
  */
 
-#include <filesystem>
-#include <chrono>
-#include <iomanip>
+// ------------------------------- REQUIRED LIBRARIES -------------------------
+#include <filesystem>  // Filesystem library
+#include <chrono>      // Time management with different precisions
+#include <iomanip>     // Input/Output Manipulators
 
+// ----------------------------- NAMESPACES TO CONSIDER ----------------------- 
 namespace my_machine = std::filesystem;
 
+// ---------------------------- TEMPLATES USED -------------------------------
 template <typename TP>
 std::time_t to_time_t(TP tp)
 {
@@ -27,8 +64,11 @@ std::time_t to_time_t(TP tp)
     return system_clock::to_time_t(sctp);
 }
 
+// ---------------------------- MAIN IMPLEMENTATION ---------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 10: Properties in filesystem...\n" << std::endl;
+    
     auto file_path = my_machine::current_path() / "modern_cpp_programming"
         / "M07_files_and_streams" / "L08_working_with_files.cpp";
     auto err = std::error_code{};
@@ -114,4 +154,5 @@ int main(int argc, char* argv[])
               << my_machine::is_symlink(file_path, err) << std::endl;
 
     return 0;
-}
+
+} // main()
