@@ -39,16 +39,26 @@
  *   'recursive_diretory_iterator', while 'visit_directory()' is recursive and
  *   uses 'directory_iterator'
  * 
+ * When you are ready, you can run:
+ * 
+ *      g++ -std=c++17 L11_enum_content.cpp -o enum_content.out
+ *      ./enum_content.out
+ * 
  */
 
 // --------------------------- REQUIRED LIBRARIES -----------------------------
 #include <filesystem>  // For managing the machine's filesystem
 #include <fstream>     // File stream (output/input)
 
+// -------------------------- NAMESPACES CONSIDERED ---------------------------
 namespace my_machine = std::filesystem;
 
+// -------------------------- MAIN IMPLEMENTATION -----------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 11: Enumerating the content of a dir\n" << std::endl;
+
+    // Path considered for exersize
     auto base_path = my_machine::current_path();
     base_path /= "example";
 
@@ -197,6 +207,6 @@ int main(int argc, char* argv[])
         }
     }
 
-
     return 0;
-}
+
+} // main()
