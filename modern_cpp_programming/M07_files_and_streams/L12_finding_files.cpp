@@ -97,6 +97,15 @@ int main(int argc, char* argv[])
 
 // ------------------------------- FUNCTION DEFINITIONS -----------------------
 
+/**
+ * Enumerates in a recursive way the content of a dir, presenting
+ * the files and subdirs in a ordered way.
+ * 
+ * @param dir Path to directory to consider
+ * @param filter Expression to constrast in the search
+ * 
+ * @return Vector with the paths of the elements found
+ */
 std::vector<my_machine::path> search_file(
     my_machine::path const & dir,
     std::function<bool(my_machine::path const&)> filter)
