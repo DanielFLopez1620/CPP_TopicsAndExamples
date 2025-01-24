@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code was tested with g++ in C++17
+// Code wasn't tested with g++ in C++17
 
 #include <iostream>
 
@@ -32,6 +32,7 @@
 #include <mutex>
 #include <thread>
 #include <chrono>
+#include <vector>
 
 // Info #1: You can create a mutex by creating a mutex object, which can be from
 // the default constructor, you should consider the scope as it can be a class
@@ -47,17 +48,49 @@ struct dyn_container
     std::vector<T> content;
 };
 
-void manage_resource();
+// ------------------------- FUNCTION PROTOTYPES ------------------------------
+void manage_resource_glb();
 
 template <typename T>
-void exchange_data(dyn_container<T> & box1, dyn_container<T> & box2, 
-    T const val);
+void exchange_data(dyn_container<T>& box1, dyn_container<T>& box2, T const& val); 
 
+// ------------------------ MAIN IMPLEMENTATION -------------------------------
 int main(int argc, char* argv[])
 {
-    
+    // Info # : Example by using a structure with a mutex for thread safety
+    std::cout << "Example of struct with intern mutex: " << std::endl;
+    dyn_container<int> box1;
+    dyn_container<int> box2;
+    box1.content = {12, 34, 56, 78};
+    box2.content = {16, 62, 20, 1};
+    std::cout << "\tContent of box #1: ";
+    for (const auto& c : box1.content)
+    {
+        std::cout << c << " ";
+    }
+    std::cout << std::endl << "\tContent of box #2: ";
+    for (const auto & c: box2.content)
+    {
+        std::cout << c << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "\tContent of box #1 after exchange: ";
+    exchange_data(box1, box2, 34);
+    for (const auto& c : box1.content)
+    {
+        std::cout << c << " ";
+    }
+    std::cout << std::endl << "\tContent of box #2 after exchange: ";
+    for (const auto & c: box2.content)
+    {
+        std::cout << c << " ";
+    }
+    std::cout << std::endl;
+
     return 0;
 }
+
+// ------------------------ FUNCTION DEFINITIONS ------------------------------
 
 /**
  * Function oriented to explore the usage of a lock by using a mutex with
@@ -84,16 +117,18 @@ void manage_resource_glb()
  * 
  */
 template <typename T>
-void exchange_data(dyn_container<T> & box1, dyn_container<T> & box2, 
-    T const val)
+void exchange_data(dyn_container<T>& box1, dyn_container<T>& box2, T const& val) 
 {
+    // Lock both mutexes without risk of deadlock using std::lock
     std::lock(box1.st_mtx, box2.st_mtx);
 
+    // Now we adopt the locks so that they can be managed by lock_guard
     std::lock_guard<std::mutex> lg1(box1.st_mtx, std::adopt_lock);
     std::lock_guard<std::mutex> lg2(box2.st_mtx, std::adopt_lock);
 
-    box1.content.erase(std::remove(box1.content.begin(), box1.content.end(),
-        val), box1.content.end());
+    // Remove the value from box1's content (if it exists)
+    box1.content.erase(std::remove(box1.content.begin(), box1.content.end(), {val}), box1.content.end());
 
-    box2.content.push_back(value);
+    // Add the value to box2's content
+    box2.content.push_back(val);
 }
