@@ -29,10 +29,14 @@
  *   causing memory leaks or data races (only one is allowed to write).
  */
 
-#include <mutex>
-#include <thread>
-#include <chrono>
-#include <vector>
+// --------------------------- REQUIRED LIBRARIES -----------------------------
+#include <mutex>     // For using mutexes and locks
+#include <thread>    // For concurrent program development
+#include <chrono>    // Oriented to time management with different precisions
+#include <vector>    // Dynamic arrays
+#include <algorithm> // General purpose algorithms
+
+// -------------------------- STRUCTS AND GLOBAL DEFINITIONS -----------------
 
 // Info #1: You can create a mutex by creating a mutex object, which can be from
 // the default constructor, you should consider the scope as it can be a class
@@ -57,7 +61,21 @@ void exchange_data(dyn_container<T>& box1, dyn_container<T>& box2, T const& val)
 // ------------------------ MAIN IMPLEMENTATION -------------------------------
 int main(int argc, char* argv[])
 {
-    // Info # : Example by using a structure with a mutex for thread safety
+    // Info # 3: You can use multiple threads to access the same resource.
+    // However, you will need to lock th eaccess to avoid problems. This can
+    // be achieved by using a global mutex.
+    std::cout << "Example of global mutex: " << std::endl;
+    std::thread t1(manage_resource_glb);
+    std::thread t2(manage_resource_glb);
+    std::thread t3(manage_resource_glb);
+    std::thread t4(manage_resource_glb);
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
+    
+    // Info # 4: Example by using a structure with a mutex for thread safety so
+    // mutiple mutex are locked when interacting with multiple resources.
     std::cout << "Example of struct with intern mutex: " << std::endl;
     dyn_container<int> box1;
     dyn_container<int> box2;
@@ -98,23 +116,33 @@ int main(int argc, char* argv[])
  */
 void manage_resource_glb()
 {
+    // Lock (will finish after exiting the scope)
     using namespace std::chrono_literals;
     {
         std::lock_guard<std::mutex> lock(glb_mtx);
         std::cout << "\tRunning thread: " << std::this_thread::get_id()
                   << std::endl;
     }
+    // Simulate a work that last 1 second
     std::this_thread::yield();
-    std::this_thread::sleep_for(2s);
+    std::this_thread::sleep_for(1s);
+    
+    // Lock again
     {
         std::lock_guard<std::mutex> lock(glb_mtx);
         std::cout << "\tFinished thread: " << std::this_thread::get_id()
                   << std::endl;
     }
-}
+
+} // manage_resource_glb()
 
 /**
+ * Exchange a given value present in one vector to another, by cosnidering a
+ * thread safe application.
  * 
+ * @param box1 First vector
+ * @param box2 Second vector
+ * @param val Value to exchange between arrays
  */
 template <typename T>
 void exchange_data(dyn_container<T>& box1, dyn_container<T>& box2, T const& val) 
@@ -127,8 +155,9 @@ void exchange_data(dyn_container<T>& box1, dyn_container<T>& box2, T const& val)
     std::lock_guard<std::mutex> lg2(box2.st_mtx, std::adopt_lock);
 
     // Remove the value from box1's content (if it exists)
-    box1.content.erase(std::remove(box1.content.begin(), box1.content.end(), {val}), box1.content.end());
+    box1.content.erase(std::remove(box1.content.begin(), box1.content.end(), val), box1.content.end());
 
     // Add the value to box2's content
     box2.content.push_back(val);
-}
+
+} // exchange_data()
