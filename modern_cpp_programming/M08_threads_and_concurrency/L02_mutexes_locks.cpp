@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code wasn't tested with g++ in C++17
+// Code was tested with g++ in C++17
 
 #include <iostream>
 
@@ -27,6 +27,29 @@
  * - std::shared_timed_mutex: Implemented since C++14, aims to scenarios when
  *   multiple readers can access the same resource at the same time wihtout 
  *   causing memory leaks or data races (only one is allowed to write).
+ * 
+ * Let's highlight that in the second example when using multiple mutexes
+ * we aren't block twice the process, but rather changing the wonership for
+ * the mutexes and then making the locks. However, you should keep in mind
+ * that are more lock options:
+ * 
+ * - std::lock_guard: It attempts to acquire the mutex at the time of its
+ *   construction and realse it upon destruction.
+ * - std::unique_lock: Provides support for deferred locking, time locking,
+ *   recursive locking, transfer of ownership and using it with condition
+ *   variables.
+ * - std::shared_lock: Is a mutex-shared ownership wrapper that provides
+ *   deferred locking, time locing and transfer of ownership.
+ * - std::scope_lock: Is a wrapper for multiple mutexes that attempts to
+ *   acquire ownership of the mutexes in a deadlock avoidance manner.
+ * 
+ * NOTE: When working with mutexes and locks, always consider cases to prevent
+ * deadlocks.
+ * 
+ * When ready, you can compile and run this code with: 
+ * 
+ *      g++ -std=c++17 L02_mutexes_locks.cpp -o mutexes_locks.out
+ *      ./mutexes_locks.out
  */
 
 // --------------------------- REQUIRED LIBRARIES -----------------------------
