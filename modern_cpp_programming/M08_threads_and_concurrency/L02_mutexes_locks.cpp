@@ -84,6 +84,8 @@ void exchange_data(dyn_container<T>& box1, dyn_container<T>& box2, T const& val)
 // ------------------------ MAIN IMPLEMENTATION -------------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 2: Using mutexes and locks:\n" << std::endl;
+
     // Info # 3: You can use multiple threads to access the same resource.
     // However, you will need to lock th eaccess to avoid problems. This can
     // be achieved by using a global mutex.
