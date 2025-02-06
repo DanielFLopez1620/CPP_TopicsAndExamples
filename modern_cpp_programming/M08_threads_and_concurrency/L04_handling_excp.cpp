@@ -27,6 +27,11 @@
  * 'try... catch', for example, with 'std::rethrown exception'. These functions
  * are all available since C++11. 
  * 
+ * 
+ * When ready, you can compile and run this code with:ADJ_OFFSET_SINGLESHOT
+ * 
+ *      g++ -std=c++17 L04_handling_excp.cpp -o handling_excp.out
+ *      ./handling_excp.out
  */
 
 // ------------------------- REQUIRED LIBRARIES -------------------------------
