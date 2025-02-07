@@ -17,13 +17,49 @@
  * 
  * The first thing to do is to import the header for the condition variable
  * that is called <condition_variable>.
+ * 
+ * In this case we want to simulate with the sleep a long term producing thread
+ * that will communicate with a consume thread at the moment the production
+ * just ends. This is possible thanks to the condition variable that the
+ * consuming thread waits for, which then remains blocked. This implies that:
+ * 
+ * - At least one thread is waiting on the condition variable to be notified.
+ * - At least one thread is signaling the condition variable.
+ * - The waiting thread must first acquire a lock on a mutex and pass it
+ *   to the wait method of the condition variable.
+ * - The thread that signals can notify just one or all using the condition
+ *   variable.
+ * 
+ * Keep in mind, that there are two types of condition variables:
+ *
+ * - std::condition_variable: Associated with a std::unique_lock.
+ * - std::condition_variable_any: General interpreation that works with lock()
+ *   and unlock(), that can be used for interruptible waits.ADJ_OFFSET_SINGLESHOT
+ * 
+ * Also, there are two overloads for a condition variable:
+ * 
+ * - std::unique_lock<std::mutex> which causes the thread to remain blocked
+ *   until the condition variable is signaled.
+ * - An overload with a prediction, that can be used to avoid spurious wakeups.
+ * 
+ * NOTE: When using condition variables, spurious wakeups my ocurr and a thread
+ * may be signaled even if nobady signal the condition variable. This tends to
+ * happen in mutiprocessor systems and require loop tests for reviewing.
+ * 
+ * When ready, you can compile and run this code with:
+ *  
+ *      g++ -std=c++17 L05_send_notifications.cpp -o send_notification.out
+ *      ./send_notification.out
+ * 
  */
 
-#include <thread>
-#include <condition_variable>
-#include <mutex>
-#include <chrono>
+// ------------------ REQUIRED LIBRARIES --------------------------------------
+#include <thread>              // For using concurrency
+#include <condition_variable>  // Condition variables with mutexes and threads
+#include <mutex>               // For generating locks in threads
+#include <chrono>              // Time-related lib with different precisions
 
+// ------------------- MAIN IMPLEMENTATION ------------------------------------
 int main(int argc, char* argv[])
 {
     // Info #1: You can define a condition variable as shown below:
@@ -79,4 +115,4 @@ int main(int argc, char* argv[])
     });
 
     return 0;
-}
+} // main()
