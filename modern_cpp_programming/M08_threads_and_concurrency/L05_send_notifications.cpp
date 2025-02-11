@@ -1,5 +1,5 @@
 // BASED ON THE "MODERN C++  PROGRAMMING COOKBOOK - 2 EDITION"
-// Code was tested with g++ in C++17
+// Code was tested with g++ in C++20
 
 #include <iostream>
 
@@ -58,10 +58,35 @@
 #include <condition_variable>  // Condition variables with mutexes and threads
 #include <mutex>               // For generating locks in threads
 #include <chrono>              // Time-related lib with different precisions
+#include <random>
+#include <vector>
+#include <array>
+#include <queue>
+
+// -------------------- FUNCTION PROTOTYPES -----------------------------------
+// Functions used in the second example
+
+void producer(int const id, std::mt19937 gen, 
+    std::uniform_int_distribution<int>& dsleep,
+        std::uniform_int_distribution<int>& dcode);
+
+void consumer();
+
+// --------------------- GLOBAL DEFINITIONS -----------------------------------
+// Variables used in second example
+
+std::mutex sec_lockprint;
+std::mutex sec_lockqueue;
+std::condition_variable sec_cv;
+std::queue<int> sec_buffer;
+bool sec_done = false;
 
 // ------------------- MAIN IMPLEMENTATION ------------------------------------
 int main(int argc, char* argv[])
 {
+    std::cout << "Lesson 5: Sending notificiations between threads\n"
+              << std::endl;
+    
     // Info #1: You can define a condition variable as shown below:
     std::condition_variable cnvar;
 
@@ -73,6 +98,8 @@ int main(int argc, char* argv[])
 
     // Info #3: Define the shared data
     float sh_info = 16.20;
+
+    // std::cout <<"Starting producing and consuming P1" << std::endl;
 
     // Info #4: Our first case is to use a producing thread, which have to be
     // locked before we modify the data
@@ -89,8 +116,9 @@ int main(int argc, char* argv[])
         }
         // Message
         {
-            std::lock_guard(io_mtx);
-            std::cout << "Change of data: " << sh_info << std::endl;
+            std::lock_guard lock(io_mtx);
+            std::cout << "\t[1° Producer] Change of data: " << sh_info 
+                      << std::endl;
         }
 
         // Info #5: After the process, you can create the notification with
@@ -110,9 +138,101 @@ int main(int argc, char* argv[])
         // scope.
         {
             std::lock_guard lock(io_mtx);
-            std::cout << "Consume of data: " << sh_info << std::endl;
+            std::cout << "\t[1° Consumer] Consume of data: " << sh_info 
+                      << std::endl;
         }       
     });
 
+    // std::cout <<"Finishing producing and consuming P1" << std::endl;
+
+    // Info #8: Let's review an additional (and more complex example)
+    auto seed = std::array<int, std::mt19937::state_size> {};
+    std::random_device rnd_dev;
+
+    std::generate(std::begin(seed), std::end(seed), std::ref(rnd_dev));
+
+    std::seed_seq seq(std::begin(seed), std::end(seed));
+
+    auto generator = std::mt19937{ seq };
+    auto dsleep = std::uniform_int_distribution<> { 1, 6};
+    auto dcode = std::uniform_int_distribution <> {160, 200};
+
+    // std::cout << "\tStarting production and consuming P2...." << std::endl;
+
+    std::thread complexconsumer(consumer);
+
+    std::vector <std::thread> complexproducing;
+    
+    for( int i = 0; i < 5; ++i)
+    {
+        complexproducing.emplace_back(
+            producer,
+            i + 1,
+            std::ref(generator),
+            std::ref(dsleep),
+            std::ref(dcode));
+    }
+
+    for (auto & th : complexproducing)
+    {
+        th.join();
+    }
+    
+    sec_done = true;
+    complexconsumer.join();
+    // std::cout << "\tFinishing producing and consuming P2..." << std::endl;
+
+
     return 0;
 } // main()
+
+// ---------------------------- FUNCTION DEFINITIONS --------------------------
+void producer(int const id, std::mt19937 gen, 
+    std::uniform_int_distribution<int>& dsleep,
+        std::uniform_int_distribution<int>& dcode)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        // Simulate work (with multiple/variable duration due to iterations)
+        std::this_thread::sleep_for(std::chrono::seconds(dsleep(gen)));
+
+        // Generate data
+        int value = id * 20 + dcode(gen);
+
+        {
+            std::unique_lock<std::mutex> locker(sec_lockprint);
+            std::cout << "\t[2° producer]: " << value << std::endl;
+        }
+
+        // Notify the consumer
+        {
+            std::unique_lock<std::mutex> locker(sec_lockqueue);
+            sec_buffer.push(value);
+            sec_cv.notify_one();
+        }
+
+    }
+}
+
+void consumer()
+{
+    // Loop until end is signaled
+    while(!sec_done)
+    {
+        std::unique_lock<std::mutex> locker(sec_lockqueue);
+
+        sec_cv.wait_for(
+            locker,
+            std::chrono::seconds(1),
+            [&]() { return !sec_buffer.empty(); });
+
+        // Check queue and process pending task
+        while(!sec_done && !sec_buffer.empty())
+        {
+            std::unique_lock<std::mutex> locker(sec_lockprint);
+            std::cout << "\t[2° consumer]: " << sec_buffer.front() << std::endl;
+            sec_buffer.pop();
+        }
+
+    }
+}
