@@ -58,15 +58,16 @@
 #include <condition_variable>  // Condition variables with mutexes and threads
 #include <mutex>               // For generating locks in threads
 #include <chrono>              // Time-related lib with different precisions
-#include <random>
-#include <vector>
-#include <array>
-#include <queue>
+#include <random>              // Pseudo-random number generation
+#include <vector>              // Memory dynamic arrays
+#include <array>               // Functions and methods with arrays
+#include <queue>               // For using queues (last in, first out)
+#include <atomic>              // For additional prevention of race conditions
 
 // -------------------- FUNCTION PROTOTYPES -----------------------------------
 // Functions used in the second example
 
-void producer(int const id, std::mt19937 gen, 
+void producer(int const id, std::mt19937& gen, 
     std::uniform_int_distribution<int>& dsleep,
         std::uniform_int_distribution<int>& dcode);
 
@@ -79,7 +80,7 @@ std::mutex sec_lockprint;
 std::mutex sec_lockqueue;
 std::condition_variable sec_cv;
 std::queue<int> sec_buffer;
-bool sec_done = false;
+std::atomic<bool> sec_done { false };
 
 // ------------------- MAIN IMPLEMENTATION ------------------------------------
 int main(int argc, char* argv[])
@@ -99,7 +100,7 @@ int main(int argc, char* argv[])
     // Info #3: Define the shared data
     float sh_info = 16.20;
 
-    // std::cout <<"Starting producing and consuming P1" << std::endl;
+    std::cout <<"Starting producing and consuming P1" << std::endl;
 
     // Info #4: Our first case is to use a producing thread, which have to be
     // locked before we modify the data
@@ -129,7 +130,7 @@ int main(int argc, char* argv[])
     // Info #6: Now, we have the implemenation of the consuming thread
     std::thread consuming([&]()
     {
-        // Wiating notification
+        // Waiting notification
         {
             std::unique_lock lock(cnvar_mtx);
             cnvar.wait(lock);
@@ -143,7 +144,11 @@ int main(int argc, char* argv[])
         }       
     });
 
-    // std::cout <<"Finishing producing and consuming P1" << std::endl;
+    producing.join();
+    consuming.join();
+
+
+    std::cout <<"Finishing producing and consuming P1" << std::endl;
 
     // Info #8: Let's review an additional (and more complex example)
     auto seed = std::array<int, std::mt19937::state_size> {};
@@ -157,7 +162,7 @@ int main(int argc, char* argv[])
     auto dsleep = std::uniform_int_distribution<> { 1, 6};
     auto dcode = std::uniform_int_distribution <> {160, 200};
 
-    // std::cout << "\tStarting production and consuming P2...." << std::endl;
+    std::cout << "Starting production and consuming P2...." << std::endl;
 
     std::thread complexconsumer(consumer);
 
@@ -179,15 +184,17 @@ int main(int argc, char* argv[])
     }
     
     sec_done = true;
-    complexconsumer.join();
-    // std::cout << "\tFinishing producing and consuming P2..." << std::endl;
 
+    sec_cv.notify_one();
+
+    complexconsumer.join();
+    std::cout << "Finishing producing and consuming P2..." << std::endl;
 
     return 0;
 } // main()
 
 // ---------------------------- FUNCTION DEFINITIONS --------------------------
-void producer(int const id, std::mt19937 gen, 
+void producer(int const id, std::mt19937& gen, 
     std::uniform_int_distribution<int>& dsleep,
         std::uniform_int_distribution<int>& dcode)
 {
@@ -217,17 +224,17 @@ void producer(int const id, std::mt19937 gen,
 void consumer()
 {
     // Loop until end is signaled
-    while(!sec_done)
+    while(!sec_done || !sec_buffer.empty())
     {
         std::unique_lock<std::mutex> locker(sec_lockqueue);
 
         sec_cv.wait_for(
             locker,
             std::chrono::seconds(1),
-            [&]() { return !sec_buffer.empty(); });
+            [&]() { return !sec_buffer.empty() || sec_done; });
 
         // Check queue and process pending task
-        while(!sec_done && !sec_buffer.empty())
+        while(!sec_buffer.empty())
         {
             std::unique_lock<std::mutex> locker(sec_lockprint);
             std::cout << "\t[2° consumer]: " << sec_buffer.front() << std::endl;
