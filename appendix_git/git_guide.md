@@ -151,11 +151,82 @@ Now... Adding a file doesn't mean that the changes have been commited, it just a
 git commit -m "My first change"
 ~~~
 
-[TODO: Add commit image]
+![git_commit](/appendix_git/resources/git_commit.png)
+
+With this, you just committed a change. The committed changes can be tracked and you can check the history of your project.
+
+How to check the history of changes? You can check the logs in git for your repository with:
+
+~~~bash
+git log
+~~~
+
+![git_log](/appendix_git/resources/git_log.png)
+
+Not so much changes for now, so try adding multiple commits and check it later. Keep in mind that if you modify a file that was already in the history of a repository, you won't add a untracked file but rather to add a modified tracked file.
 
 Is it still messy to understand the workflow of the changes? Let's illustrate it with next image:
 
 ![git_workflow_diagram](/appendix_git/resources/git_workflow_diagram.drawio.png)
+
+## Branches and merges:
+
+A branch is a division of your workspace in multiple space, so you can focus in different things. For example, you may have the **main** branch, where your base application is present, and the **dev** branch, where you experiment and add features. Later, when all was setup in the **dev** branch, you can merge its content to the **main** branch.
+
+This also allows a better collaboration and the implementation of features, bug fix and changes in a better and tracked way.
+
+Don't you know which branch are you on? Just run the next command:
+
+~~~bash
+git branch
+~~~
+
+At this point, you should only have one branch, it can be **master** or **main** depending on your set up. 
+
+To create one branch, you can use:
+
+~~~bash
+# git checkout -b <branch_name>
+git checkout -b dev
+
+# After that, check the creation
+git log
+~~~
+![git checkout -b branch](/appendix_git/resources/git_branch.png)
+
+You can add and commit changes that are independent of other branches, for example, you can run:
+
+~~~bash
+echo "Commit in another branch" >> ./contenido.txt
+git add contenido.txt
+git commit -m "Changes in other branch"
+~~~
+
+If you change branches, you wouldn't notice the changes. But... how can you add the changes to the main branch when I think I am ready? Well, you just need to merge it:
+
+~~~bash
+# Move to your main branch
+git checkout master # Or git switch master
+
+# Merge and specify the branch
+git merge dev
+~~~
+
+It will notify you about the changes and notifications, after this you would be able to watch the changes, so check with the logs.
+
+~~~bash
+git log
+~~~
+
+![git_log_2](/appendix_git/git_guide.md)
+
+Finally, do not forget about deleting branches once their purpose was completed, you can run:
+
+~~~bash
+# git branch -D <branch>
+git branch -D dev
+~~~
+
 
 # Additional resources:
 
