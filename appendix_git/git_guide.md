@@ -227,6 +227,76 @@ Finally, do not forget about deleting branches once their purpose was completed,
 git branch -D dev
 ~~~
 
+## Time travel:
+
+Did you ever wondered how to travel to the past and correct a mistake? Well, it is impossible to know. However, we can go back with **Git** to previous versions of our code to make changes, there are two options **reset** and **revert**:
+
+- ```git reset``` : Return to a previous commit, deleting the history of changes until that point. It also allows to explore past changes.
+- ```git revert``` : Return to a previous commit by creating a new commit in that point.
+
+Keep in mind to check for the **HEAD** that is where you created the last commit, for example, it can be *main* if you just merged two branches (*dev* merged to *main*)
+
+Let's take a look in a more practical way, we have a history of 3 commits:
+
+![git_log-3](/appendix_git/resources/git_log_3.png)
+
+But, we added a change we didn't really want. So I have to come back now, I can achieve it by using a *revert* with a proper commit in mind, so we will take a look on the commit ID/hash.
+
+~~~bash
+# git revert <id/hash_of_commit>
+# In my case, it would be:
+git revert 096f8c5a9ec524026d545ab24b4debfb55aa309d
+~~~
+
+And it will display you the notification (in a text editor) to specify the commit of revert, like this:
+
+![git_revert_act](/appendix_git/resources/git_revert_act.png)
+
+Now, if you check the logs, you may notice important additional information:
+
+~~~bash
+git log
+~~~
+
+![git_log_4](/appendix_git/resources/git_log_4.png)
+
+In case you have a conflict with the *revert*, you have three options:
+
+- Fix the conflicts and continue:
+
+~~~bash
+# After making the fix
+git revert --continue
+~~~
+
+- Skip the patch:
+
+~~~bash
+git revert --skip
+~~~
+
+- Cancel the rever operation
+
+~~~bash
+git revert --abort
+~~~
+
+Then, why don't we try to reset the history of our repository? Of course, we will do it with the commit that was reverted:
+
+~~~bash
+# git reset <option> <commit>
+#       --soft: HEAD to the specified commit, preserves the changes in staging area
+#       -- mixed: Default, moves HEAD, discard changes in staging area but mantains changes in working dir.
+#       -- --hard: Moves HEAD but discard all the changes
+git reset --hard 096f8c5a9ec524026d545ab24b4debfb55aa309d
+~~~
+
+![git_log_5](/appendix_git/resources/git_log_5.png)
+
+Always ensure to use **--hard** as last option, as you are affecting the history of changes and the workflow of others.
+
+Take advantage of this tools only to improve your work, fix bugs and by considering a proper communication with the team.
+
 
 # Additional resources:
 
