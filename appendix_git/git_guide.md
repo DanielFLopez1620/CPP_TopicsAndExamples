@@ -297,6 +297,25 @@ Always ensure to use **--hard** as last option, as you are affecting the history
 
 Take advantage of this tools only to improve your work, fix bugs and by considering a proper communication with the team.
 
+## Managing versions:
+
+You can have different versions by considering **tags** or **checks**.
+
+On one hand, **tags** it like a stamp you add to a commit for a easy future identification, for example, by identifying a commit with a key work version like Ubuntu does with its distros (Utopic Unicorn, Wily Werewolf, Focal Fosa, Jammy Jellyfish...) or just to manage alfa, betas and stable versions.
+
+~~~bash
+# git tag [option] <name>
+#       -a : To make an unsiged annotated tag object
+#       -m : To submit a message
+git tag -a v1.0 -m "First version"
+~~~
+
+Did you already give it a try? If the answer is no, check the iamges below to check the changes between **logs**.
+
+
+
+On the other hand, **checkouts** allow to change branches or commits, in other words, it allow you to come back to specific commit or check another branch.
+
 
 # Additional resources:
 
