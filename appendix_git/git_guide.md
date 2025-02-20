@@ -304,17 +304,59 @@ You can have different versions by considering **tags** or **checks**.
 On one hand, **tags** it like a stamp you add to a commit for a easy future identification, for example, by identifying a commit with a key work version like Ubuntu does with its distros (Utopic Unicorn, Wily Werewolf, Focal Fosa, Jammy Jellyfish...) or just to manage alfa, betas and stable versions.
 
 ~~~bash
+# Adding a tag
 # git tag [option] <name>
-#       -a : To make an unsiged annotated tag object
+#       -a : To make an unsigned annotated tag object
 #       -m : To submit a message
 git tag -a v1.0 -m "First version"
 ~~~
 
-Did you already give it a try? If the answer is no, check the iamges below to check the changes between **logs**.
+Did you already give it a try? If the answer is no, check the images below to check the changes between **logs**.
 
+![git_log_6](/appendix_git/resources/git_log_6.png)
 
+As you can see, the last commit has the tag we just created, but... what happens when I have a lot of commits and a few tags? Do I really need to explore all the commits to find the tags? The answer is *no*, as you can list only the tags as follows:
+
+~~~bash
+# Lsit available tags
+git tag
+~~~
+
+If you have the version we just created, it should only appear that. Try to add more commits and versions, and compare the listing.
+
+Another interesting option here, is to show the specified version, this can be done as it illustrated below:
+
+~~~bash
+git show v1.0
+~~~
+
+![git_show_tag](/appendix_git/resources/git_show_tag.png)
+
+Let's say you added a wrong tag, there is still the option to delete it with the command:
+
+~~~bash
+# git tag [option] <tag>
+#       -d : Delete the given tag
+git tag -d v1.0
+~~~
+
+By deleting a tag, you do not mess the commit story. You just delete a version tag, which can be replaced or taken to another position.
 
 On the other hand, **checkouts** allow to change branches or commits, in other words, it allow you to come back to specific commit or check another branch.
+
+How? Well... run a **git log**, then select a commit, copy its ID and run the next command:
+
+~~~bash
+# git checkout <commit>
+# In my case it is:
+git checkout 6cf8b65ed188d0ef3e60d83703292f8db37be3e0
+~~~
+
+Then, you should notice the "time travel" as it can warn you about the position of the *HEAD* and how to implement changes from the commit you are currently on:
+
+![git_checkout_sp_com](/appendix_git/resources/git_checkout_sp_com.png)
+
+The command you can watch on screen is **swtich** which can help you to create a new branch from this point or just undo the operation (by providing ´´´-´´´ option)
 
 
 # Additional resources:
