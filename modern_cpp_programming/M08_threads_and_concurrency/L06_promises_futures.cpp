@@ -43,16 +43,22 @@
  *      /./promises_futures.out 
  */
 
-#include <future>
-#include <thread>
-#include <mutex>
-#include <chrono>
+// ------------------------- REQUIRED LIBRARIES -------------------------------
+
+#include <future>  // For asynscrhornously executed task management
+#include <thread>  // Related with concurrent development of task
+#include <mutex>   // For implementing locks and mutex
+#include <chrono>  // Library for time mangement with different precisions
+
+// ------------------------ FUNCTION PROTOTYPES -------------------------------
 
 void production_promise(std::promise<float>& prom);
 void consume_future(std::future<float>& fut);
 
+// ------------------------- GLOBAL DEFINITIONS ------------------------------
 std::mutex glb_mtx;
 
+// ------------------------- MAIN IMPLEMENTATION -----------------------------
 int main(int argc, char* argv[])
 {
     std::cout << "Lesson 6: Using future and promises\n" << std::endl;
@@ -71,9 +77,16 @@ int main(int argc, char* argv[])
     }
 
     return 0;
-}
 
+} // main()
 
+// --------------------------- FUNCTION DEFINITIONS ---------------------------
+
+/**
+ * Function that create a promise for a floating number
+ * 
+ * @param prom Reference value to promise
+ */
 void production_promise(std::promise<float>& prom)
 {
     // Info #1: We are inside a thread function that will make a promise, that
@@ -88,8 +101,16 @@ void production_promise(std::promise<float>& prom)
     // Info #2: You can use 'set_value' and 'set_exception' to set a result to
     // represent a value or exception.
     prom.set_value(16.20);
-}
 
+}  // production_promise()
+
+
+
+/**
+ * Function that consums asyncrhonously a given number once it is ready
+ * 
+ * @param fut Reference to float number of interest
+ */
 void consume_future(std::future<float>& fut)
 {
     // Info #3: We are inside a thread function that will associate the future
@@ -100,4 +121,5 @@ void consume_future(std::future<float>& fut)
     auto current = fut.get();
     std::lock_guard<std::mutex> lock(glb_mtx);
     std::cout << "Using value: " << current << std::endl;
-}
+
+} // consume_future()

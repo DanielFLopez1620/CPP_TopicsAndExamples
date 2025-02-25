@@ -191,9 +191,19 @@ int main(int argc, char* argv[])
     std::cout << "Finishing producing and consuming P2..." << std::endl;
 
     return 0;
+
 } // main()
 
 // ---------------------------- FUNCTION DEFINITIONS --------------------------
+
+/**
+ * Produces a queue full of pseudo-random numbers by using a shared resource
+ * in a proper way.
+ * 
+ * @param gen Generator for the pseudo-random numbers
+ * @param dsleep Uniform pseudo-random distributed value to set a sleep
+ * @param dcode Unifom pseudo-random distributed value for coding
+ */
 void producer(int const id, std::mt19937& gen, 
     std::uniform_int_distribution<int>& dsleep,
         std::uniform_int_distribution<int>& dcode)
@@ -219,8 +229,12 @@ void producer(int const id, std::mt19937& gen,
         }
 
     }
-}
+} // producer()
 
+
+/**
+ * Consumes the numbers present in a queue by using a safe resource access.
+ */
 void consumer()
 {
     // Loop until end is signaled
@@ -242,4 +256,4 @@ void consumer()
         }
 
     }
-}
+} // consumer()
