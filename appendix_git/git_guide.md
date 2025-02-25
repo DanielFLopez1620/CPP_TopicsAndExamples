@@ -356,8 +356,105 @@ Then, you should notice the "time travel" as it can warn you about the position 
 
 ![git_checkout_sp_com](/appendix_git/resources/git_checkout_sp_com.png)
 
-The command you can watch on screen is **swtich** which can help you to create a new branch from this point or just undo the operation (by providing ´´´-´´´ option)
+The command you can watch on screen is **swtich** which can help you to create a new branch from this point or just undo the operation (by providing ```-``` option)
 
+Be careful with the modifications over the history of commits, as you may not notice the latest changes and if you push/merge to a recent point, it may generate a conflict.
+
+You can return to the last point of your branch, by providing its name.
+
+~~~bash
+# git checkout <branch>
+git checkout main # Or master depending your set up
+~~~
+
+# Solving conflicts:
+
+When we are working in a individual and local way, everything tends to go easy. However, when you add more people to the equation, **conflicts** may appear.
+
+ These conflicts are not fights or problems, they are bugs and mistakes that happen when you merge branches. Then, the fusion alters the changes that were made in other branch that was recently merged.
+
+ If this happen to you, do not worry as you can fix it. First, let's simulate a conflict in our repository.
+
+1. In your main branch, create a change, for example:
+
+~~~bash
+echo "Let's create a conflict" > conflict.txt
+~~~
+
+2. Add the file to your repository history:
+
+~~~bash
+git add conflict.txt
+git commit -m "Adding a non-conflicting file"
+~~~
+
+3. Then, we create another branch, for example:
+
+~~~bash
+git checkout -b devel
+~~~
+
+4. Make changes to the file in the new branch:
+
+~~~bash
+echo "Changes in devel" >> conflict.txt
+~~~
+
+5. Then, add the changes to the branch history:
+
+~~~bash
+git add conflict.txt
+git commit -m "Is this a conflicting change?"
+~~~
+
+6. Go again to your original branch, in this case, it can be *master* or *main*
+
+~~~bash
+git checkout master # or main
+~~~
+
+7. Add a new change to the file in the main, making sure you haven't merge the changes from the other branch:
+
+~~~bash
+echo "Still not conflict, right? >> conflict.txt
+~~~
+
+8. And add those changes to the history of the repository at the current branch:
+
+~~~bash
+git add conflict.txt
+git commit -m "A change in main with no conflict (not sure)"
+~~~
+
+9. Now, the two branches have changed, if we merge, it will have a conflict:
+
+~~~bash
+git merge devel
+~~~
+
+![git_conflict_1](/appendix_git/resources/git_conflict_1.png)
+
+Now... how can we solve it? Well, you just need to edit the conflicting files by deciding what to leave... it can be only what is in *master*/*main* or only what is in *devel* or both or neither, as you wish:
+
+~~~bash
+nano conflict.txt
+
+# And edit the file, you should see a similar structure as below.
+~~~
+
+![git_conflict_2](/appendix_git/resources/git_conflict_2.png)
+
+What does it mean? The arrows indicate the changes origin (which is the branch?) and the equals indicate the separation between the changes.
+
+Once you have solved it, check the status:
+
+~~~bash
+git status
+~~~
+
+![git_conflict_3](/appendix_git/resources/git_conflict_3.png)
+
+After this, you can add and commit the changes, and then attempt the merge, which should be completed without any problems. 
 
 # Additional resources:
 
