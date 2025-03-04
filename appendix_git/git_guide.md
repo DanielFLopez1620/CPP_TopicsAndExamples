@@ -367,7 +367,7 @@ You can return to the last point of your branch, by providing its name.
 git checkout main # Or master depending your set up
 ~~~
 
-# Solving conflicts:
+## Solving conflicts:
 
 When we are working in a individual and local way, everything tends to go easy. However, when you add more people to the equation, **conflicts** may appear.
 
@@ -455,6 +455,42 @@ git status
 ![git_conflict_3](/appendix_git/resources/git_conflict_3.png)
 
 After this, you can add and commit the changes, and then attempt the merge, which should be completed without any problems. 
+
+##  VS Code and Git?
+
+Yes, you can use the control version integrated in [VS Code](https://code.visualstudio.com/) to take advantage in your daily developing task.
+
+Do you remember how to open it? Well, you just run:
+
+~~~bash
+code . # Or the path to your workspace and repository
+~~~
+
+Once inside, and if you are using a *Git* repository, you can go to the icon shown in the red circle to access it:
+
+![vs_code_control_version](/appendix_git/resources/vs_code_control_version.png)
+
+Here you can find a lot of tools to do the same you have done in terminal in order to control the versions of your code.
+
+Some of the info you should consider is highlighted in the image below:
+
+![vs_code_some_tools](/appendix_git/resources/vs_code_some_tools.png)
+
+So, let's dive into this options:
+
+- **Git options:** There you can find the tools for using *pull*, *push*, *fetch*, *clone*, *checkout*, *tags*, *remote*, *commit* and the options you have discovered previously in these lessons, but in this case using a GUI (Graphical User Interface).
+- **Source control and tracking:** If you modify a file, you would see it right here. It will also track the staged files, and will give you the option to give a commit, you can select in a graphical way which file to move to the next stage.
+- **History and branches:** It will display the histroy of your repo, with branches and merges included, if you pass over a commit you will get additional details.
+- **Current branch:** It will indicate your current branch, and if you give click, you can move to other branches (local or remote) and even create a new one.
+- **Current status:** Will tell you shortly about the changes and the current status of the repository.
+
+But let's take things in a interesting way... did you know that you can also fix conflicts? Yes... coming back to this topic, if it happens in VS Code, it should be something like:
+
+![vs_code_confict](/appendix_git/resources/vs_code_conflict.png)
+
+Where you can explore in a graphical way the files and decide what to leave before the changes are merged. Here you can edit manually, or select an option (keep current change, keep incoming change and keep both). And as you can see it is helpful with colors and additional messages.
+
+![vs_code_conflict_solved](/appendix_git/resources/vs_code_conflict_solved.png)
 
 # Additional resources:
 
