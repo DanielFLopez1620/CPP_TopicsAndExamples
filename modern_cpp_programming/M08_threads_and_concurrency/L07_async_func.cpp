@@ -27,8 +27,22 @@ int main(int argc, char* argv[])
     std::cout << "Lesson 7: Executing functions asynchronously...\n"
               << std::endl;
 
-    
+    // Info #1: You can start a new trhead with a specific function by using
+    // "std::asynch" with "std::launch::async" policy to ensure it as
+    // asynchrounous.
+    std::cout << "Let's make an async call..." << std::endl;
+    auto async_call = std::async(std::launch::async, say_it);
+    say_it_again();
+    async_call.wait();
+    std::cout << "\tAll done with the call..." << std::endl; 
 
+    // Info #2: You can also have reutrn values by considering the get() method
+    // with a object running asynchronously.
+    std::cout << "Let's make an async call..." << std::endl;
+    auto async_return = std::async(std::launch::async, do_math);
+    auto res1 = do_math_again();
+    auto res2 = async_return.get();
+    std::cout << "\tAll done with the call..." << std::endl; 
     return 0;
 }
 
@@ -51,7 +65,7 @@ void say_it_again()
     }
 
     std::lock_guard<std::mutex> lock(glb_mtx);
-    std::cout << "Say it out LOUD again!" << std::endl;
+    std::cout << "\tSay it out LOUD again!" << std::endl;
 }
 
 int do_math()
