@@ -492,6 +492,32 @@ Where you can explore in a graphical way the files and decide what to leave befo
 
 ![vs_code_conflict_solved](/appendix_git/resources/vs_code_conflict_solved.png)
 
+# Github:
+
+## Why Github?
+
+In a productive environment we need to share our work with others. Then, [Github](https://github.com/) appears a solution to control the versions and deploy online your repositories, and the most important thing is that *Git* is its core.
+
+It isn't the only solution though, there are others like [BitBucket](https://bitbucket.org/product/), [GitLab](https://about.gitlab.com/), among others. However, Github is the most famous, it was released in February 2008.
+
+Github offers a platform that aims to build, scale and submit secure software, even with AI powered tools, and in the case of the Enterprise edition it also adds AI (as it is transforming the software development), collaboration, productivity, security and scalability. It also automates some activities helping you to focus on the development.
+
+One additional plus is that you can collaborate in projects, even bigger ones like programming languages and kernels, connecting with proffesionals around the world.
+
+So, do not forget to create your account: [Sign In](https://github.com/login)
+
+## Getting started with Github:
+
+After you have created your account, let's explore the platform.
+
+In the landing page, you can find the info ilustrated in the image below:
+
+![github_landingpage](/appendix_git/resources/github_landingpage.png)
+
+
+
+
+
 # Additional resources:
 
 - [Git Cheat Sheet | Github Education ](https://education.github.com/git-cheat-sheet-education.pdf)
