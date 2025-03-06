@@ -515,6 +515,47 @@ In the landing page, you can find the info ilustrated in the image below:
 ![github_landingpage](/appendix_git/resources/github_landingpage.png)
 
 
+Do not forget to update your profile, where you can configure your name, your photo, your bio, the URL to your website, the company you are working on and links to your social media.
+
+But the settings do not stop there, as you should also consider the security of your accound, considering the next factors:
+
+- Use a strong password.
+- Activate the [mobile 2FA](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication), do not use SMS as double factor.
+- Enable hte usage of secure keys.
+
+After this, you are ready to explore the workflow with Git and Github.
+
+## Working with Github:
+
+You use *Git* inside *Github*, it is very important. However, there more things to do here, as you can explore new online tools to manage the versions of your code.
+
+Some notes to consider are:
+
+- *git init* is replaced as you can create a repository by using the GUI and then clone it into your machine.
+
+- When you are done, you better move your local updates to the internet, in this case with different branches and using push, pull request and code review.
+
+- It is better to divide the code review by considering smaller tasks, as it can be one task one objective.
+
+Well, then let's begin with how to create a repository. In your home page, click the option to create a new repository:
+
+![githuh_new_repo](/appendix_git/resources/github_new_repo.png)
+
+Once you clic the option, you are ready to edit the details:
+
+![github_create_repo](/appendix_git/resources/github_create_repository.png)
+
+
+The aspects to focus here are:
+
+- **Name:** How will be the identificator of your repository?
+- **Propietary:** Who is the author? Can be a person, a group or a company.
+- **Type:** Public or private, accoridng your requirements.
+- **ReadMe file:** Specifiy if you want to create a repository with a markdown file to tell others what is going on here.
+- **Add .gitignore:** A tempalte of a file that will host the things to ignore in the repository, for example, in C you will ignore the compiled results as you only need the source.
+- **Add license:** Choose a license properly according to your objectives.
+
+After you have done, the result should be like this:
 
 
 
