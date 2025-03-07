@@ -557,7 +557,35 @@ The aspects to focus here are:
 
 After you have done, the result should be like this:
 
+![github_new_repository](/appendix_git/resources/github_new_repository.png)
 
+Some additional keypoints are:
+
+- You can check your branches here, at the moment we only have one, called **main**. However, if we create more, we could be able to select it.
+
+- This also applys for tags, which can be checked at the side of the branches and at the **Releases** section.
+
+- In the **About** section, you can find information about the repository including a short description, links to the **activity**, **stars**, **watching** and **forks**.
+
+- You have windows for **Code** (where you develop), **Issues** (to solve issues notified by you or users), **Pull Requests** (invitations of merge of you or users you have received), **Actions** (for Github actions), **Projects** (for more about the project and relateds), **Wiki** (the documentation and wiki of the repository), **Security** (info related to the security of the repository), **Insighs** (important statistics of the repo) and **Settings** (Set up and configuration of your repository). We will check them out later, for now... let's dive in working together by adding a collaborator.
+
+If you have a colleague or a friend who wants to participate in the project, you can add him/her as a collaborator. For this, go to **Settings** of your repository and check the option **Collaborators**.
+
+![add_collaborators](/appendix_git/resources/github_add_collaborators.png)
+
+You may have to give your 2FA credentials in order to make this happen. Once you in this screen, you can press the button **Add people** and type the username of the person you want to add.
+
+That person must have a Github account and also accept the invitation before he/she is able to watch, modify and edit the repository.
+
+Once, you are ready to continue, remember that you can work with the repository locally, but first you must clone it, how? Go to the green button called **Code**, copy the link and clone it in your terminal with:
+
+~~~bash
+git clone <url>
+~~~
+
+In my case (do not try the same repo as I configured it privetaly), it would be like this:
+
+![github_git_clone](/appendix_git/resources/github_git_clone.png)
 
 # Additional resources:
 
