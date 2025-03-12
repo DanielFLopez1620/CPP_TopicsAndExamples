@@ -587,6 +587,71 @@ In my case (do not try the same repo as I configured it privetaly), it would be 
 
 ![github_git_clone](/appendix_git/resources/github_git_clone.png)
 
+## Setting your keys:
+
+Working with HTTP is enough to develop. However, you may need additional security, then you can use the **SSH** option.
+
+What is this? It allows the usage of keys in order to recognize who is working and who is able to connect with your repositories.
+
+If you check the **code** options (green button), you can watch that additionally to **HTTPS** there is an option called **SSH**:
+
+![github_check_ssh_1](/appendix_git/resources/github_check_ssh_1.png)
+
+However, as you may watch, yo do not have any key. Then, let's move to the creation of them. So, go to your terminal:
+
+1. Create your key with the **SSH generator**:
+
+~~~bash
+# ssh-keygen -t <encriptation_level> -C correo
+ssh-keygen -t ed25519 -C <your_gmail>
+
+# An assistant should appear, to select the name, location, password and nothing more. Fill the data and remember it.
+~~~
+
+2. Check that the key was created:
+
+~~~bash
+ls .ssh
+# And search for the key name you just created
+~~~
+
+3. Evaluate the agent is running:
+
+~~~bash
+# Check if the agent exists
+eval "$(ssh-agent -s)"
+~~~
+
+4. Link the key with the agent:
+
+~~~bash
+ssh-add ~/.ssh/<key_name>
+# You will be asked for the key's password
+~~~
+
+5. Now, the machine knows about the key, the next step is to use the public key in your Github
+
+~~~bash
+cat ~/.ssh/<key_name>
+# Copy the content
+~~~
+
+6. Go to your web browser, open Github and go to your settings.
+
+7. Select the category SSH and add inside the section **SSH Keys**, add a new key. You may require to log with the 2FA.
+
+8. Finally, add the next command in order to create a connection with Github and check the process:
+
+~~~bash
+ssh -T git@github.com
+# After checking, you may notice that 'authorized_host' appeared under the .ssh dir.
+~~~
+
+Once it is created, try to clone a repository by using the **SSH** option.
+
+Make sure to just add a unique key per computer, do not share it. Security is very important.
+
+
 # Additional resources:
 
 - [Git Cheat Sheet | Github Education ](https://education.github.com/git-cheat-sheet-education.pdf)
