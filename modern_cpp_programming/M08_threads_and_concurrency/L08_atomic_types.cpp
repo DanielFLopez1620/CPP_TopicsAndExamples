@@ -29,8 +29,13 @@
 #include <atomic>
 #include <thread>
 #include <vector>
+#include <cassert>
+#include <numeric>
+#include <random>
+#include <algorithm>
 
 void counting(int &counter);
+std::vector<float> call_generator();
 
 int main(int argc, char* argv[])
 {
@@ -105,6 +110,37 @@ int main(int argc, char* argv[])
         th.join();
     }
     std::cout << "\tFinal value: " << counter << std::endl;
+    
+    // Info #4: You can use 'fetch_add()', 'fetch_sub()', 'atomic_fech_add()',
+    // 'atomic_fech_add_explicit()', 'atomic_fech_sub()', 
+    // 'atomic_fech_sub_explicit()' to atomically add or substract a value from
+    // an atomic object and returns its value before the operation.
+    std::atomic<float> total {0};
+    std::vector<float> nums = call_generator();
+    size_t size = nums.size();
+    std::vector<std::thread> more_ths;
+    std::cout << "Using atomic fecht:" << std::endl;
+    for(int i = 0; i < 10; ++i)
+    {
+        more_ths.emplace_back([&total, &nums]
+            (size_t const start, size_t const end)
+            {
+                for(size_t j = start; j < end; ++j)
+                {
+                    std::atomic_fetch_add_explicit(
+                        &total, nums[j], std::memory_order_acquire);
+                        // Can also be implemented as:
+                        // total.fetch_add(nums[j], std::memory_order_acquire);
+                        
+                    }
+                }, i*(size/10), (i+1)*(size/10));
+            }
+    for (auto & th : more_ths)  
+    {
+        th.join();
+    }
+    std::cout << "\tFinal sum: " << total << std::endl;
+
     return 0;
 }
 
@@ -130,3 +166,14 @@ void counting(int &counter)
         th.join();
     }
 }
+
+std::vector<float> call_generator()
+   {
+      std::random_device rd;
+      auto generator = std::mt19937{ rd() };
+      auto dis = std::uniform_real_distribution<>{ 16, 20 };
+      std::vector<float> numbers(100000, 0);
+      std::generate(std::begin(numbers), std::end(numbers), [&dis, &generator] {return dis(generator); });
+
+      return numbers;
+   }
