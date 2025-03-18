@@ -652,6 +652,34 @@ Once it is created, try to clone a repository by using the **SSH** option.
 Make sure to just add a unique key per computer, do not share it. Security is very important.
 
 
+## Cloning, forking and more:
+
+Fork? Are we going to eat something? No, a fork is a copy of a repository from another person that is added into our account. Once it is forked, you will lose the updates, then why do you need to do this? Well, in case you want to collaborate in a project by experimenting in a local set up, when you want to change the flow of another repository or idea, or just to explore more about a repository.
+
+You can do it by simply checking the **fork** option in Github:
+
+![github_forks](/appendix_git/resources/github_fork.png)
+
+Once you clic, you should see the options for configuring the fork:
+
+![github_forking_process](/appendix_git/resources/github_forking_process.png)
+
+And what about stars? It is a way to add a repository as a favorite. Then, you will follow it and you can access to it very quickly.
+
+Again, it is very easy, you just need to select the star as shown below:
+
+![github_star](/appendix_git/resources/github_stars.png)
+
+Do not forget another important part of the process, that is cloning... yes, just:
+
+~~~bash
+git clone <url>
+~~~
+
+As this will allow you to work locally on your project, just do not forget to upload the changes and commits as you move on with your work in the proper branch.
+
+Hopefully you make a secure clone by implementing what you learn about SSH keys.
+
 # Additional resources:
 
 - [Git Cheat Sheet | Github Education ](https://education.github.com/git-cheat-sheet-education.pdf)
