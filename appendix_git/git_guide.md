@@ -680,6 +680,60 @@ As this will allow you to work locally on your project, just do not forget to up
 
 Hopefully you make a secure clone by implementing what you learn about SSH keys.
 
+## Working with remote repositories:
+
+It is not only about cloning and working, as you may need to sync changes from your work and the work of others. Then we will introduce **pull**, **push** and **fetch**.
+
+When you need to bring information that was loaded to the remote repository into your local repository, you have to use **git pull**.
+
+If you need to upload your changes, after you have added and committed, you have to use **git push**.
+
+So let's get started, after you clone your repo, you should check in which branch you are located:
+
+~~~bash
+git branch
+# It will display the branch name, in my case it is main.
+~~~
+
+I am using my private repository *git_example*, so donot forget to create one for the incoming practices.
+
+Start by modifying the **README.md** file of your repository, then add and commit the changes.
+
+~~~bash
+cd ~/path/to/repo/git_example
+echo "## My first contribution" >> README.md
+git add README.md
+git commit -m "Adding header 2"
+~~~
+
+Now, you have local changes that are not present in the remote repository. So you are ahead by 1 commit of 'origin/main' and we are ready to make a push:
+
+~~~bash
+# git push <source> <send_to>
+#   -u : Set upstream
+git push -u origin main
+~~~
+
+If you go to the remote repository after this point (and refresh your browser), you should be able to watch the changes.
+
+![git_push_showcase](/appendix_git/resources/git_push_showcase.png)
+
+But... what happens if changes are uploaded and you do not have them? Well, let's make the experiment.
+
+Begin by modifying the repository online, by clicking the pen which will allow you to edit the **README.md** file.
+
+![github_changes_online](/appendix_git/resources/github_changes_online.png)
+
+After you are done with the changes, proceed to commit them.
+
+![github_making_commit](/appendix_git/resources/github_making_commit.png)
+
+This changes aren't synced in our local repository, then we require a **pull**:
+
+~~~bash
+
+~~~
+
 # Additional resources:
 
 - [Git Cheat Sheet | Github Education ](https://education.github.com/git-cheat-sheet-education.pdf)
