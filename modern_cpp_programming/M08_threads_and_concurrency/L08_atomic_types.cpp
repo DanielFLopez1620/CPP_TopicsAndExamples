@@ -23,6 +23,62 @@
  *   'atomic_load_explicit()', 'atomic_store()', 'atomic_store_explicit()',
  *   'atomic_exchange()' and 'atomic_exchange_explicit()' so you can read,
  *    set or exchange the value of an atomic object.
+ * - You can even consider logical operators like 'fetch_add()', 'fetch_or()'
+ *   and 'fetch_xor()' as member functions. Or go further with non-member
+ *   functions like 'atomic_fetch_and()','atomic_fetch_and_explicit()', 
+ *   'atomic_fetch_or()', 'atomic_fetch_or_explicit()', 'atomic_fetch_xor()'
+ *   and 'atomic_fetch_xor_explicit()'.
+ * - Another option is to use 'std:atomic_flag' with its members:
+ *   'test_and_set()' and 'clear()'; or its non-members: 
+ *   'atomic_flag_test_and_set()', 'atomic_flag_test_and_set_explicit()',
+ *   'atomic_flag_clear()' and 'atomic_flag_clear_explicit()'. Additionally,
+ *   with C++20 you have an additional member 'test()' and two non-members
+ *   'atomic_flag_test()' and 'atomic_flag_test_explicit()'.
+ * - There are also more add-on after C++20 to perform thread synchronization
+ *   with members like 'wait()', 'notify_one()', 'notify_all()' that are
+ *   available to 'std::atomic', 'std::atomic_ref' and 'std::atomic_flag',
+ *   'atomic_wait()', 'atomic_wait_explicit()', 'atomic_notify_one()' and
+ *   'atomic_notify_all()'.
+ * 
+ * But let's go again to the point, a 'std::atomic' is a class template that
+ * defines an atomic type which behavior is well defined in order to avoid
+ * conflicts when working with multiple threads without the need of a lock. 
+ * Some of its specializations are:
+ * 
+ * - 'atomic_bool' which is a full boolean specialization.
+ * - 'atomic_int', 'atomic_long', 'atomic_char' and 'atomic_wchar' for
+ *   integral definitions.
+ * - Partial specialization for pointer types.
+ * - Full specialization for float, double and long doule after C++ 20.
+ * - 'std::atomic<std::shared_ptr<U>>' and 'std::atomic<std::weak_ptr<U>>'
+ *   for the corresponding pointers after C++20.
+ * 
+ * You should have in mind the members to perform atomic operations in a proper
+ * way:
+ * 
+ * - 'load()': Load an return the value.
+ * - 'store()': Save a non atomic-value inside the object.
+ * - 'exchange()': Save a non-atomic value and return the previous value.
+ * - 'operator=': Operator with the same effect as store.
+ * - 'fetch_add()': To add a non_atomic argument to an atomic value stored
+ *   previously.
+ * - 'fetch_sub()': To subsctract a non-atomic argument to an atomic value
+ *   stored previously.
+ * - 'fetch_and()': Atomic AND oepration.
+ * - 'fetch_or()': Atomic OR operation.
+ * - 'fetch_xor()': Atomic XOR operation.
+ * - The usage of operator++ and operator-- are atomicly implemented.
+ * - You can also take advantage of operators +=, -=, &=, |=, ^=.
+ * 
+ * In the case of 'std::atomic<bool>' and std::atomic_flag, you also count with
+ * the next options:
+ * 
+ * - 'test_and_set()': Set the value to true and return the previous one.
+ * - 'clear()': To set the value to false.
+ * - 'test()': After C++20 to return the value of the flag.
+ * - ATOMIC_FLAG_INIT: Do not forget to set up the flag. However this macro
+ *   was deprecated.
+ * 
  * 
  **/
 
