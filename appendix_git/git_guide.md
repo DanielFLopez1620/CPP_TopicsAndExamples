@@ -731,8 +731,52 @@ After you are done with the changes, proceed to commit them.
 This changes aren't synced in our local repository, then we require a **pull**:
 
 ~~~bash
-
+git pull
 ~~~
+
+This will bring all the recent changes into your local repository. 
+
+![github_pull_changes](/appendix_git/resources/github_pull_changes.png)
+
+However, you must be careful as your pull/push can generate conflicts, and you already know how to solve them. 
+
+Another important thing to remember is that you cannot push if you are not up to date with the repository. So, it is better to start with a pull when you work.
+
+We still have one command for this section and it is **fetch**. Before we introduce it, modify your Github repository, add the changes and commit them online.
+
+Then go to your terminal, and let's begin by checking the status:
+
+~~~bash
+git status
+~~~
+
+From here, you are not able to see if there were changes remotely (in this case omitting we know it beforehand). So, what can we do to check it? The answer is easy:
+
+~~~bash
+git fecht origin
+~~~
+
+This will download the changes but they won't be merged, so you can receive the cahnges and evaluate them, in order to maintain, modify or remove them.
+
+![github_fetching_changes](/appendix_git/resources/github_fetching_changes.png)
+
+If you want to check the detailed changes, you can use:
+
+~~~bash
+git log main..origin/main
+~~~
+
+It will display the commits that aren't present in your local branch, so you can go further and explore it. If the context is of your interest, you can merge them.
+
+~~~bash
+git merge origin/main
+~~~
+
+## Issues and Discussions:
+
+A **issue** allows to set up a ticket to follow a bug, so you can introduce the problem and attend the request.
+
+The request can be a mistype in the documentation or even a security bug that requires attention, but it will depend on the repository author if it will be solved.
 
 # Additional resources:
 
