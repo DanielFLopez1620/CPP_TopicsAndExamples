@@ -79,6 +79,55 @@
  * - ATOMIC_FLAG_INIT: Do not forget to set up the flag. However this macro
  *   was deprecated.
  * 
+ * When talking about atomic types, you should also consider the memory order,
+ * which refers to an option to overload 'std::atomic' and 'std::atomic_flag'
+ * to specify how non-atomic memory accesses are to be ordered around atomic
+ * operations, the default is called 'sequential consistency'. 
+ * 
+ * Following this, we have ordering types with 'std::memory_order' which
+ * comes with a enumeration that is shown below:
+ * 
+ * - 'memory_order_relaxed': No synchronization or ordering constraints.
+ * - 'memory_order_consume': Mostly compiler optimizations, focused on 
+ *   avoiding read/write in the current thread with depedent values. So,
+ *   it only writes to data-dependent variables present in other threads
+ *   that release the same atomic variable visisble in the current thread.
+ * - 'memory_order_release': No read/write operations and no reorder from
+ *   this. All writes in the current thread are visible in other threads
+ *   and writes that carry a dependency to the atomic value visible in
+ *   that consume the same atomic.
+ * - 'memory_order_acq_rel': Read/write operation is both an acquire operation
+ *   and a release operation. All writes are visible before the modification in
+ *   other threads, and the modification is visible in other threads that
+ *   aquire the same atomic variable.
+ * - 'memory_order_seq_cst': All the threads observe all the modifications in
+ *   the same order.
+ * 
+ * Lastly, when considering references you cannot use 'std::atomic'. That is the
+ * reason 'std::atomic_ref' is a handly solution after C++20. So you can manage
+ * a non atomic elemetn with an atomic reference, just keep in mind that you
+ * should avoid accessing to it without the atomic reference in other instances
+ * once you have used it.
+ * 
+ * The 'std::atomic_ref' has specializations for any trivially-copyable type,
+ * partial specialization for all pointers, specialization for integral types
+ * (inclusing cstdint header types) and specializations for float, double and
+ * long double types.
+ * 
+ * Additionally for a 'std::atomic_ref', it is not thread-safe to accss
+ * to subobjects referenced. However, it is possible to modify the referenced
+ * value through a const atomic reference type.
+ * 
+ * NOTE: C++20 also came with new members and non-members that are efficient
+ * for thread synchronization like 'wait()', 'atomic_wait()',
+ * 'atomic_wait_explicit()', 'atomic_flag_wait()', 'atomic_flag_wait()',
+ * 'atomic_flag_wait_explicit()' which act to block a thread until a notification
+ * of a change values arrived. Also, we have 'notify_one()',
+ * 'atomic_notify_one()' and 'atomic_flag_notify_one()' for single cases of
+ * notifcation with threads, and notify_all(),
+ * 'atomic_notify_all()' and 'atomic_flag_notify_all()' to unblock all the
+ * threads blocked in an aotmic waiting operation.
+ * 
  * 
  **/
 
