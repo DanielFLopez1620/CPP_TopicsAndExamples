@@ -778,6 +778,97 @@ A **issue** allows to set up a ticket to follow a bug, so you can introduce the 
 
 The request can be a mistype in the documentation or even a security bug that requires attention, but it will depend on the repository author if it will be solved.
 
+Let's begin by creating one by ourselves:
+
+1. Go to your repo and click the **Issues** section.
+
+![github_creating_issues](/appendix_git/resources/github_creating_issue.png)
+
+2. Clic on the **New Issue** botton.
+
+3. Add a title and a description, this is the minimum information required to create a issue.
+
+![github_filling_issue](/appendix_git/resources/github_filling_issue.png)
+
+4. You can add additional elements like a assignee, a label, a type or a milestone.
+
+5. Once you finish the details, press the **Create** button.
+
+![github_created_issue](/appendix_git/resources/github_created_issue.png)
+
+In this new window, you can chat about the issue. However, it is recommended to have a template so others can tell you about the issue in a proper way you can understand it.
+
+In order, to integrate this, follow the next steps:
+
+1. Create a Github directory on your repository.
+
+~~~bash
+mkdir .github
+~~~
+
+2. Create a subdirectory for the issues:
+
+~~~bash
+cd .github
+mkdir ISSUE_TEMPLATE
+~~~
+
+3. Now, we can create a template inside this directory:
+
+~~~bash
+cd ISSUE_TEMPLATE
+touch bug_report.md
+~~~
+
+4. Add the content to your template, it can be Markdown or YAML, for example, one interesting proposal I found comes from [github-issue-templates | stevemao @ Github](https://github.com/stevemao/github-issue-templates/blob/master/.github/ISSUE_TEMPLATE/BUG-REPORT.yml?plain=1). This is made in order to tell others what info you require to reproduce the issue, so you can start exploring about it. It also may appear as a template when generating a new issue:
+
+![github_template_issue](/appendix_git/resources/github_template_issue.png)
+
+## Collaborations with Pull Requests:
+
+When we help others and collaborate in different repositories, we have to do it in a proper way, avoiding to overwrite the work of others with your work.
+
+The first rule is to not work in the **main** branch, so you create a branch, work on what you need and then search for the merge. However, there is a step you need to consider, and it is a **pull requiest**.
+
+This request is a merge proposal that can be reviewed, so you can ask the team for a code review and they will decide the fate of your changes (propose changes, ask for clarifications, deny the proposal, among other options).
+
+Let's begin by making changes and creating a new branch.
+
+~~~bash
+git checkout -b new_dev
+echo "For a future pull request!" >> README.md
+~~~
+
+Then, add the changes and generate the commit:
+
+~~~bash
+git branch
+git status
+git add README.md
+git commit -m "Changes to README for PR"
+~~~
+
+After you are done, make the push:
+
+~~~bash
+git push -u origin new_dev
+~~~
+
+Once you are done with the push, the log message will suggest you about the **PR** (Pull Request), then you can check the link provided or you can just go to your repo, and Github may suggest you the **PR**.
+
+![github_pull_request_demo](/appendix_git/resources/github_pull_request_demo.png)
+
+Here you can comment about the proposals of changes and once you are finish, you can clic the green button **create pull request**. Once it is created, you should see something like this:
+
+![github_new_pr](/appendix_git/resources/github_new_pr.png)
+
+Once in this place, you will have to chat with the developers to explain more about your proposals, they will review it and decide your fate, where once everything is fine they will allow you to merge the results, for example, like this:
+
+![github_merged_pr](/appendix_git/resources/github_merged_pr.png)
+
+Once you are done, you can delete the branch where you submitted the changes.
+
+
 # Additional resources:
 
 - [Git Cheat Sheet | Github Education ](https://education.github.com/git-cheat-sheet-education.pdf)
