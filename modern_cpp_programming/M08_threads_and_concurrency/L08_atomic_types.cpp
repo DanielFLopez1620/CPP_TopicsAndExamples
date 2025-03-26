@@ -118,6 +118,11 @@
  * to subobjects referenced. However, it is possible to modify the referenced
  * value through a const atomic reference type.
  * 
+ * Once you are ready, you can compile and run this code with:
+ * 
+ *      g++ -std=c++20 L08_atomic_types.cpp -o atomic_t.out
+ *      ./atomic_t.out
+ * 
  * NOTE: C++20 also came with new members and non-members that are efficient
  * for thread synchronization like 'wait()', 'atomic_wait()',
  * 'atomic_wait_explicit()', 'atomic_flag_wait()', 'atomic_flag_wait()',
@@ -128,20 +133,26 @@
  * 'atomic_notify_all()' and 'atomic_flag_notify_all()' to unblock all the
  * threads blocked in an aotmic waiting operation.
  * 
- * 
+ * NOTE: What is sequential consistency? Well, it means that all the
+ * instructions are executed in some order and all the write are visible
+ * throught the system at the moment they are made.
  **/
 
-#include <atomic>
-#include <thread>
-#include <vector>
-#include <cassert>
-#include <numeric>
-#include <random>
-#include <algorithm>
+ // -------------------------------- REQUIRED LIBRARIES -----------------------
+#include <atomic>    // For atomic processes with variables
+#include <thread>    // Related with concurrency implementations
+#include <vector>    // Dynamic memory arrays
+#include <cassert>   // Asssertions from C
+#include <numeric>   // Additional numeric elements
+#include <random>    // For pseudo-random operations
+#include <algorithm> // Inclusion of general purpose algorithms
+
+// ------------------------------ FUNCTION PROTOTYPES ------------------------
 
 void counting(int &counter);
 std::vector<float> call_generator();
 
+// ------------------------------ MAIN IMPLEMENTATION ------------------------
 int main(int argc, char* argv[])
 {
     std::cout << "Lesson 8: Atomic types\n" << std::endl;
@@ -247,8 +258,16 @@ int main(int argc, char* argv[])
     std::cout << "\tFinal sum: " << total << std::endl;
 
     return 0;
-}
 
+} // main()
+
+// --------------------------- FUNCTION DEFINTIONS ----------------------------
+
+/**
+ * Void function that implements a thread safe counter.
+ * 
+ * @param counter Integer value to consider for the counter.
+ */
 void counting(int &counter)
 {
     std::atomic_ref<int> at_counter { counter };
@@ -272,13 +291,20 @@ void counting(int &counter)
     }
 }
 
+/**
+ * Function that returns a vector of 100000 position of pseudo random
+ * numbers.
+ * 
+ * @return Pseudo random floating array generated.
+ */
 std::vector<float> call_generator()
-   {
-      std::random_device rd;
-      auto generator = std::mt19937{ rd() };
-      auto dis = std::uniform_real_distribution<>{ 16, 20 };
-      std::vector<float> numbers(100000, 0);
-      std::generate(std::begin(numbers), std::end(numbers), [&dis, &generator] {return dis(generator); });
+{
+    std::random_device rd;
+    auto generator = std::mt19937{ rd() };
+    auto dis = std::uniform_real_distribution<>{ 16, 20 };
+    std::vector<float> numbers(100000, 0);
+    std::generate(std::begin(numbers), std::end(numbers), 
+        [&dis, &generator] {return dis(generator); });
 
-      return numbers;
-   }
+    return numbers;
+}
