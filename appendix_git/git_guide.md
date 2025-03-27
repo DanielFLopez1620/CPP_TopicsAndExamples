@@ -868,6 +868,36 @@ Once in this place, you will have to chat with the developers to explain more ab
 
 Once you are done, you can delete the branch where you submitted the changes.
 
+# More collaboration tools in Github:
+
+## Github Projects:
+
+It is a tool oriented to the planification and tracking while using Github, so you can organize which activities someone has to do in a repository.
+
+To get started with **Github Projects** go to your profile and go to the tab **Projects**.
+
+![github_tab_project](/appendix_git/resources/github_tab_project.png)
+
+You can create a new one and start exploring the templates to generate your projec, for example, **Kanban**, **Bug Tracker**, among others.
+
+TODO: Pending photo on templates
+
+For now, we will focus on the **Team Planning** template, it will enable the next options:
+
+- **Backlog:**
+
+- **Team Capacity:**
+
+- **Current Iteration:**
+
+- **Roadmap:**
+
+- **My items:**
+
+Most of this tabs when working on a company will be the focus of the **developer lead** or a related position. However, even when you are working alone, this can be an useful tool to develop by dividing task and stimating times.
+
+How is this possible? When selecting the tasks, you can generate Issues to the proper repositories where you have to work, which will allow you to develop focused on branches that come from these issues.
+
 
 # Additional resources:
 
