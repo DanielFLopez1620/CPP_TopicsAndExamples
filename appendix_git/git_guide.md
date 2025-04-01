@@ -880,23 +880,40 @@ To get started with **Github Projects** go to your profile and go to the tab **P
 
 You can create a new one and start exploring the templates to generate your projec, for example, **Kanban**, **Bug Tracker**, among others.
 
-TODO: Pending photo on templates
+![github_project_templates](/appendix_git/resources/github_project_templates.png)
 
-For now, we will focus on the **Team Planning** template, it will enable the next options:
+For now, we will focus on the **Team Planning** template, focused on working with others in order to achieve a project or certain task from a project in a cyclic way.
 
-- **Backlog:**
+![github_project_team_planning](/appendix_git/resources/github_project_team_planning.png)
 
-- **Team Capacity:**
+This template will enable the next options:
 
-- **Current Iteration:**
+- **Backlog:** Oriented to a board where you can add task and specify their status (to do, doing and done), while you also have the ability to check how others are going with their tasks. It contains all the history of the task development.
 
-- **Roadmap:**
+![github_project_backlog](/appendix_git/resources/github_project_backlog.png)
 
-- **My items:**
+- **Team Capacity:** A panel to explore with your collaborators by adding tasks, reviewing responabilities or adding new members to the project.
+
+![github_project_team](/appendix_git/resources/github_project_team.png)
+
+- **Current Iteration:** To check the status of the current sprint and how the development is going.
+
+![github_project_current_it](/appendix_git/resources/github_project_current_it.png)
+
+- **Roadmap:** Shows a timelapse of the development and the activities of the project, so you can access further details.
+
+![github_project_roadmap](/appendix_git/resources/github_project_roadmap.png)
+
+- **My items:** A section focused on you, your task and issues, so you do not get lost exploring what others are doing, as you may only be a deveoper and not the team manager.
+
+![github_project_items](/appendix_git/resources/github_project_my_items.png)
 
 Most of this tabs when working on a company will be the focus of the **developer lead** or a related position. However, even when you are working alone, this can be an useful tool to develop by dividing task and stimating times.
 
 How is this possible? When selecting the tasks, you can generate Issues to the proper repositories where you have to work, which will allow you to develop focused on branches that come from these issues.
+
+## Automation and management of projects:
+
 
 
 # Additional resources:
