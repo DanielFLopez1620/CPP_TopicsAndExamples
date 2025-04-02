@@ -1,6 +1,8 @@
-# Git:
+# Git and Github Lessons
 
-## What is Git?
+## Git
+
+### What is Git?
 
 Git is a version control tool, what does this mean?
 
@@ -10,7 +12,7 @@ It was created by Linus Torvalds, yes the creator of Linux, who also had problem
 
 It can work in your machine with terminal tools or [VS Code](https://code.visualstudio.com/). But if you need to collaborate, you may need to consider [Github](https://github.com/) and [Gitlab](https://about.gitlab.com/)
 
-### Why is it important?
+#### Why is it important?
 
 There are many reasons, some of them are:
 
@@ -19,7 +21,7 @@ There are many reasons, some of them are:
 - It will help you to collaborate in teams.
 - It allows you to publish your projects.
 
-## First steps with Git
+### First steps with Git
 
 Most of the Linux systems comes with Git installed.
 
@@ -74,7 +76,7 @@ If you desire so, you can check all the configurations with:
 git config --list
 ~~~
 
-## Basic commands:
+### Basic commands
 
 Once you have initialized *Git* you are ready to control the versions of your code.
 
@@ -83,7 +85,7 @@ Once you have initialized *Git* you are ready to control the versions of your co
 git init
 ~~~
 
-But... what does the initialization do? Well, it add a **.git** directory to track the changes and will reflect all the git actions we implement. Do you see it? Well... it is a hidden dir. 
+But... what does the initialization do? Well, it add a **.git** directory to track the changes and will reflect all the git actions we implement. Do you see it? Well... it is a hidden dir.
 
 ~~~bash
 # Inside a git project, run:
@@ -169,7 +171,7 @@ Is it still messy to understand the workflow of the changes? Let's illustrate it
 
 ![git_workflow_diagram](/appendix_git/resources/git_workflow_diagram.drawio.png)
 
-## Branches and merges:
+### Branches and merges
 
 A branch is a division of your workspace in multiple space, so you can focus in different things. For example, you may have the **main** branch, where your base application is present, and the **dev** branch, where you experiment and add features. Later, when all was setup in the **dev** branch, you can merge its content to the **main** branch.
 
@@ -181,7 +183,7 @@ Don't you know which branch are you on? Just run the next command:
 git branch
 ~~~
 
-At this point, you should only have one branch, it can be **master** or **main** depending on your set up. 
+At this point, you should only have one branch, it can be **master** or **main** depending on your set up.
 
 To create one branch, you can use:
 
@@ -192,6 +194,7 @@ git checkout -b dev
 # After that, check the creation
 git log
 ~~~
+
 ![git checkout -b branch](/appendix_git/resources/git_branch.png)
 
 You can add and commit changes that are independent of other branches, for example, you can run:
@@ -227,7 +230,7 @@ Finally, do not forget about deleting branches once their purpose was completed,
 git branch -D dev
 ~~~
 
-## Time travel:
+### Time travel
 
 Did you ever wondered how to travel to the past and correct a mistake? Well, it is impossible to know. However, we can go back with **Git** to previous versions of our code to make changes, there are two options **reset** and **revert**:
 
@@ -297,7 +300,7 @@ Always ensure to use **--hard** as last option, as you are affecting the history
 
 Take advantage of this tools only to improve your work, fix bugs and by considering a proper communication with the team.
 
-## Managing versions:
+### Managing versions
 
 You can have different versions by considering **tags** or **checks**.
 
@@ -367,7 +370,7 @@ You can return to the last point of your branch, by providing its name.
 git checkout main # Or master depending your set up
 ~~~
 
-## Solving conflicts:
+### Solving conflicts
 
 When we are working in a individual and local way, everything tends to go easy. However, when you add more people to the equation, **conflicts** may appear.
 
@@ -377,60 +380,60 @@ When we are working in a individual and local way, everything tends to go easy. 
 
 1. In your main branch, create a change, for example:
 
-~~~bash
-echo "Let's create a conflict" > conflict.txt
-~~~
+    ~~~bash
+    echo "Let's create a conflict" > conflict.txt
+    ~~~
 
 2. Add the file to your repository history:
 
-~~~bash
-git add conflict.txt
-git commit -m "Adding a non-conflicting file"
-~~~
+    ~~~bash
+    git add conflict.txt
+    git commit -m "Adding a non-conflicting file"
+    ~~~
 
 3. Then, we create another branch, for example:
 
-~~~bash
-git checkout -b devel
-~~~
+    ~~~bash
+    git checkout -b devel
+    ~~~
 
 4. Make changes to the file in the new branch:
 
-~~~bash
-echo "Changes in devel" >> conflict.txt
-~~~
+    ~~~bash
+    echo "Changes in devel" >> conflict.txt
+    ~~~
 
 5. Then, add the changes to the branch history:
 
-~~~bash
-git add conflict.txt
-git commit -m "Is this a conflicting change?"
-~~~
+    ~~~bash
+    git add conflict.txt
+    git commit -m "Is this a conflicting change?"
+    ~~~
 
 6. Go again to your original branch, in this case, it can be *master* or *main*
 
-~~~bash
-git checkout master # or main
-~~~
+    ~~~bash
+    git checkout master # or main
+    ~~~
 
 7. Add a new change to the file in the main, making sure you haven't merge the changes from the other branch:
 
-~~~bash
-echo "Still not conflict, right? >> conflict.txt
-~~~
+    ~~~bash
+    echo "Still not conflict, right? >> conflict.txt
+    ~~~
 
 8. And add those changes to the history of the repository at the current branch:
 
-~~~bash
-git add conflict.txt
-git commit -m "A change in main with no conflict (not sure)"
-~~~
+    ~~~bash
+    git add conflict.txt
+    git commit -m "A change in main with no conflict (not sure)"
+    ~~~
 
 9. Now, the two branches have changed, if we merge, it will have a conflict:
 
-~~~bash
-git merge devel
-~~~
+    ~~~bash
+    git merge devel
+    ~~~
 
 ![git_conflict_1](/appendix_git/resources/git_conflict_1.png)
 
@@ -454,9 +457,9 @@ git status
 
 ![git_conflict_3](/appendix_git/resources/git_conflict_3.png)
 
-After this, you can add and commit the changes, and then attempt the merge, which should be completed without any problems. 
+After this, you can add and commit the changes, and then attempt the merge, which should be completed without any problems.
 
-##  VS Code and Git?
+### VS Code and Git?
 
 Yes, you can use the control version integrated in [VS Code](https://code.visualstudio.com/) to take advantage in your daily developing task.
 
@@ -492,9 +495,11 @@ Where you can explore in a graphical way the files and decide what to leave befo
 
 ![vs_code_conflict_solved](/appendix_git/resources/vs_code_conflict_solved.png)
 
-# Github:
+## Github
 
-## Why Github?
+Let's discover about one of the biggest tool for developers.
+
+### Why Github?
 
 In a productive environment we need to share our work with others. Then, [Github](https://github.com/) appears a solution to control the versions and deploy online your repositories, and the most important thing is that *Git* is its core.
 
@@ -506,14 +511,13 @@ One additional plus is that you can collaborate in projects, even bigger ones li
 
 So, do not forget to create your account: [Sign In](https://github.com/login)
 
-## Getting started with Github:
+### Getting started with Github
 
 After you have created your account, let's explore the platform.
 
 In the landing page, you can find the info ilustrated in the image below:
 
 ![github_landingpage](/appendix_git/resources/github_landingpage.png)
-
 
 Do not forget to update your profile, where you can configure your name, your photo, your bio, the URL to your website, the company you are working on and links to your social media.
 
@@ -525,7 +529,7 @@ But the settings do not stop there, as you should also consider the security of 
 
 After this, you are ready to explore the workflow with Git and Github.
 
-## Working with Github:
+### Working with Github
 
 You use *Git* inside *Github*, it is very important. However, there more things to do here, as you can explore new online tools to manage the versions of your code.
 
@@ -544,7 +548,6 @@ Well, then let's begin with how to create a repository. In your home page, click
 Once you clic the option, you are ready to edit the details:
 
 ![github_create_repo](/appendix_git/resources/github_create_repository.png)
-
 
 The aspects to focus here are:
 
@@ -587,7 +590,7 @@ In my case (do not try the same repo as I configured it privetaly), it would be 
 
 ![github_git_clone](/appendix_git/resources/github_git_clone.png)
 
-## Setting your keys:
+### Setting your keys
 
 Working with HTTP is enough to develop. However, you may need additional security, then you can use the **SSH** option.
 
@@ -601,40 +604,40 @@ However, as you may watch, yo do not have any key. Then, let's move to the creat
 
 1. Create your key with the **SSH generator**:
 
-~~~bash
-# ssh-keygen -t <encriptation_level> -C correo
-ssh-keygen -t ed25519 -C <your_gmail>
+    ~~~bash
+    # ssh-keygen -t <encriptation_level> -C correo
+    ssh-keygen -t ed25519 -C <your_gmail>
 
-# An assistant should appear, to select the name, location, password and nothing more. Fill the data and remember it.
-~~~
+    # An assistant should appear, to select the name, location, password and nothing more. Fill the data and remember it.
+    ~~~
 
 2. Check that the key was created:
 
-~~~bash
-ls .ssh
-# And search for the key name you just created
-~~~
+    ~~~bash
+    ls .ssh
+    # And search for the key name you just created
+    ~~~
 
 3. Evaluate the agent is running:
 
-~~~bash
-# Check if the agent exists
-eval "$(ssh-agent -s)"
-~~~
+    ~~~bash
+    # Check if the agent exists
+    eval "$(ssh-agent -s)"
+    ~~~
 
 4. Link the key with the agent:
 
-~~~bash
-ssh-add ~/.ssh/<key_name>
-# You will be asked for the key's password
-~~~
+    ~~~bash
+    ssh-add ~/.ssh/<key_name>
+    # You will be asked for the key's password
+    ~~~
 
 5. Now, the machine knows about the key, the next step is to use the public key in your Github
 
-~~~bash
-cat ~/.ssh/<key_name>
-# Copy the content
-~~~
+    ~~~bash
+    cat ~/.ssh/<key_name>
+    # Copy the content
+    ~~~
 
 6. Go to your web browser, open Github and go to your settings.
 
@@ -651,8 +654,7 @@ Once it is created, try to clone a repository by using the **SSH** option.
 
 Make sure to just add a unique key per computer, do not share it. Security is very important.
 
-
-## Cloning, forking and more:
+### Cloning, forking and more
 
 Fork? Are we going to eat something? No, a fork is a copy of a repository from another person that is added into our account. Once it is forked, you will lose the updates, then why do you need to do this? Well, in case you want to collaborate in a project by experimenting in a local set up, when you want to change the flow of another repository or idea, or just to explore more about a repository.
 
@@ -680,7 +682,7 @@ As this will allow you to work locally on your project, just do not forget to up
 
 Hopefully you make a secure clone by implementing what you learn about SSH keys.
 
-## Working with remote repositories:
+### Working with remote repositories
 
 It is not only about cloning and working, as you may need to sync changes from your work and the work of others. Then we will introduce **pull**, **push** and **fetch**.
 
@@ -734,11 +736,11 @@ This changes aren't synced in our local repository, then we require a **pull**:
 git pull
 ~~~
 
-This will bring all the recent changes into your local repository. 
+This will bring all the recent changes into your local repository.
 
 ![github_pull_changes](/appendix_git/resources/github_pull_changes.png)
 
-However, you must be careful as your pull/push can generate conflicts, and you already know how to solve them. 
+However, you must be careful as your pull/push can generate conflicts, and you already know how to solve them.
 
 Another important thing to remember is that you cannot push if you are not up to date with the repository. So, it is better to start with a pull when you work.
 
@@ -772,7 +774,7 @@ It will display the commits that aren't present in your local branch, so you can
 git merge origin/main
 ~~~
 
-## Issues and Discussions:
+### Issues and Discussions
 
 A **issue** allows to set up a ticket to follow a bug, so you can introduce the problem and attend the request.
 
@@ -782,13 +784,13 @@ Let's begin by creating one by ourselves:
 
 1. Go to your repo and click the **Issues** section.
 
-![github_creating_issues](/appendix_git/resources/github_creating_issue.png)
+    ![github_creating_issues](/appendix_git/resources/github_creating_issue.png)
 
 2. Clic on the **New Issue** botton.
 
 3. Add a title and a description, this is the minimum information required to create a issue.
 
-![github_filling_issue](/appendix_git/resources/github_filling_issue.png)
+    ![github_filling_issue](/appendix_git/resources/github_filling_issue.png)
 
 4. You can add additional elements like a assignee, a label, a type or a milestone.
 
@@ -802,29 +804,29 @@ In order, to integrate this, follow the next steps:
 
 1. Create a Github directory on your repository.
 
-~~~bash
-mkdir .github
-~~~
+    ~~~bash
+    mkdir .github
+    ~~~
 
 2. Create a subdirectory for the issues:
 
-~~~bash
-cd .github
-mkdir ISSUE_TEMPLATE
-~~~
+    ~~~bash
+    cd .github
+    mkdir ISSUE_TEMPLATE
+    ~~~
 
 3. Now, we can create a template inside this directory:
 
-~~~bash
-cd ISSUE_TEMPLATE
-touch bug_report.md
-~~~
+    ~~~bash
+    cd ISSUE_TEMPLATE
+    touch bug_report.md
+    ~~~
 
 4. Add the content to your template, it can be Markdown or YAML, for example, one interesting proposal I found comes from [github-issue-templates | stevemao @ Github](https://github.com/stevemao/github-issue-templates/blob/master/.github/ISSUE_TEMPLATE/BUG-REPORT.yml?plain=1). This is made in order to tell others what info you require to reproduce the issue, so you can start exploring about it. It also may appear as a template when generating a new issue:
 
 ![github_template_issue](/appendix_git/resources/github_template_issue.png)
 
-## Collaborations with Pull Requests:
+### Collaborations with Pull Requests
 
 When we help others and collaborate in different repositories, we have to do it in a proper way, avoiding to overwrite the work of others with your work.
 
@@ -868,9 +870,11 @@ Once in this place, you will have to chat with the developers to explain more ab
 
 Once you are done, you can delete the branch where you submitted the changes.
 
-# More collaboration tools in Github:
+## More collaboration tools in Github
 
-## Github Projects:
+Let's explore about collaborative task and development tools provided by Github.
+
+### Github Projects
 
 It is a tool oriented to the planification and tracking while using Github, so you can organize which activities someone has to do in a repository.
 
@@ -912,10 +916,40 @@ Most of this tabs when working on a company will be the focus of the **developer
 
 How is this possible? When selecting the tasks, you can generate Issues to the proper repositories where you have to work, which will allow you to develop focused on branches that come from these issues.
 
-## Automation and management of projects:
+### Automation and management of projects
 
+Let's explore how to automate your process by using Projects on Github.
 
+Move to your *Project* or create a new one:
 
-# Additional resources:
+![github_planning_project](/appendix_git/resources/github_planning_project.png)
 
-- [Git Cheat Sheet | Github Education ](https://education.github.com/git-cheat-sheet-education.pdf)
+And let's edit the settings and personalize it before we get started with the automations:
+
+![github_modifying_project](/appendix_git/resources/github_modifying_project.png)
+
+Now, go to the repository you want to work with, and move to the **Projects** tab:
+
+![github_repo_project](/appendix_git/resources/github_repo_project.png)
+
+Then, select the option **Link a project** and select the project you just modified:
+
+![github_link_project](/appendix_git/resources/github_link_project.png)
+
+And we are ready to start using task and activities form the project with the repository. So, let's create our first task:
+
+1. Create a new task in the proper category, by clicking on **New Item** and adding a name:
+
+    ![github_new_task](/appendix_git/resources/github_new_task.png)
+
+2. Add more information, as you can select a template to launch a issue to link to a repository. If you select blank, you can take advantage on the README to add info formatted as **Markdown**.
+
+    ![github_new_task_issue](/appendix_git/resources/github_new_task_issue.png)
+
+3. The issue should appear ready and you (or a collaborator) have now something new to work on.
+
+    ![github_new_task_prepared](/appendix_git/resources/github_new_task_prepared.png)
+
+## Additional resources
+
+- [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
