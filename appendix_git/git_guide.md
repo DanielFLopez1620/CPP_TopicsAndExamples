@@ -950,6 +950,46 @@ And we are ready to start using task and activities form the project with the re
 
     ![github_new_task_prepared](/appendix_git/resources/github_new_task_prepared.png)
 
+Now, before fixing the issue, le't automate some work:
+
+1. Go to the **Workflow** of your project:
+
+    ![github_project_workflow](/appendix_git/resources/github_project_workflow.png)
+
+2. Go to the **Code Review Approved**:
+
+    ![github_project_code_review](/appendix_git/resources/github_project_code_review.png)
+
+3. Press the edit option, and change the value:
+
+    ![github_project_code_review_approved](/appendix_git/resources/gith_code_review_approved.png)
+
+4. Click save changes and now you are ready to move on.
+
+To solve an issue it is a good practice to create a new branch with a name that includes the developer name and the number of the issue, so everyone know who is in charge of the branch and what is its purpose. So, le't get to "code":
+
+1. Go to your task or the issue, read and understand the info before anything:
+
+    ![github_project_issue_to](/appendix_git/resources/github_project_issue_to.png)
+
+2. Go to the branches, and create a new one with your name and the number of the issue:
+
+    ![github_project_new_branch](/appendix_git/resources/github_project_new_branch.png)
+
+3. Develop and commit changes.
+
+4. After you are done with the changes, make a **PR** but in the information, add a **Closes #** with the number of the issue, so the review gets linked to the given issue.
+
+    ![github_project_pr_to_from_issue](/appendix_git/resources/github_project_pr_from_issue.png)
+
+5. Now, wait until the PR is approved, when you get the notification (and after some discussion), you can check that the **workflow** has been automatically updated.
+
+    ![github_project_pr_approved](/appendix_git/resources/github_project_pr_approved.png)
+
+    ![github_project_auto_workflow](/appendix_git/resources/github_project_auto_workflow.png)
+
+6. You are all done, and you can continue.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
