@@ -990,6 +990,33 @@ To solve an issue it is a good practice to create a new branch with a name that 
 
 6. You are all done, and you can continue.
 
+### Markdown and formatting
+
+Have you heard of **README** files? Well, they are the first thing you see when you explore a repository and you even have one for your profile. This files are formattedd with **[Markdown](https://www.markdownguide.org/)** and it is easy to learn and implement.
+
+Go to your profile and create a repository with your username (it must be the same), and let's get hands on the topic. If you already have one, open and edit it.
+
+Some of the basis of Markdown are:
+
+- **Titles and subtitles:** They are made with the hierarchy of ```#```, ```##```,
+```###``` and ```####```, after them you add a space and then the title or content.
+
+- **Formats:** You can also use **bold** with ```**<text>**``` and *italic* with ```*<text>*```.
+
+- **Link:** You can add external resources [linked](https://www.markdownguide.org/) to a text with ```[text](url)```.
+
+- **Images:** You can also add images as ```![alt_text](url/path)```.
+
+- **Emojis:** Why not? :D You can use them by using ```:<official_emoji_name>:```.
+
+You can even take advantage of additional resources like:
+
+- **[Shields.io](https://shields.io/)**: Useful imports of images and badges for your READMEs.
+
+- **[Simple Icons](https://simpleicons.org)**: Icons from software, programming languages and companies.
+
+- **[Markdown and VS Code Integration](https://code.visualstudio.com/docs/languages/markdown): If you are curious on how to develop faster with previews.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
