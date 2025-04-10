@@ -1037,6 +1037,37 @@ When you have a project, you should document what it is about, how to use, how t
 
 Also, divide it properly and be organized. If you require it, you can also create your own navigation bar to help other find information on your project.
 
+### GitHub Gist
+
+If it is only about one framgment or a single code, it doesn't require a repository as you can use a Github Gist. It will also allow the option to discuss about the fragment in a separeted way.
+
+To access, go to the [Gist Webpage](https://gist.github.com/).
+
+![github_gist_landing](/appendix_git/resources/github_gist_landing.png)
+
+As you see at the bottom right, you can create **secret** or **public** gist. So, start by adding a framgment or a code of the language you prefer, and then save it:
+
+![github_gitst_code](/appendix_git/resources/github_gitst_code.png)
+
+You can know share the link to the gist, participate in the discussion and check what to implement:
+
+![github_gist_disc](/appendix_git/resources/github_gist_disc.png)
+
+The **Gist** discussion can help you to decide which option is the best to implement in a repository or to ask for suggestions in certain fragments.
+
+You can even change and edit the gist in real time to apply the proposals or the results of the discussion. When you are ready, you can delete or close the **Gist**.
+
+Do not forget that Github and Gist have different domains, so do not get lost when exploring the web. However, form Github you can have a link access to your Gist:
+
+![github_gist_access](/appendix_git/resources/github_gist_access.png)
+
+### Github Pages
+
+Yeah! You can host web sites directly from a Github Repository. For more information check [Github Pages](https://pages.github.com/)
+
+Do not forget to check the link as it will introduce you with a brief tutorial to implement you own webpages, a brief resume is presented below:
+
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
