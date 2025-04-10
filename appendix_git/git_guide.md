@@ -1017,6 +1017,26 @@ You can even take advantage of additional resources like:
 
 - **[Markdown and VS Code Integration](https://code.visualstudio.com/docs/languages/markdown): If you are curious on how to develop faster with previews.
 
+- **[MarkdownLint | VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint): For those hints you didn't know you require when using MD. Also to implement the MD rules more easily.
+
+### Using WIKIs
+
+Another important part of Github Repositories are the **WIKIs**, where you can add the documentation of your project in a professional and organized way. And... it supports *MarkDown*.
+
+![github_wiki](/appendix_git/resources/github_wiki_tab.png)
+
+So... let's create our first page, click the option presented in the image above and the next window should appear:
+
+![github_wiki_first](/appendix_git/resources/github_wiki_first.png)
+
+You can edit it and add the proper content, it even have a commmit option so you can also track changes of the wiki.
+
+![github_wiki_dev](/appendix_git/resources/github_wiki_dev.png)
+
+When you have a project, you should document what it is about, how to use, how to contribute and usage license. Remember, it is not only about the code.
+
+Also, divide it properly and be organized. If you require it, you can also create your own navigation bar to help other find information on your project.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
