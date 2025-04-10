@@ -53,7 +53,7 @@ void parallel_map(Iter begin, Iter end, F f);
 // consider a prototype that considers the 'begin' and 'end' iterator. But also,
 // the 'init' value and the 'operation/function' to implement.
 template <typename Iter, typename R, typename F>
-auto parallel_fold(Iter begin, Iter end, R init, F op);
+R parallel_fold(Iter begin, Iter end, R init, F op);
 
 // --------------------------- MAIN IMPLEMENTATION ----------------------------
 
@@ -93,6 +93,8 @@ int main(int argc, char* argv[])
                   << std::right << std::setw(8) 
                   << std::chrono::duration<double, std::micro>(pl_map).count()
                   << std::endl;
+        
+        assert(vec_copy1 == vec_copy2);
     }
 
     std::cout << std::right << std::setw(8) << std::setfill(' ') << "Size"
@@ -105,16 +107,18 @@ int main(int argc, char* argv[])
         std::vector<int> num_vec2(size);
         std::iota(std::begin(num_vec2), std::end(num_vec2), 1);
         auto vec_copy3 = num_vec2;
+        auto res1 = 0LL;
         auto nor_fld = perf_timer<>::duration([&]
             {
-                std::accumulate(std::begin(vec_copy3), std::end(vec_copy3),
+                res1 = std::accumulate(std::begin(vec_copy3), std::end(vec_copy3),
                     0LL, std::plus<>()); 
             });
         auto vec_copy4 = num_vec2;
+        long long int res2 = 0LL;
         auto pl_fld = perf_timer<>::duration([&]
             {
-                parallel_fold(std::begin(vec_copy4), std::end(vec_copy4),
-                    0LL, std::plus<>()); 
+                res2 = parallel_fold(std::begin(vec_copy4), std::end(vec_copy4), 0LL, std::plus<long long>());
+
             });
         std::cout << std::right << std::setw(8) << std::setfill(' ') << size
                   << std::right << std::setw(8) 
@@ -122,6 +126,8 @@ int main(int argc, char* argv[])
                   << std::right << std::setw(8) 
                   << std::chrono::duration<double, std::micro>(pl_fld).count()
                   << std::endl;
+
+        assert(res1 == res2);
     }
 
     return 0;
@@ -186,7 +192,7 @@ void parallel_map(Iter begin, Iter end, F f)
 }
 
 template <typename Iter, typename R, typename F>
-auto parallel_fold(Iter begin, Iter end, R init, F op)
+R parallel_fold(Iter begin, Iter end, R init, F op)
 {
     auto size = std::distance(begin, end);
     if(size <= 10000)
