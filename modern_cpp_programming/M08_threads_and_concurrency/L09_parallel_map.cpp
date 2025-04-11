@@ -10,15 +10,33 @@
  * 
  * But... what happens when we have long ranges? We can introduce concurrency,
  * threads and asynchronous task to speed up the execution.
+ * 
+ * In the code below we implemnt mappings and folding, divided in common ones
+ * and parallel ones. We base this desicion on the quantity of elements to
+ * consider, if a threshol is surpassed then the process is divided.
+ * 
+ * The division is made by considering the 'std::thread::hardware_concurrency()'
+ * which returns the number of concurrent threads supported. Howerver, this is
+ * a hint rather than an accurate value.
+ * 
+ * The implementations are based on 'std::transform()' and 'std::accumulate()',
+ * that were presented in the module 3.
+ * 
+ * When ready, you can compile and run with:
+ * 
+ *      g++ -std=c++20 L09_parallel_map.cpp -o parallel_f_and_m.out
+ *      ./parallel_f_and_m.out
  */
 
-#include <thread>
-#include <algorithm>
-#include <numeric>
-#include <chrono>
-#include <cassert>
-#include <functional>
+// --------------------------- REQUIRED HEADERS -------------------------------
+#include <thread>      // For using concurrency and parallel process.
+#include <algorithm>   // A collection of common and usefult algorithms.
+#include <numeric>     // Usage of different type of numeric values.
+#include <chrono>      // For time management with different precisions.
+#include <cassert>     // For assertions and raise of errors/exceptions
+#include <functional>  // Related with functions usage
 
+// --------------------------- GLOBAL DEFINTIONS ------------------------------
 const int THRESHOLD = 10000;
 
 template <typename Time = std::chrono::microseconds,
@@ -49,7 +67,7 @@ unsigned get_no_of_threads();
 template <typename Iter, typename F>
 void parallel_map(Iter begin, Iter end, F f);
 
-// Info #3: Let's also create a parallel version of fold, here we also
+// Info #5: Let's also create a parallel version of fold, here we also
 // consider a prototype that considers the 'begin' and 'end' iterator. But also,
 // the 'init' value and the 'operation/function' to implement.
 template <typename Iter, typename R, typename F>
@@ -59,6 +77,7 @@ R parallel_fold(Iter begin, Iter end, R init, F op);
 
 int main(int argc, char* argv[])
 {
+    // Initialization of sizes and display
     std::vector<int> sizes
     {
     10000, 100000, 500000, 
@@ -71,6 +90,7 @@ int main(int argc, char* argv[])
               << std::right << std::setw(8) << std::setfill(' ') << "Par Map"
               << std::endl;
 
+    // Loop for mappings
     for(auto const size : sizes)
     {
         std::vector<int> num_vec(size);
@@ -102,6 +122,7 @@ int main(int argc, char* argv[])
               << std::right << std::setw(8) << std::setfill(' ') << "Par Fld"
               << std::endl;
 
+    // Loop for foldings
     for(auto const size : sizes)
     {
         std::vector<int> num_vec2(size);
@@ -131,7 +152,7 @@ int main(int argc, char* argv[])
     }
 
     return 0;
-}
+} // main()
 
 // ------------------------ FUNCTION DEFINITIONS ------------------------------
 
@@ -164,9 +185,14 @@ void parallel_map(Iter begin, Iter end, F f)
     }
     else
     {
+        // Info #3: For larger number consider a different number of threads
+        // so it divides the task to make it parallel.
         auto no_th = get_no_of_threads();
         auto part = len / no_th;
         auto last = begin;
+
+        // Info #4: Start the threads and generate a subsequential mapping to
+        // each one.
         std::vector<std::thread> ths;
         for(unsigned i = 0; i < no_th; ++i)
         {
@@ -184,16 +210,32 @@ void parallel_map(Iter begin, Iter end, F f)
             );
             begin = last;
         }
+
+        // Join the threads for the mapping
         for(auto & th: ths)
         {
             th.join();
         }
     }
-}
+} // parallel_map()
 
+/**
+ * Implement a custom fold (apply a function then sum the values) in a parallel
+ * way for cases where there are many instances.
+ * 
+ * @param begin Beginning iterator of the array.
+ * @param end Ending iterator of the array.
+ * @param init Value to initialize the folding process.
+ * @param op Function to apply to the elements.
+ * 
+ * @return Single value that summarize the folding (sum of values to the
+ *         applied function).
+ */
 template <typename Iter, typename R, typename F>
 R parallel_fold(Iter begin, Iter end, R init, F op)
 {
+    // Info #6: Check the size to consider if doing the process in one
+    // single step or to divide it in multiple threads.
     auto size = std::distance(begin, end);
     if(size <= 10000)
     {
@@ -201,10 +243,13 @@ R parallel_fold(Iter begin, Iter end, R init, F op)
     }
     else
     {
+        // Info #7: For larger ranges split the number of thread by considering the
+        // number of threads that your machine is able to do.
         auto no_of_th = get_no_of_threads();
         auto part = size / no_of_th;
         auto last = begin;
 
+        // Info #8: Start the threads and create a subsequential fold
         std::vector<std::thread> ths;
         std::vector<R> values (no_of_th);
         for(unsigned i = 0; i < no_of_th; ++i)
@@ -226,11 +271,16 @@ R parallel_fold(Iter begin, Iter end, R init, F op)
             );
             begin = last;
         }
+
+        // Join the threads for completing the partial folds.
         for(auto & th : ths)
         {
             th.join();
         }
+
+        // Info #9: Wait for the threads to join and accumulate the final
+        // result.
         return std::accumulate(std::begin(values), std::end(values), init,
             std::forward<F>(op));
     }
-}
+} // parallel_fold()
