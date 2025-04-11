@@ -1067,6 +1067,42 @@ Yeah! You can host web sites directly from a Github Repository. For more informa
 
 Do not forget to check the link as it will introduce you with a brief tutorial to implement you own webpages, a brief resume is presented below:
 
+1. Create a new repository with the name following convention: ```<owner>.github.io```. Just remember that the pages would be public.
+
+2. Clone your repository locally and open it, you can use **VS code**.
+
+3. Add your web template or your web development, preferibly under the **docs** directory.
+
+4. Add and commit the changes.
+
+5. Push the changes to the online repository.
+
+6. In the Github repository, go to configuration and search for the **Pages** category.
+
+7. Once you are on the **Github Pages Set Up** Category
+
+    - **Build and deployment:** Deploy from branch.
+    - **Branch**: *main* (or a custom branch specified) / *docs* (or the directory with the web implementation). Then clic *Save*.
+
+8. After you save, it should display a message *"Github Pages source saved"*.
+
+9. Go to the *Code* section and then go back to the **Github Pages Set Up**.
+
+10. An option to go to your webpage should have appeared, and now you have your first web page hosted on *Github Pages*.
+
+## Github and Codespaces
+
+It refers to development environments hosted on the cloud. So, if you do not have your local workspace, you can create or use a **CodeSpace** to work with your projects from the Cloud.
+
+### SetUp and Development
+
+Go to your Github Profile and let's begin with the magic:
+
+1. Go the **Add** option and clic on **New codespace**.
+
+    ![github_codespace_new](/appendix_git/resources/github_codespace_new.png)
+
+2. ...
 
 ## Additional resources
 
