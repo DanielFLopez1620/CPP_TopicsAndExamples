@@ -1102,7 +1102,45 @@ Go to your Github Profile and let's begin with the magic:
 
     ![github_codespace_new](/appendix_git/resources/github_codespace_new.png)
 
-2. ...
+2. Set up the repository you want to use, the branch, the region and the specifications, for now, as our project is small, with **2 cores** is more than enough.
+
+    ![github_codespace_create](/appendix_git/resources/github_created_codespace.png)
+
+3. Once you created it, you may see a VS Code online editor (well... a VS Code on the Cloud).
+
+    ![github_codespace_vs](/appendix_git/resources/github_codespace_vs.png)
+
+You are now ready to use the **Codespace** you just created, so let's make some changes:
+
+1. We are going to try a Python project, so check the version first:
+
+    ![github_codespace_pyver](/appendix_git/resources/github_codespace_pyver.png)
+
+2. Create a new directory where you are going to work:
+
+    ![github_codespace_newdir](/appendix_git/resources/github_codespace_newdir.png)
+
+3. Add content to the directory (in this case just a HelloWorld), it may ask you to install extension according the programming laguage of your project, as a local VS Code will do, but for now it is not necessary as the scope of the project is small.
+
+    ![github_codespace_pycode](/appendix_git/resources/github_codespace_pycode.png)
+
+4. You can use the GUI for control version of VS Code, and add/commit the changes:
+
+    ![github_codespace_gitgui](/appendix_git/resources/github_codespace_gitgui.png)
+
+5. Do not forget to sync (push) the changes.
+
+If you want to explore more about the **CodeSpaces**, you can go to:
+
+![github_codespaces_options](/appendix_git/resources/github_codespaces_options.png)
+
+There you can explore about your available *Codespaces* and search for templates for new ones:
+
+![github_codespaces_home](/appendix_git/resources/github_codespaces_home.png)
+
+Do not forget to close and delete those environmetns, as in case of free accounts you are only allowed to use them for 120 hours.
+
+![github_codespace_delete](/appendix_git/resources/github_codespace_delete.png)
 
 ## Additional resources
 
