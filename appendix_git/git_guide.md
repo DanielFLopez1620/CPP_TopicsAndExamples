@@ -1195,6 +1195,49 @@ Another interesting feature is that you can open your *CodeSpaces* locally in VS
 
 You may need to refresh code, also if you have the app running on the web, make sure to close it before using it locally.
 
+### Pair programming and real-time collaboration
+
+VSCode and Codespaces allow an interesting feature, to collaborate in real time. In this case we can refer to it as a pair programming or sharing a session in a real time development on the same code.
+
+Go again to the **Extension** window in your VS Code and search for the **Live Share** extension, and installed it.
+
+When installing extensions check the category where you are installing it as it can be:
+
+- **Local:** Apply to the changes of your machine.
+- **Codespace (name):** Apply only to the given codespace and will sync with it in Github.
+- **WSL:(name)** In case you are working with Windows Subsystem for Linux, it wil install the requirements only there.
+- **Recommended:** A section that will provide you with recommendations according to your project structure and programming languages being used.
+
+Once you are installed the **LiveShare** extension, in the bar down, you can have a easy access to it. In my case it appears like shown below.
+
+![vscode_liveshare_att](/appendix_git/resources/vscode_liveshare_att.png)
+
+You can clic it and it will initialize, it will give you some options.
+
+![vscode_liveshare_inv](/appendix_git/resources/vscode_liveshare_inv.png)
+
+You can start by obtaining the invitation and send it to another collaborator.
+
+That collaborator should open the link, decide to work with local or web VS Code and start working together. It is recommended that the collaborator has an account and log the session using that account in order to be able to identify and prevent unkwowns to join the session.
+
+You can work together, and VS Code will help you to understand who is making changes and who wrote/modified parts.
+
+For example, here I am using another account to do, as it can be checked in the photo below:
+
+[vscode_two_collabs](/appendix_git/resources/vscode_two_collabs.png)
+
+Let's highlight something, when doing this it doesn't necessarily means that the one who is sharing session will take all the credit as you have the option to add a co-author to the commit. This will only work if the other collaborator logged with a valid Github account.
+
+Some final notes are:
+
+- You can use the chat provided by the extension to exchange information, but in my recommendation it is better to be online in a call/video call with the other devs, specially when making pair programming.
+
+- If you close the window or the codespace, the others connected with the extension will lose their access.
+
+- If you are working on a codespace, do not forget to close it when you are done.
+
+### Github Dev Editor
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
