@@ -1142,6 +1142,59 @@ Do not forget to close and delete those environmetns, as in case of free account
 
 ![github_codespace_delete](/appendix_git/resources/github_codespace_delete.png)
 
+### Advanced settings on Codespaces
+
+Now, go to the [Codespaces](https://github.com/codespaces) section on Github and let's explore more options.
+
+At first, you can see there are many templates and they are specialized for different implementations or technologies.
+
+![github_codespaces_templates](/appendix_git/resources/github_codespaces_templates.png)
+
+Check the one you are interested on according to your project and the requirement, for example, in my case I am going to select the **DJango Template**.
+
+![github_codespace_django](/appendix_git/resources/github_codespace_django.png)
+
+As you may see when you open it, it will not only create the **Codespace** but also a domain URL to explore about the web project and it is public, even more it update the project changes in real time. However, if you want to end the project execution you just need to use **CTRL+C** on the active terminal.
+
+Now, drag your attention to the directory **.devcontainer**, it is the directory where the set ups of your codespace exists. What does it do? Wel... the **devcontainer.json** file set up a container, a Python container in this case, to work in a proper way.
+
+![github_codespace_devcontainer](/appendix_git/resources/github_codespace_devcontainer.png)
+
+VS Code will use this file to set up the ambient with all the requierements specified, even with VS Code extensions if they are present and specified in the file. (Remember that if you install a extension manually in a Codespace, it doesn't mean it will be permanent).
+
+Let's focus on the config file:
+
+![github_codespace_dev_content](/appendix_git/resources/github_codespace_dev_content.png)
+
+Some key aspects to mention are:
+
+- **image**: Refers to the base image that will be used to build the container.
+- **hostRequirement**: Contain parameters for hardware sepecifcations to run the container.
+  - **cpus**: Refers to the number of cores required.
+- **waitFor**: Wait flag in order to delay actions until the arg passed become true or the condition is accepted.
+- **updateContentCommand**: For dependecies and update commands
+- **postCreateCommand**: To execute after creation of the container.
+- **postAttachCommand**: To attach a server, web server in the case previously presented.
+- **customization**: To add custom elements to the container, mainly refered to VS Code and codespaces components.
+  - **codespaces**: For setting up the codespace.
+    - **openFiles**: To open a certain file on init or restart.
+  - **vscode**: Focused only on Visual Studio Code elements.
+    - **extensions**: To add custom extensions to download and enable on the environment.
+- **portAttributes**: Related with the set up of ports and their actions.
+- **forwardPorts**: Ports to expose.
+
+If you want to add VS Code extesions in a proper way, you can go to the extension marketplace, search the extesion of your interest, install it and then go to the config of the extesion, and clic the option *Add to devcontainer.json*
+
+![github_codespace_add_ext](/appendix_git/resources/github_codespace_add_ext.png)
+
+After this, you can check the *devcontainer.json* to check the installed extesions.
+
+![github_codespaces_vscode](/appendix_git/resources/github_codespaces_vscode.png)
+
+Another interesting feature is that you can open your *CodeSpaces* locally in VS Code. How? You just go the global options (3 lines) and check *Open in VS Code Desktop*. It will open a Pop Up, you have to accept and it will locally display you the message to install the **Github Codespaces** extesion, so install it to access to this functionality.
+
+You may need to refresh code, also if you have the app running on the web, make sure to close it before using it locally.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
