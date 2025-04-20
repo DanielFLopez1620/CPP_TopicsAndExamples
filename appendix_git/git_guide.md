@@ -1238,6 +1238,40 @@ Some final notes are:
 
 ### Github Dev Editor
 
+Yes, there is also a way to edit your repositories on the web. It can be used with any repositories, and it is as easy as clicking the pen option as shown below.
+
+![github_dev_editor](/appendix_git/resources/github_dev_editor.png)
+
+I was joking... you may have already try this. It the base editor for Github. However, there is more.
+
+But... let's make it in a more professional way, once you are in the page of your repository press the **.** (dot) key and it will open a VS Code online editor.
+
+![github_web_editor](/appendix_git/resources/github_web_editor.png)
+
+This will only be a editor, you won't be able to run/execute code, as this isn't a **Codespace**. Still, you have access to the extensions, control version and edit tools.
+
+![github_web_editor_warn](/appendix_git/resources/github_web_editor_warn.png)
+
+If you click on the three lines options, you can access to the option **Go to repository** for a quick access.
+
+## Security and Good Practices
+
+### Managing secure access to private repositories
+
+You can use temporal keys or tokens to manage access to different levels in Github, for example, when you want someone to check out a private repository without adding him as a collaborator.
+
+Go to **Settings** and search for **Developer Settings**.
+
+![github_developer_settings](/appendix_git/resources/github_dev_settings.png)
+
+Here you can watch the next options:
+
+- **GitHub App:** To create applications that extend/integrate GitHub so you can access to the GitHub API.
+
+- **OAuth Apps:** Oriented to authentification apps linked with GitHub, in order to access to the GitHub API.
+
+- **Personal Access Token:** For managing keys for accessing, editing, modifying and managing repositories.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
