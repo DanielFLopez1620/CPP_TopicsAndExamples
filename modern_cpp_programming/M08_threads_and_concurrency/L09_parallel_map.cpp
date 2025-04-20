@@ -237,7 +237,7 @@ R parallel_fold(Iter begin, Iter end, R init, F op)
     // Info #6: Check the size to consider if doing the process in one
     // single step or to divide it in multiple threads.
     auto size = std::distance(begin, end);
-    if(size <= 10000)
+    if(size <= THRESHOLD)
     {
         return std::accumulate(begin, end, init, std::forward<F>(op));
     }
