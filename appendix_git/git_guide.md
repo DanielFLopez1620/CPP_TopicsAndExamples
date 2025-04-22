@@ -1272,6 +1272,45 @@ Here you can watch the next options:
 
 - **Personal Access Token:** For managing keys for accessing, editing, modifying and managing repositories.
 
+Click on the last option as we will manage access of people in our teams, guest or even ourselves. There are two options:
+
+- **Tokens (Classic):** Once, inside check the option for generating a new token:
+
+  ![github_token_create](/appendix_git/resources/github_token_create.png)
+
+  You may need to log with credentials and even verify yourself with the 2FA. Once you have done, you may be able to modify the settings of the key.
+
+  ![github_token_options](/appendix_git/resources/github_token_options.png)
+
+  You can set up the next things:
+
+  - **Name:** Useful to know the purpose of the token, even you can add the name of the holder of it.
+  - **Expiration:** It is not recommended to add a non-expiration day, as it is insecure. Consider the proper time according the project.
+  - **Scopes:** It will allow to set up the access options and things the holder is able to do with the token. It can be *repo*, *workflow*, *write*, *delete*, *acctions*, admin* and so on. Be carefult with what you select.
+
+  Once you are done, check the **Create Token**.
+
+  It will display the token, so make sure to copy as it will be the only time you will be able to see it, then it will be gone forever.
+
+  The moment the token purpose is no longer required, delete it.
+
+  ![github_token_delete](/appendix_git/resources/github_token_delete.png)
+
+- **Fine-grained tokens:** Inside this category, clic the option *Generate new token*. Here there woulld be more options.
+
+  ![githuB_fine_grained_token](/appendix_git/resources/github_fine_grained_token.png)
+
+  We have again the *token name* and the *expiration*. But for this last one, there is no longer *No expiration* option. Also, there are the next option:
+
+  - **Description:** For additional info on the token.
+  - **Resource Owner:** Set up the holder or organization for the token.
+  - **Repository Access:** Oriented to *public repositories*, *all repositories* or *only selected respositories* (and provide the names of the repositories).
+  - **Permissions:** Configure repository and account permissions, there are a lot, be careful on what purposes to select.
+  - **Overview:** Check the available permissiones applied.
+
+  Once you are done, select **Create token** and it will appear, as mentioned previously, make sure to copy and save it, otherwise you will lose it.
+
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
