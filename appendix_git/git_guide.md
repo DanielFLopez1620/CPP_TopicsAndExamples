@@ -1310,6 +1310,39 @@ Click on the last option as we will manage access of people in our teams, guest 
 
   Once you are done, select **Create token** and it will appear, as mentioned previously, make sure to copy and save it, otherwise you will lose it.
 
+  The visualization of the *fine-grained* token is different as you can check the propietary, expircy and also the last time it was used. Also you may have the option to delete it, do it when it is required or when it has already expired.
+
+Now, how can I use it? You can share the token with the collaborator of interest, he/she should copy the URL the repository related with the token and clone it. Once it starts the process, it should provide the user and the password. However, the password for this case would be the token.
+
+Even with your credentials, you need a personal access token, as you have the 2FA active and the password (the user's password) will no longer work on the terminal CLI.
+
+You can even pass the token to automation codes to improve your workflow.
+
+### Dependencies and security with Dependabot
+
+You always work with dependencies, no matter if it Pythom or a web programming languages, so you need to manage them in a proper way, even to work with them in latest version to prevent security issues. So, **Dependabot** can be our favorite ally.
+
+To get stated, go to your repo and navigate to the **Settings** (or you can go the **Security** Tab).
+
+![github_security_tab](/appendix_git/resources/github_security_tab.png)
+
+Then, check the option **Dependabot** and you should see that it is disabled, and it is asking to got to the *Settings* tab.
+
+![github_dependabot_disabled](/appendix_git/resources/github_security_dependabot_disabled.png)
+
+So, we move on to the **Settings** tab, and search for the **Security** section and the **Code security** subsection.
+
+![github_dependabot_config](/appendix_git/resources/github_secuirty_dependabot_config.png)
+
+Here, enable the **Dependabot alerts** and the changes should be saved automatically. You can even enable the rest of alerts and notification of **Dependabot**.
+
+If you enable the option **Dependabot version updates**, it should send you to a .yaml file like this one:
+
+![github_dependabot_yaml](/appendix_git/resources/github_security_dependabot_yaml.png)
+
+Here you can configure the loop that calls *Dependabot* for version updates, for example, *daily* changes or according to your sprints. Once you save and commit the changes on the Github Editor, it should appear under the directory **.github**.
+
+Here you can proceed to interact with web development or even Python scripts, and add dependencies. You will require to create a package manifiest, so... make sure to copy the proper name of the dependencies you require, for example, add it via **DotNet** in *C#* Projects.
 
 ## Additional resources
 
