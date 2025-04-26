@@ -44,6 +44,24 @@
  * - std::execution::unsequenced_policy: Implemented in C++20, it searches
  *   for a vectorized execution, and the object is 'std::execution::unseq'.
  * 
+ * Other useful algorithms you should know:
+ * 
+ * - 'std::for_each_n': Apply a given function to the N first elements, by
+ *    considering a given policy.
+ * - 'std::exclusive_scan': Computes partial sum of a range of elements but
+ *   excludes the ith element form the ith sum.
+ * - 'std::inclusive_scan': Computes the partial sum of a range of elements,
+ *   but includes the ith element in the ith sum.
+ * - 'std::transform_exclusive_scan': Applies a function and then calculates
+ *   a exclusive scan.
+ * - 'std::reduce': Out of order version of 'std::accumulate'
+ * - 'std::transform_reduce' applies a function, then accumulates out of
+ *   order.
+ * 
+ * Again, let's highlight that a algorithm that can run in parallel doesn't
+ * imply it will. The reason is that the execution depends on hardware, data
+ * and particularities of the algorithm, for example, algorithms like copy,
+ * copy_n, fill, reverse, rotate and so on don't perform parallelization.
  */
 
 #include <execution>
