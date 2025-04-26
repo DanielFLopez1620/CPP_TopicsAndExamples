@@ -1344,6 +1344,45 @@ Here you can configure the loop that calls *Dependabot* for version updates, for
 
 Here you can proceed to interact with web development or even Python scripts, and add dependencies. You will require to create a package manifiest, so... make sure to copy the proper name of the dependencies you require, for example, add it via **DotNet** in *C#* Projects.
 
+Let's make a brief example with Python.
+
+1. Update the **dependabot.yaml**.
+
+    ~~~yaml
+    version: 2
+    updates:
+    - package-ecosystem: "pip"
+        directory: "/" # Location of requirements.txt
+        schedule:
+        interval: "weekly"
+    ~~~
+
+2. Add a **requirements.txt**, let's consider a old version of *requests* dependencies.
+
+    ~~~bash
+    echo "requests==2.28.1" > requirements.txt
+    ~~~
+
+3. Add, commit and push the changes into your GitHub repository.
+
+4. Check the **Security** tab alerts.
+
+    ![github_dependabot_example](/appendix_git/resources/github_dependabot_example.png)
+
+5. Select one and starat reading about it.
+
+    ![githuB_dependabot_alert](/appendix_git/resources/github_dependabot_alert1.png)
+
+6. Click the option to **Check security update**, which will lead you to a PR, here the dependabot has made some suggestion for fixing the issues, so review the PR.
+
+    ![github_dependabot_pr](/appendix_git/resources/github_dependabot_pr.png)
+
+7. Once you have reviewed and it is ready, merge the PR. It will also delete the branch where the changes come from.
+
+    ![github_dependabot_fix_pr](/appendix_git/resources/github_dependabot_fix_pr.png)
+
+Repeat this process for all the security updates, remember that the checking will be made automatically in the period you added on the **dependabot.yaml** file.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
