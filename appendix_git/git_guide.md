@@ -1383,6 +1383,32 @@ Let's make a brief example with Python.
 
 Repeat this process for all the security updates, remember that the checking will be made automatically in the period you added on the **dependabot.yaml** file.
 
+### Setting up private repositories
+
+Before you being a repository, you should consider its scope... Would it be *public* or *private*?
+
+If you want too change the visibility of your repository, just go to settings and in the main page, scroll down until you check the options **Danger Zone**, there you will find these options.
+
+![github_danger_zone](/appendix_git/resources/github_danger_zone.png)
+
+The option of our interest is **Change visibility**, this will ask you for a confirmation and even may prompt you with a 2FA autentication.
+
+Remember, that if you change a repository to private, the only way to access them is by providing a certain key or token. Also, if a repository change of visibility and you have cloned it, for making further changes you will need to log in again with your Github account.
+
+Now, let's move on to an important file in your repository, the **.gitignore** file. The purpose of this file is to include files that are going to be ignored in the control version management, for example, with C++ our interest is with the **.cpp** files and not the **.out** files, so our file to ignore this would be:
+
+~~~gitignore
+*.out
+~~~
+
+You can manage the **.gitignore** by providing the puntual name of the elements to not consider or by using regex code, for example, **(*).out** truncates to all the results that end with this extension.
+
+However, you do not need to worry about manually implementing the *gitignore* files, as Github provides a lot of templates according many programming languages and technologies. You can find them at the moment you create a repository or by searching on [gitignore @ Github](https://github.com/github/gitignore)
+
+Why is it important to ignore files? Well... you do not need to upload logs or compilation files, as they can be generated with the rest of the code when working on them. Ensure to upload just what is required and avoid to upload files that may expose you on the network, for example, config files with passwords.
+
+### Security breaches prevention
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
