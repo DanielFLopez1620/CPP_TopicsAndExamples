@@ -1409,6 +1409,42 @@ Why is it important to ignore files? Well... you do not need to upload logs or c
 
 ### Security breaches prevention
 
+Do not forget that you cannot upload information that can affect the security of your project or the ones who are using it. This can include access key to APIs, databases or repositories. Then, let's learn how to mitigate this.
+
+Let's start with checking the security options. go to the **Settings** of your repository and search for **Code security and analysis**.
+
+![github_security_options](/appendix_git/resources/github_security_options.png)
+
+Note: This option may not appear if your repository is private. Some options are only available on public repositories that have accepted the [Github CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) or are repositories for teams with **Github Code Security** enabled.
+
+Then, you can go the the **Code Scanning** option, and selecting the **CodeQL analysis**. Here select the default option.
+
+![github_secuirty_codeql](/appendix_git/resources/github_security_codeql.png)
+
+This will show you an inteface where you can set up the next options:
+
+- **Language:** The security depend on the technology you are developing with.
+- **Query suites**: Code scanning suites with various confidence code scanning results to test the security of your code.
+- **Scan events:** To consider when to check, for example, time intervals or based on actions (push/PR).
+
+By allowing this you can check for API access, sensitive data and other elements that may expose you to riks.
+
+If it detects something, it will notify you on the **Security** and it will give recommendations on what to do.
+
+## Management of repositories
+
+### Organizations and development
+
+There would be times where you develop with a team or you want to create a company that develops software, if this is the case, you will need to create a **Github Organization**.
+
+Go to your Github main page and select the option **+** and select the option **New organization**.
+
+![github_new_organization](/appendix_git/resources/github_new_organization.png)
+
+Once you click the option, it will ask you to select a plan. Read carefully the details. For now, we will move on with the free organization.
+
+![github_organization_plan](/appendix_git/resources/github_organization_plan.png)
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
