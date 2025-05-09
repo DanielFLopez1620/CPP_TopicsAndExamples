@@ -19,6 +19,8 @@
 
 void th_func1(int i);
 void th_func2(std::stop_token stop, float& num);
+void th_func3(std::stop_token stop, float& value);
+void th_func4(std::stop_token stop, float& info);
 
 int main(int argc, char* argv[])
 {
@@ -49,6 +51,40 @@ int main(int argc, char* argv[])
     // - All the thread functions should implement the first arg as a stop.
     // - All the threads should check periodically for the stop request.
     // - All the theads have to be 'std::jthreads'.
+    float value1 = 16;
+    float value2 = 10;
+    std::stop_source stop_th;
+    std::cout << "Example of multiple stops:" << std::endl;
+
+    std::jthread th3(th_func3, stop_th.get_token(), std::ref(value1));
+    std::jthread th4(th_func3, stop_th.get_token(), std::ref(value2));
+
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(1s);
+
+    stop_th.request_stop();
+    std::cout << "\tValue1: " << value1 << "\t\nValue2: " << value2
+              << std::endl; 
+    
+    // Info #4: You can implement callbacks so you can implemnt executions
+    // of certain pieces of code when you call a stop request in joinable
+    // threads.
+    float info = 1;
+
+    std::cout << "Usage of canceletation callback" << std::endl;
+    std::stop_source stop_src;
+    std::stop_token token = stop_src.get_token();
+    std::stop_callback callback(token,
+        []{std::cout << "\tThis is the callback..." << std::endl; });
+
+    std::jthread th5(th_func4, token, std::ref(info));
+        
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(1s);
+
+    stop_src.request_stop();
+    std::cout << "\tInfo value" << info << std::endl;
+
     return 0;
 }
 
@@ -66,7 +102,29 @@ void th_func2(std::stop_token stop, float& num)
     {
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(100ms);
-        i++;
+        num++;
     } while (!stop.stop_requested() && num < 1619);
+    
+}
+
+void th_func3(std::stop_token stop, float& value)
+{
+    do
+    {
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(100ms);
+        value++;
+    } while(!stop.stop_requested() && value < 20);
+    
+}
+
+void th_func4(std::stop_token stop, float& info)
+{
+    do
+    {
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(150ms);
+        info++;
+    } while (!stop.stop_requested() &&  info < 16);
     
 }
