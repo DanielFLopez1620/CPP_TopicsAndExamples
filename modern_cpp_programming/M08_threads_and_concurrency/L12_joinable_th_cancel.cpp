@@ -12,6 +12,33 @@
  * intended to call the join method when the object is destroyed and it is
  * still joinable. It also came with additional features like cancellation
  * wtih 'std::stop_source' and 'std::stop_token'.
+ * 
+ * This came as a fix to the C++11 threads, implementing changes like:
+ * 
+ * - Implementing a shared stop-state for requesting stop executiongs.
+ * - Cooperative cancellation with tools like 'get_stop_source()', which returns
+ *   std::stop_source objects related with the stop state; or 'get_stop_token()'
+ *   which returns a std::stop_token which can be used for cancellation
+ *   requests.
+ * - The destructor calls the 'request_stop()' and 'join()'.
+ * 
+ * As you may note below, you can initiate a joinable threads as you would do
+ * with a normal thread. However, the first argument possible may refer to a
+ * 'std::stop_token()' to make possible the cooperative cancel scenarios. If
+ * the first argument isn't this token, the token is passed to the function
+ * and cat get retrieved with 'get_stop_token()'.
+ * 
+ * This stop token must be checked regularly with 'stop_requested()' boolean
+ * member. Also, in the case of multiple stop takens are linked with the same
+ * stop source, just the first one will be taken.
+ * 
+ * The process to request a stop is simple, you just need to use
+ * 'request_stop()'. You can check if a 'std::stop_source' is associated witt
+ * a stop-state by using 'stop_possible()'.
+ * 
+ * One last thing to mention is that if multiple 'std::stop_callbacks' are
+ * called, the order of them when invoken is unspecified but they will be
+ * executed synchronously.
  */
 
  #include <thread>
