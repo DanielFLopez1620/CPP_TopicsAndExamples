@@ -39,16 +39,25 @@
  * One last thing to mention is that if multiple 'std::stop_callbacks' are
  * called, the order of them when invoken is unspecified but they will be
  * executed synchronously.
+ * 
+ * After you have review this code, you can use:
+ * 
+ *      g++ -std=c++20 L12_joinable_th_cancel.cpp -o join_th.out
+ *      ./join_th.out
  */
 
- #include <thread>
- #include <stop_token>
+// -------------------------- REQUIRED LIBRARIES ------------------------------
+#include <thread>     // For thread usage
+#include <stop_token> // Using stop signals with threads
+
+// -------------------------- FUNCTION PROTOTYPES -----------------------------
 
 void th_func1(int i);
 void th_func2(std::stop_token stop, float& num);
 void th_func3(std::stop_token stop, float& value);
 void th_func4(std::stop_token stop, float& info);
 
+// -------------------------- MAIN IMPLEMENTATION ----------------------------
 int main(int argc, char* argv[])
 {
     // Info #1: You can implement a thread that automatically join if the
@@ -90,7 +99,7 @@ int main(int argc, char* argv[])
     std::this_thread::sleep_for(1s);
 
     stop_th.request_stop();
-    std::cout << "\tValue1: " << value1 << "\t\nValue2: " << value2
+    std::cout << "\tValue1: " << value1 << "\n\tValue2: " << value2
               << std::endl; 
     
     // Info #4: You can implement callbacks so you can implemnt executions
@@ -113,16 +122,32 @@ int main(int argc, char* argv[])
     std::cout << "\tInfo value" << info << std::endl;
 
     return 0;
-}
+} // main()
 
+// ------------------------------ FUNCTION DEFINITIONS ------------------------
+
+/**
+ * Simple function that implements a count down with a while function, it will
+ * display the count until it ends at zero.
+ * 
+ * @param i Start of the count
+ */
 void th_func1(int i)
 {
     do
     {
         std::cout << "\tCurrent value of i: " << i << std::endl;
     } while (--i > 0);
-}
 
+} // th_func1()
+
+/**
+ * Thread function oriented to implement a count up to 1619 while also checking
+ * for stop request on the thread by considering the stop token.
+ * 
+ * @param stop Thread's stop token
+ * @param num Start of the count
+ */
 void th_func2(std::stop_token stop, float& num)
 {
     do
@@ -131,9 +156,17 @@ void th_func2(std::stop_token stop, float& num)
         std::this_thread::sleep_for(100ms);
         num++;
     } while (!stop.stop_requested() && num < 1619);
-    
-}
 
+} // th_func2()
+
+
+/**
+ * Thread function that implements a count up to 20 with time pauses while 
+ * reviwing thread stops over a stop token.
+ * 
+ * @param stop Thread's stop token
+ * @param value Start value 
+ */
 void th_func3(std::stop_token stop, float& value)
 {
     do
@@ -142,9 +175,16 @@ void th_func3(std::stop_token stop, float& value)
         std::this_thread::sleep_for(100ms);
         value++;
     } while(!stop.stop_requested() && value < 20);
-    
-}
 
+} // th_func3()
+
+/**
+ * Thread function that creates a count down based on a initial value while
+ * checking for stop conditions.
+ * 
+ * @param stop Thread's stop token
+ * @param info Startup of the count up
+ */
 void th_func4(std::stop_token stop, float& info)
 {
     do
