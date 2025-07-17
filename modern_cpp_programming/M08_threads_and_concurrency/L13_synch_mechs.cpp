@@ -41,74 +41,56 @@ int main(int argc, char* argv[])
     display(latch_data);
     
     // Info #2: Barriers
+    const auto games = {"Halo", "Fall Guys", "Fornite"};
 
-    std::vector<int> barrier_data(jobs);
-    int cycle = 1;
-    std::stop_source st_src;
+    auto on_download = []() noexcept
+    {
+        static auto element = 
+            "\t...completed\n"
+            "\tIntalling...\n";
+        std::cout << element;
+        element = "\t...completed\n";
+    };
+
+    std::barrier barrier_wk(std::ssize(games), on_download);
     
-    std::barrier<std::function<void()>>
-        barrier_wk(
-            jobs,
-            [&barrier_data, &cycle, &st_src]()
-            {
-                display(barrier_data);
-                cycle++;
-                if(cycle == 10)
-                {
-                    st_src.request_stop();
-                }
-            }
-        );
-
-    std::vector<std::jthread> bar_ths;
-    for (int i = 1; i <= jobs; ++i)
+    auto for_game = [&](std::string name)
     {
-        bar_ths.push_back(std::jthread(
-            [&cycle, &barrier_wk, &barrier_data](std::stop_token st_tk, int const i)
-            {
-                while (!st_tk.stop_requested())
-                {
-                    using namespace std::chrono_literals;
-                    std::this_thread::sleep_for(250ms);
+        std::cout << "\t " + name + " is available\n";
+        barrier_wk.arrive_and_wait();
 
-                    barrier_data[i] = factor(i, cycle);
+        std::cout << "\t " + name + " is installed\n";
+        barrier_wk.arrive_and_wait();
+    };
 
-                    barrier_wk.arrive_and_wait();
-                }
-            },
-            i
-        ));
+    std::cout << "Using barriers...." << std::endl 
+              << "\tSearching" << std::endl;
+    std::vector<std::jthread> barrier_ths;
+    barrier_ths.reserve(std::size(games));
+    for(auto const& g : games)
+    {
+        barrier_ths.emplace_back(for_game, std::string(g));
     }
 
-    for (auto& th : bar_ths)
+    // Semaphores 
+    std::binary_semaphore semaphore_wk{0};
+    auto printing_page = [&](const std::string& user, int pages)
     {
-        th.join();
-    }
-
-    // Info #3: Counting sempahore.
-    std::vector<int> sem_data;
-
-    std::binary_semaphore bin_sem{0};
-
-    std::vector < std::jthread> sem_ths;
-    for (int i = 1; i <= jobs; ++i)
-    {
-        sem_ths.push_back(std::jthread([&sem_data, i, &bin_sem]
+        for(int i = 1; i <= pages; ++i)
         {
-            for(int j = 1; j < jobs + 1; j++)
-            {
-                using namespace std::chrono_literals;
-                std::this_thread::sleep_for(250ms);
-                int value = factor(i, j);
-                
-                bin_sem.acquire();
-                sem_data.push_back(value);
-                bin_sem.release();
-            }
-        }));
-    }
+            semaphore_wk.acquire();
 
-    display(sem_data);
+            using namespace std::chrono_literals;
+
+            std::cout << user << " is priting page " << i << "...\n";
+            std::this_thread::sleep_for(500ms);
+
+            std::cout << user << " finished page" << std::endl;
+            semaphore_wk.release();
+            std::this_thread::sleep_for(100ms);
+        }
+    };
+
 
     return 0;
 } // main()
