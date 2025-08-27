@@ -1445,6 +1445,14 @@ Once you click the option, it will ask you to select a plan. Read carefully the 
 
 ![github_organization_plan](/appendix_git/resources/github_organization_plan.png)
 
+### Getting started with Github Actions
+
+You have already watched a little bit of Github Actions with the DependaBot, but let's explore further.
+
+The Github Actions are automated actions you can implement for reviewing, checking, updating or changing info based on workflows or conditions you set.
+
+Let's see this by implementing a auto update on our profile for the last commit we did
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
