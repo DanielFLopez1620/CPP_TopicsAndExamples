@@ -1451,7 +1451,93 @@ You have already watched a little bit of Github Actions with the DependaBot, but
 
 The Github Actions are automated actions you can implement for reviewing, checking, updating or changing info based on workflows or conditions you set.
 
-Let's see this by implementing a auto update on our profile for the last commit we did
+Let's see this by implementing a auto update on our profile for the last commits we did, and we will be implementing the [recent-activity](https://github.com/Readme-Workflows/recent-activity) by ReadmeWorkflows.
+
+1. Go to your README profile add a section where you want to add your recent activity, and add the place holders for the acitivy as show below:
+
+    ~~~Markdown
+    ...
+
+    ## Recent activity
+
+    <!--RECENT_ACTIVITY:start-->
+
+    <!--RECENT_ACTIVITY:last_update-->
+    ...
+    ~~~
+
+2. Go to the section **Actions**, then select **New Workflow** and select the option **Simple workflow**.
+
+    ![github_action_workflow](/appendix_git/resources/github_action_workflow.png)
+
+3. Now, you should be in a file at the *.github/workflows* path, you can change the name but keep it in mind.
+
+4. Configrue the workflow provided
+
+    ~~~YAML
+    name: Update README
+
+    on:
+    schedule:
+        - cron: '0 */24 * * *' # Change the crontab for a certain time input
+    workflow_dispatch:
+
+    jobs:
+    build:
+        runs-on: ubuntu-latest
+        name: Update Profile README
+
+        steps:
+        - uses: actions/checkout@v2.3.4
+        - uses: Readme-Workflows/recent-activity@{version} # Update with the latests version
+            env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    ~~~
+
+5. Configure the recent activity file, by creating a *recent-activity.config.yaml* at the *.github* directory. A sample is listed below:
+
+    ~~~yaml
+    settings:
+        username: "Readme-Workflows" 
+        commit_msg: "⚡ Update README with the recent activity"
+        max_lines: 5 # Update here for lines to consider
+        readme_file: "./TEMPLATE.md" # Replace with README file name
+        disabled_events:
+            - "comments"
+        url_text: "{REPO}{ID}"
+        date:
+            timezone: "GMT+00:00"
+            text: "Last Updated: {DATE}"
+            format: "dddd, mmmm dS, yyyy, h:MM:ss TT"
+        commit_name: "readme-bot"
+        commit_email: "41898282+github-actions[bot]@users.noreply.github.com"
+        line_prefix: "{NUM}. "
+        ignored_repos:
+            - username/repo
+        # Modify reproduction messages
+        messages:
+            comments: "💬 Commented on {ID} in {REPO}"
+            push: "⬆️ Pushed {AMOUNT} commit(s) to {REPO}"
+            issue_opened: "❗️ Opened issue {ID} in {REPO}"
+            issue_closed: "✔️ Closed issue {ID} in {REPO}"
+            pr_opened: "💪 Opened PR {ID} in {REPO}"
+            pr_closed: "❌ Closed PR {ID} in {REPO}"
+            pr_merged: "🎉 Merged PR {ID} in {REPO}"
+            create_repo: "📔 Created new repository {REPO}"
+            fork_repo: "🔱 Forked {FORK} from {REPO}"
+            wiki_create: "📖 Created new wiki page {WIKI} in {REPO}"
+            added_member: "🤝 Became collaborator on {REPO}"
+            changes_approved: "👍 Approved {ID} in {REPO}"
+            changes_requested: "🔴 Requested changes in {ID} in {REPO}"
+            new_release: "✌️ Released {ID} in {REPO}"
+            new_star: "⭐ Starred {REPO}"
+    ~~~
+
+6. After saving and commtting, go to actions an run the workflow, check the logs in case of errors.
+
+    ![github_action_run](/appendix_git/resources/github_action_run.png)
+
+7. With the workflow running you should be able to see the initial updates, and more updates when the crontab resets the call.
 
 ## Additional resources
 
