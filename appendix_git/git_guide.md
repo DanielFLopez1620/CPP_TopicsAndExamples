@@ -1539,6 +1539,73 @@ Let's see this by implementing a auto update on our profile for the last commits
 
 7. With the workflow running you should be able to see the initial updates, and more updates when the crontab resets the call.
 
+### Github Cli
+
+Yes... you can have a terminal to control all you require. For knowing more about this project, you can check [cli @ Github](https://github.com/cli/cli)
+
+For the installation, you can follow the official instructions, in my case, for a Debian-based system, it is:
+
+~~~bash
+(type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) \
+    && sudo mkdir -p -m 755 /etc/apt/keyrings \
+    && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && sudo mkdir -p -m 755 /etc/apt/sources.list.d \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \ 
+    && sudo apt install gh -y
+~~~
+
+After that you are done and ready to experiment, but if you aren't sure of the installation, you can use:
+
+~~~bash
+gh --version
+
+# gh version 2.78.0 (2025-08-21) # In my case
+~~~
+
+Then, let's start by the authentication login:
+
+~~~bash
+gh auth login
+~~~
+
+This will display a step-by-step login config on your terminal that you should complete in order to use Github Cli, some considerations to take are:
+
+- **Account type:** Github or Github Enterprise
+- **Preferred protocol:** HTTPS or SSH
+- **Credentials:** Shared with git or other option.
+- **How to authenticate:** Web protocol, token or key.
+
+After that you should be logged in:
+
+![github_cli_auth](/appendix_git/resources/github_cli_auth.png)
+
+Now, you have full access to your Github by using a terminal, for example, you can create a repository with:
+
+~~~bash
+gh repo create
+
+# It will display the config of creation type, name, description, visibility, README file options, .gitignore file options, among others inside the terminal.
+~~~
+
+But it doesn't end there, as you can even set up a repo in a faster way, for example:
+
+~~~bash
+gh repo create MiCliRepo --public --add-readme -d "Repo from CLI" --clone
+~~~
+
+Do not forget to check the documentation for more context on the params and args for this code.
+
+Let's explore something else, for example, creating issues:
+
+~~~bash
+gh issue create
+
+# It displays a issue interface for adding a name, description, body, metadata, among others. Also, do not forget to assign you or mention you if required.
+~~~
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
