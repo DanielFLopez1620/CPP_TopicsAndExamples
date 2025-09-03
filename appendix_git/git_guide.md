@@ -1606,6 +1606,46 @@ gh issue create
 # It displays a issue interface for adding a name, description, body, metadata, among others. Also, do not forget to assign you or mention you if required.
 ~~~
 
+## Change management on Github
+
+We have already checked up about the management of the repositories itself in the previous module. However, we can go further as we may need to implement changes coming from other branches or developments. So, let's explore about them.
+
+### Setting up a software project
+
+After you created you repository, it is a good practice to include a template on how to include Pull Requests, for example:
+
+~~~Markdown
+# Nice title
+
+Short description about the changes implemented in this PR
+
+## Changes included
+
+A comprehensive list on the changes implemented and the reason (why) behind the change.
+
+## Testing implemented
+
+How the changes were implemented and what is the validation made to them
+
+## Related tickets
+
+Others PRs and Issues considered
+
+## Checklist
+
+- [] I have followed the conventions on the repository
+- [] I have added unit testing for the changes
+- [] Every tests pass
+- [] I have docummented the chhanges
+
+## Additional comments
+
+What other information would you like to share?
+
+~~~
+
+You should add this template under the title **pull_request_template.md** on the **.github** directory of your repository.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
