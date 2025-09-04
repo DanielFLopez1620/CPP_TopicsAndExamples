@@ -1646,6 +1646,32 @@ What other information would you like to share?
 
 You should add this template under the title **pull_request_template.md** on the **.github** directory of your repository.
 
+So when you work in another branche and you are ready to Pull Request the changes, you can review the template and start the process in a better way.
+
+![github_pr_template](/appendix_git/resources/github_pr_template.png)
+
+And you are ready to move on for the PR.
+
+### Branch and PR Management
+
+Let's implement a routine when you enter Github
+
+1. Check your repositories and notifications
+
+2. If you see a PR, read it and check the changes.
+
+3. If you have questions, use the discussion on the PR.
+
+4. Once you are ready, merge the PR.
+
+5. Delete the branch.
+
+But that is not the only one, as you may be collaborating on repositories and projects, so it is good to check the last changes, pull them if required and organize yourself before moving on.
+
+Now, suppose you want to pushed to a new branch and discovered that you need to merge the latest changes of another branch, for those cases, a *conflict* will appear.
+
+You can take advantage of the VS Code environment and pass the merging by considering the review of changes, merging and then pushing.
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
