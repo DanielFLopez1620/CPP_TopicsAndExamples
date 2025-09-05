@@ -1672,6 +1672,22 @@ Now, suppose you want to pushed to a new branch and discovered that you need to 
 
 You can take advantage of the VS Code environment and pass the merging by considering the review of changes, merging and then pushing.
 
+### Releases for software development
+
+A release? Yeah... not stay only with the commits as you need to offer official and stable releases for your libraries. This is related with git tags but go further on the topic.
+
+![github_flask_api](/appendix_git/resources/github_flask_repo.png)
+
+AS you can check, in this **Flask** repository, there are many releases for certain versions, for example, they can use semantic versioning which stands for:
+
+~~~Markdown
+x.y.z
+
+**x**: Major version (important)
+**y**: Minor version (funcionality)
+**z**: Patch version (bugs)
+~~~
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
