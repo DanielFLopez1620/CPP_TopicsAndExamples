@@ -1,0 +1,1754 @@
+# Git and Github Lessons
+
+## Git
+
+### What is Git?
+
+Git is a version control tool, what does this mean?
+
+It means that you no longer need to go from **project.cpp**, to **project_final.cpp**, and even to **project_final_real.cpp**. As Git will save only the changes you made to the files and will help you to collaborate with others in a clean way.
+
+It was created by Linus Torvalds, yes the creator of Linux, who also had problems with versioning of his own codes.
+
+It can work in your machine with terminal tools or [VS Code](https://code.visualstudio.com/). But if you need to collaborate, you may need to consider [Github](https://github.com/) and [Gitlab](https://about.gitlab.com/)
+
+#### Why is it important?
+
+There are many reasons, some of them are:
+
+- It is an efficient way to manage your projects and codes.
+- It is a proffesional tool for proffesional development and growth.
+- It will help you to collaborate in teams.
+- It allows you to publish your projects.
+
+### First steps with Git
+
+Most of the Linux systems comes with Git installed.
+
+So, let's begin wit checking it:
+
+~~~bash
+git --version
+# Should display the installed version, otherwise check the installation.
+~~~
+
+Then, create a directory to explore things:
+
+~~~bash
+mkdir my_project
+cd my_project
+~~~
+
+Now, we are ready to start the Git in this folder, run the next command:
+
+~~~bash
+# git init [params]
+git init
+~~~
+
+You should see a display of the config made, it may be asking you to set the default branch if it is your first time. In the past, the main branch was called **master**. However, it has changed to **main** or **trunk**. To achieve this change you can run:
+
+~~~bash
+# git config 
+git config --global init.defualtBranch main
+~~~
+
+Inside your project, let's proceed with this change by running:
+
+~~~bash
+# git branch [params] <branch>
+#   -m To change  from old branch to new branch
+git branch -m main
+~~~
+
+We have set up the branch, but there are still configurations you have to implement:
+
+~~~bash
+# User name set up
+git config --global user.name "<your_username>"
+# User email set up
+git config --global user.email "<your_email>"
+~~~
+
+If you desire so, you can check all the configurations with:
+
+~~~bash
+git config --list
+~~~
+
+### Basic commands
+
+Once you have initialized *Git* you are ready to control the versions of your code.
+
+~~~bash
+# Remember, always initialize to work with Git
+git init
+~~~
+
+But... what does the initialization do? Well, it add a **.git** directory to track the changes and will reflect all the git actions we implement. Do you see it? Well... it is a hidden dir.
+
+~~~bash
+# Inside a git project, run:
+ls -al
+# Then search for the .git directory
+~~~
+
+So... let's being creating content
+
+~~~bash
+# Inside your git project
+echo "New file with changes" > ./contenido.txt
+~~~
+
+Once you have done changes, you may be interested in know the status of changes, in this case you can try with the next command:
+
+~~~bash
+git status
+~~~
+
+![git_status_1_tm](/appendix_git/resources/git_status_1_tm.png)
+
+Here, you can notice the following:
+
+- You are on the branch master
+- There are no commits
+- The file you just added appears in untracked files
+
+Now, to start tracking the file, you have to add it to git as shown below:
+
+~~~bash
+# git add [files_name] <file_name>
+git add contenido.txt
+~~~
+
+Then, if you check the status it should be different.
+
+![git_status_2_tm](/appendix_git/resources/git_status_2_tm.png)
+
+In case you added a file you didn't want, you can revert it with:
+
+~~~bash
+# git rm --cached <filename>
+git rm --cached cotenido.txt
+~~~
+
+But this is not the case, so make sure to add it again:
+
+~~~bash
+git add contenido.txt
+~~~
+
+If there are many files, and you want to import everything. You can simply run:
+
+~~~bash
+git add .
+~~~
+
+However, be careful when doing this, as you may accidentaly add undesired files if you do not check properly.
+
+Now... Adding a file doesn't mean that the changes have been commited, it just add it to a staging phase to confirm and check, before committing a change. Then, the question becomes... how do I commit something in the stage file, easy:
+
+~~~bash
+# git commit -m "<message>"
+git commit -m "My first change"
+~~~
+
+![git_commit](/appendix_git/resources/git_commit.png)
+
+With this, you just committed a change. The committed changes can be tracked and you can check the history of your project.
+
+How to check the history of changes? You can check the logs in git for your repository with:
+
+~~~bash
+git log
+~~~
+
+![git_log](/appendix_git/resources/git_log.png)
+
+Not so much changes for now, so try adding multiple commits and check it later. Keep in mind that if you modify a file that was already in the history of a repository, you won't add a untracked file but rather to add a modified tracked file.
+
+Is it still messy to understand the workflow of the changes? Let's illustrate it with next image:
+
+![git_workflow_diagram](/appendix_git/resources/git_workflow_diagram.drawio.png)
+
+### Branches and merges
+
+A branch is a division of your workspace in multiple space, so you can focus in different things. For example, you may have the **main** branch, where your base application is present, and the **dev** branch, where you experiment and add features. Later, when all was setup in the **dev** branch, you can merge its content to the **main** branch.
+
+This also allows a better collaboration and the implementation of features, bug fix and changes in a better and tracked way.
+
+Don't you know which branch are you on? Just run the next command:
+
+~~~bash
+git branch
+~~~
+
+At this point, you should only have one branch, it can be **master** or **main** depending on your set up.
+
+To create one branch, you can use:
+
+~~~bash
+# git checkout -b <branch_name>
+git checkout -b dev
+
+# After that, check the creation
+git log
+~~~
+
+![git checkout -b branch](/appendix_git/resources/git_branch.png)
+
+You can add and commit changes that are independent of other branches, for example, you can run:
+
+~~~bash
+echo "Commit in another branch" >> ./contenido.txt
+git add contenido.txt
+git commit -m "Changes in other branch"
+~~~
+
+If you change branches, you wouldn't notice the changes. But... how can you add the changes to the main branch when I think I am ready? Well, you just need to merge it:
+
+~~~bash
+# Move to your main branch
+git checkout master # Or git switch master
+
+# Merge and specify the branch
+git merge dev
+~~~
+
+It will notify you about the changes and notifications, after this you would be able to watch the changes, so check with the logs.
+
+~~~bash
+git log
+~~~
+
+![git_log_2](/appendix_git/git_guide.md)
+
+Finally, do not forget about deleting branches once their purpose was completed, you can run:
+
+~~~bash
+# git branch -D <branch>
+git branch -D dev
+~~~
+
+### Time travel
+
+Did you ever wondered how to travel to the past and correct a mistake? Well, it is impossible to know. However, we can go back with **Git** to previous versions of our code to make changes, there are two options **reset** and **revert**:
+
+- ```git reset``` : Return to a previous commit, deleting the history of changes until that point. It also allows to explore past changes.
+- ```git revert``` : Return to a previous commit by creating a new commit in that point.
+
+Keep in mind to check for the **HEAD** that is where you created the last commit, for example, it can be *main* if you just merged two branches (*dev* merged to *main*)
+
+Let's take a look in a more practical way, we have a history of 3 commits:
+
+![git_log-3](/appendix_git/resources/git_log_3.png)
+
+But, we added a change we didn't really want. So I have to come back now, I can achieve it by using a *revert* with a proper commit in mind, so we will take a look on the commit ID/hash.
+
+~~~bash
+# git revert <id/hash_of_commit>
+# In my case, it would be:
+git revert 096f8c5a9ec524026d545ab24b4debfb55aa309d
+~~~
+
+And it will display you the notification (in a text editor) to specify the commit of revert, like this:
+
+![git_revert_act](/appendix_git/resources/git_revert_act.png)
+
+Now, if you check the logs, you may notice important additional information:
+
+~~~bash
+git log
+~~~
+
+![git_log_4](/appendix_git/resources/git_log_4.png)
+
+In case you have a conflict with the *revert*, you have three options:
+
+- Fix the conflicts and continue:
+
+~~~bash
+# After making the fix
+git revert --continue
+~~~
+
+- Skip the patch:
+
+~~~bash
+git revert --skip
+~~~
+
+- Cancel the rever operation
+
+~~~bash
+git revert --abort
+~~~
+
+Then, why don't we try to reset the history of our repository? Of course, we will do it with the commit that was reverted:
+
+~~~bash
+# git reset <option> <commit>
+#       --soft: HEAD to the specified commit, preserves the changes in staging area
+#       -- mixed: Default, moves HEAD, discard changes in staging area but mantains changes in working dir.
+#       -- --hard: Moves HEAD but discard all the changes
+git reset --hard 096f8c5a9ec524026d545ab24b4debfb55aa309d
+~~~
+
+![git_log_5](/appendix_git/resources/git_log_5.png)
+
+Always ensure to use **--hard** as last option, as you are affecting the history of changes and the workflow of others.
+
+Take advantage of this tools only to improve your work, fix bugs and by considering a proper communication with the team.
+
+### Managing versions
+
+You can have different versions by considering **tags** or **checks**.
+
+On one hand, **tags** it like a stamp you add to a commit for a easy future identification, for example, by identifying a commit with a key work version like Ubuntu does with its distros (Utopic Unicorn, Wily Werewolf, Focal Fosa, Jammy Jellyfish...) or just to manage alfa, betas and stable versions.
+
+~~~bash
+# Adding a tag
+# git tag [option] <name>
+#       -a : To make an unsigned annotated tag object
+#       -m : To submit a message
+git tag -a v1.0 -m "First version"
+~~~
+
+Did you already give it a try? If the answer is no, check the images below to check the changes between **logs**.
+
+![git_log_6](/appendix_git/resources/git_log_6.png)
+
+As you can see, the last commit has the tag we just created, but... what happens when I have a lot of commits and a few tags? Do I really need to explore all the commits to find the tags? The answer is *no*, as you can list only the tags as follows:
+
+~~~bash
+# Lsit available tags
+git tag
+~~~
+
+If you have the version we just created, it should only appear that. Try to add more commits and versions, and compare the listing.
+
+Another interesting option here, is to show the specified version, this can be done as it illustrated below:
+
+~~~bash
+git show v1.0
+~~~
+
+![git_show_tag](/appendix_git/resources/git_show_tag.png)
+
+Let's say you added a wrong tag, there is still the option to delete it with the command:
+
+~~~bash
+# git tag [option] <tag>
+#       -d : Delete the given tag
+git tag -d v1.0
+~~~
+
+By deleting a tag, you do not mess the commit story. You just delete a version tag, which can be replaced or taken to another position.
+
+On the other hand, **checkouts** allow to change branches or commits, in other words, it allow you to come back to specific commit or check another branch.
+
+How? Well... run a **git log**, then select a commit, copy its ID and run the next command:
+
+~~~bash
+# git checkout <commit>
+# In my case it is:
+git checkout 6cf8b65ed188d0ef3e60d83703292f8db37be3e0
+~~~
+
+Then, you should notice the "time travel" as it can warn you about the position of the *HEAD* and how to implement changes from the commit you are currently on:
+
+![git_checkout_sp_com](/appendix_git/resources/git_checkout_sp_com.png)
+
+The command you can watch on screen is **swtich** which can help you to create a new branch from this point or just undo the operation (by providing ```-``` option)
+
+Be careful with the modifications over the history of commits, as you may not notice the latest changes and if you push/merge to a recent point, it may generate a conflict.
+
+You can return to the last point of your branch, by providing its name.
+
+~~~bash
+# git checkout <branch>
+git checkout main # Or master depending your set up
+~~~
+
+### Solving conflicts
+
+When we are working in a individual and local way, everything tends to go easy. However, when you add more people to the equation, **conflicts** may appear.
+
+ These conflicts are not fights or problems, they are bugs and mistakes that happen when you merge branches. Then, the fusion alters the changes that were made in other branch that was recently merged.
+
+ If this happen to you, do not worry as you can fix it. First, let's simulate a conflict in our repository.
+
+1. In your main branch, create a change, for example:
+
+    ~~~bash
+    echo "Let's create a conflict" > conflict.txt
+    ~~~
+
+2. Add the file to your repository history:
+
+    ~~~bash
+    git add conflict.txt
+    git commit -m "Adding a non-conflicting file"
+    ~~~
+
+3. Then, we create another branch, for example:
+
+    ~~~bash
+    git checkout -b devel
+    ~~~
+
+4. Make changes to the file in the new branch:
+
+    ~~~bash
+    echo "Changes in devel" >> conflict.txt
+    ~~~
+
+5. Then, add the changes to the branch history:
+
+    ~~~bash
+    git add conflict.txt
+    git commit -m "Is this a conflicting change?"
+    ~~~
+
+6. Go again to your original branch, in this case, it can be *master* or *main*
+
+    ~~~bash
+    git checkout master # or main
+    ~~~
+
+7. Add a new change to the file in the main, making sure you haven't merge the changes from the other branch:
+
+    ~~~bash
+    echo "Still not conflict, right? >> conflict.txt
+    ~~~
+
+8. And add those changes to the history of the repository at the current branch:
+
+    ~~~bash
+    git add conflict.txt
+    git commit -m "A change in main with no conflict (not sure)"
+    ~~~
+
+9. Now, the two branches have changed, if we merge, it will have a conflict:
+
+    ~~~bash
+    git merge devel
+    ~~~
+
+![git_conflict_1](/appendix_git/resources/git_conflict_1.png)
+
+Now... how can we solve it? Well, you just need to edit the conflicting files by deciding what to leave... it can be only what is in *master*/*main* or only what is in *devel* or both or neither, as you wish:
+
+~~~bash
+nano conflict.txt
+
+# And edit the file, you should see a similar structure as below.
+~~~
+
+![git_conflict_2](/appendix_git/resources/git_conflict_2.png)
+
+What does it mean? The arrows indicate the changes origin (which is the branch?) and the equals indicate the separation between the changes.
+
+Once you have solved it, check the status:
+
+~~~bash
+git status
+~~~
+
+![git_conflict_3](/appendix_git/resources/git_conflict_3.png)
+
+After this, you can add and commit the changes, and then attempt the merge, which should be completed without any problems.
+
+### VS Code and Git?
+
+Yes, you can use the control version integrated in [VS Code](https://code.visualstudio.com/) to take advantage in your daily developing task.
+
+Do you remember how to open it? Well, you just run:
+
+~~~bash
+code . # Or the path to your workspace and repository
+~~~
+
+Once inside, and if you are using a *Git* repository, you can go to the icon shown in the red circle to access it:
+
+![vs_code_control_version](/appendix_git/resources/vs_code_control_version.png)
+
+Here you can find a lot of tools to do the same you have done in terminal in order to control the versions of your code.
+
+Some of the info you should consider is highlighted in the image below:
+
+![vs_code_some_tools](/appendix_git/resources/vs_code_some_tools.png)
+
+So, let's dive into this options:
+
+- **Git options:** There you can find the tools for using *pull*, *push*, *fetch*, *clone*, *checkout*, *tags*, *remote*, *commit* and the options you have discovered previously in these lessons, but in this case using a GUI (Graphical User Interface).
+- **Source control and tracking:** If you modify a file, you would see it right here. It will also track the staged files, and will give you the option to give a commit, you can select in a graphical way which file to move to the next stage.
+- **History and branches:** It will display the histroy of your repo, with branches and merges included, if you pass over a commit you will get additional details.
+- **Current branch:** It will indicate your current branch, and if you give click, you can move to other branches (local or remote) and even create a new one.
+- **Current status:** Will tell you shortly about the changes and the current status of the repository.
+
+But let's take things in a interesting way... did you know that you can also fix conflicts? Yes... coming back to this topic, if it happens in VS Code, it should be something like:
+
+![vs_code_confict](/appendix_git/resources/vs_code_conflict.png)
+
+Where you can explore in a graphical way the files and decide what to leave before the changes are merged. Here you can edit manually, or select an option (keep current change, keep incoming change and keep both). And as you can see it is helpful with colors and additional messages.
+
+![vs_code_conflict_solved](/appendix_git/resources/vs_code_conflict_solved.png)
+
+## Github
+
+Let's discover about one of the biggest tool for developers.
+
+### Why Github?
+
+In a productive environment we need to share our work with others. Then, [Github](https://github.com/) appears a solution to control the versions and deploy online your repositories, and the most important thing is that *Git* is its core.
+
+It isn't the only solution though, there are others like [BitBucket](https://bitbucket.org/product/), [GitLab](https://about.gitlab.com/), among others. However, Github is the most famous, it was released in February 2008.
+
+Github offers a platform that aims to build, scale and submit secure software, even with AI powered tools, and in the case of the Enterprise edition it also adds AI (as it is transforming the software development), collaboration, productivity, security and scalability. It also automates some activities helping you to focus on the development.
+
+One additional plus is that you can collaborate in projects, even bigger ones like programming languages and kernels, connecting with proffesionals around the world.
+
+So, do not forget to create your account: [Sign In](https://github.com/login)
+
+### Getting started with Github
+
+After you have created your account, let's explore the platform.
+
+In the landing page, you can find the info ilustrated in the image below:
+
+![github_landingpage](/appendix_git/resources/github_landingpage.png)
+
+Do not forget to update your profile, where you can configure your name, your photo, your bio, the URL to your website, the company you are working on and links to your social media.
+
+But the settings do not stop there, as you should also consider the security of your accound, considering the next factors:
+
+- Use a strong password.
+- Activate the [mobile 2FA](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication), do not use SMS as double factor.
+- Enable hte usage of secure keys.
+
+After this, you are ready to explore the workflow with Git and Github.
+
+### Working with Github
+
+You use *Git* inside *Github*, it is very important. However, there more things to do here, as you can explore new online tools to manage the versions of your code.
+
+Some notes to consider are:
+
+- *git init* is replaced as you can create a repository by using the GUI and then clone it into your machine.
+
+- When you are done, you better move your local updates to the internet, in this case with different branches and using push, pull request and code review.
+
+- It is better to divide the code review by considering smaller tasks, as it can be one task one objective.
+
+Well, then let's begin with how to create a repository. In your home page, click the option to create a new repository:
+
+![githuh_new_repo](/appendix_git/resources/github_new_repo.png)
+
+Once you clic the option, you are ready to edit the details:
+
+![github_create_repo](/appendix_git/resources/github_create_repository.png)
+
+The aspects to focus here are:
+
+- **Name:** How will be the identificator of your repository?
+- **Propietary:** Who is the author? Can be a person, a group or a company.
+- **Type:** Public or private, accoridng your requirements.
+- **ReadMe file:** Specifiy if you want to create a repository with a markdown file to tell others what is going on here.
+- **Add .gitignore:** A tempalte of a file that will host the things to ignore in the repository, for example, in C you will ignore the compiled results as you only need the source.
+- **Add license:** Choose a license properly according to your objectives.
+
+After you have done, the result should be like this:
+
+![github_new_repository](/appendix_git/resources/github_new_repository.png)
+
+Some additional keypoints are:
+
+- You can check your branches here, at the moment we only have one, called **main**. However, if we create more, we could be able to select it.
+
+- This also applys for tags, which can be checked at the side of the branches and at the **Releases** section.
+
+- In the **About** section, you can find information about the repository including a short description, links to the **activity**, **stars**, **watching** and **forks**.
+
+- You have windows for **Code** (where you develop), **Issues** (to solve issues notified by you or users), **Pull Requests** (invitations of merge of you or users you have received), **Actions** (for Github actions), **Projects** (for more about the project and relateds), **Wiki** (the documentation and wiki of the repository), **Security** (info related to the security of the repository), **Insighs** (important statistics of the repo) and **Settings** (Set up and configuration of your repository). We will check them out later, for now... let's dive in working together by adding a collaborator.
+
+If you have a colleague or a friend who wants to participate in the project, you can add him/her as a collaborator. For this, go to **Settings** of your repository and check the option **Collaborators**.
+
+![add_collaborators](/appendix_git/resources/github_add_collaborators.png)
+
+You may have to give your 2FA credentials in order to make this happen. Once you in this screen, you can press the button **Add people** and type the username of the person you want to add.
+
+That person must have a Github account and also accept the invitation before he/she is able to watch, modify and edit the repository.
+
+Once, you are ready to continue, remember that you can work with the repository locally, but first you must clone it, how? Go to the green button called **Code**, copy the link and clone it in your terminal with:
+
+~~~bash
+git clone <url>
+~~~
+
+In my case (do not try the same repo as I configured it privetaly), it would be like this:
+
+![github_git_clone](/appendix_git/resources/github_git_clone.png)
+
+### Setting your keys
+
+Working with HTTP is enough to develop. However, you may need additional security, then you can use the **SSH** option.
+
+What is this? It allows the usage of keys in order to recognize who is working and who is able to connect with your repositories.
+
+If you check the **code** options (green button), you can watch that additionally to **HTTPS** there is an option called **SSH**:
+
+![github_check_ssh_1](/appendix_git/resources/github_check_ssh_1.png)
+
+However, as you may watch, yo do not have any key. Then, let's move to the creation of them. So, go to your terminal:
+
+1. Create your key with the **SSH generator**:
+
+    ~~~bash
+    # ssh-keygen -t <encriptation_level> -C correo
+    ssh-keygen -t ed25519 -C <your_gmail>
+
+    # An assistant should appear, to select the name, location, password and nothing more. Fill the data and remember it.
+    ~~~
+
+2. Check that the key was created:
+
+    ~~~bash
+    ls .ssh
+    # And search for the key name you just created
+    ~~~
+
+3. Evaluate the agent is running:
+
+    ~~~bash
+    # Check if the agent exists
+    eval "$(ssh-agent -s)"
+    ~~~
+
+4. Link the key with the agent:
+
+    ~~~bash
+    ssh-add ~/.ssh/<key_name>
+    # You will be asked for the key's password
+    ~~~
+
+5. Now, the machine knows about the key, the next step is to use the public key in your Github
+
+    ~~~bash
+    cat ~/.ssh/<key_name>
+    # Copy the content
+    ~~~
+
+6. Go to your web browser, open Github and go to your settings.
+
+7. Select the category SSH and add inside the section **SSH Keys**, add a new key. You may require to log with the 2FA.
+
+8. Finally, add the next command in order to create a connection with Github and check the process:
+
+~~~bash
+ssh -T git@github.com
+# After checking, you may notice that 'authorized_host' appeared under the .ssh dir.
+~~~
+
+Once it is created, try to clone a repository by using the **SSH** option.
+
+Make sure to just add a unique key per computer, do not share it. Security is very important.
+
+### Cloning, forking and more
+
+Fork? Are we going to eat something? No, a fork is a copy of a repository from another person that is added into our account. Once it is forked, you will lose the updates, then why do you need to do this? Well, in case you want to collaborate in a project by experimenting in a local set up, when you want to change the flow of another repository or idea, or just to explore more about a repository.
+
+You can do it by simply checking the **fork** option in Github:
+
+![github_forks](/appendix_git/resources/github_fork.png)
+
+Once you clic, you should see the options for configuring the fork:
+
+![github_forking_process](/appendix_git/resources/github_forking_process.png)
+
+And what about stars? It is a way to add a repository as a favorite. Then, you will follow it and you can access to it very quickly.
+
+Again, it is very easy, you just need to select the star as shown below:
+
+![github_star](/appendix_git/resources/github_stars.png)
+
+Do not forget another important part of the process, that is cloning... yes, just:
+
+~~~bash
+git clone <url>
+~~~
+
+As this will allow you to work locally on your project, just do not forget to upload the changes and commits as you move on with your work in the proper branch.
+
+Hopefully you make a secure clone by implementing what you learn about SSH keys.
+
+### Working with remote repositories
+
+It is not only about cloning and working, as you may need to sync changes from your work and the work of others. Then we will introduce **pull**, **push** and **fetch**.
+
+When you need to bring information that was loaded to the remote repository into your local repository, you have to use **git pull**.
+
+If you need to upload your changes, after you have added and committed, you have to use **git push**.
+
+So let's get started, after you clone your repo, you should check in which branch you are located:
+
+~~~bash
+git branch
+# It will display the branch name, in my case it is main.
+~~~
+
+I am using my private repository *git_example*, so donot forget to create one for the incoming practices.
+
+Start by modifying the **README.md** file of your repository, then add and commit the changes.
+
+~~~bash
+cd ~/path/to/repo/git_example
+echo "## My first contribution" >> README.md
+git add README.md
+git commit -m "Adding header 2"
+~~~
+
+Now, you have local changes that are not present in the remote repository. So you are ahead by 1 commit of 'origin/main' and we are ready to make a push:
+
+~~~bash
+# git push <source> <send_to>
+#   -u : Set upstream
+git push -u origin main
+~~~
+
+If you go to the remote repository after this point (and refresh your browser), you should be able to watch the changes.
+
+![git_push_showcase](/appendix_git/resources/git_push_showcase.png)
+
+But... what happens if changes are uploaded and you do not have them? Well, let's make the experiment.
+
+Begin by modifying the repository online, by clicking the pen which will allow you to edit the **README.md** file.
+
+![github_changes_online](/appendix_git/resources/github_changes_online.png)
+
+After you are done with the changes, proceed to commit them.
+
+![github_making_commit](/appendix_git/resources/github_making_commit.png)
+
+This changes aren't synced in our local repository, then we require a **pull**:
+
+~~~bash
+git pull
+~~~
+
+This will bring all the recent changes into your local repository.
+
+![github_pull_changes](/appendix_git/resources/github_pull_changes.png)
+
+However, you must be careful as your pull/push can generate conflicts, and you already know how to solve them.
+
+Another important thing to remember is that you cannot push if you are not up to date with the repository. So, it is better to start with a pull when you work.
+
+We still have one command for this section and it is **fetch**. Before we introduce it, modify your Github repository, add the changes and commit them online.
+
+Then go to your terminal, and let's begin by checking the status:
+
+~~~bash
+git status
+~~~
+
+From here, you are not able to see if there were changes remotely (in this case omitting we know it beforehand). So, what can we do to check it? The answer is easy:
+
+~~~bash
+git fecht origin
+~~~
+
+This will download the changes but they won't be merged, so you can receive the cahnges and evaluate them, in order to maintain, modify or remove them.
+
+![github_fetching_changes](/appendix_git/resources/github_fetching_changes.png)
+
+If you want to check the detailed changes, you can use:
+
+~~~bash
+git log main..origin/main
+~~~
+
+It will display the commits that aren't present in your local branch, so you can go further and explore it. If the context is of your interest, you can merge them.
+
+~~~bash
+git merge origin/main
+~~~
+
+### Issues and Discussions
+
+A **issue** allows to set up a ticket to follow a bug, so you can introduce the problem and attend the request.
+
+The request can be a mistype in the documentation or even a security bug that requires attention, but it will depend on the repository author if it will be solved.
+
+Let's begin by creating one by ourselves:
+
+1. Go to your repo and click the **Issues** section.
+
+    ![github_creating_issues](/appendix_git/resources/github_creating_issue.png)
+
+2. Clic on the **New Issue** botton.
+
+3. Add a title and a description, this is the minimum information required to create a issue.
+
+    ![github_filling_issue](/appendix_git/resources/github_filling_issue.png)
+
+4. You can add additional elements like a assignee, a label, a type or a milestone.
+
+5. Once you finish the details, press the **Create** button.
+
+![github_created_issue](/appendix_git/resources/github_created_issue.png)
+
+In this new window, you can chat about the issue. However, it is recommended to have a template so others can tell you about the issue in a proper way you can understand it.
+
+In order, to integrate this, follow the next steps:
+
+1. Create a Github directory on your repository.
+
+    ~~~bash
+    mkdir .github
+    ~~~
+
+2. Create a subdirectory for the issues:
+
+    ~~~bash
+    cd .github
+    mkdir ISSUE_TEMPLATE
+    ~~~
+
+3. Now, we can create a template inside this directory:
+
+    ~~~bash
+    cd ISSUE_TEMPLATE
+    touch bug_report.md
+    ~~~
+
+4. Add the content to your template, it can be Markdown or YAML, for example, one interesting proposal I found comes from [github-issue-templates | stevemao @ Github](https://github.com/stevemao/github-issue-templates/blob/master/.github/ISSUE_TEMPLATE/BUG-REPORT.yml?plain=1). This is made in order to tell others what info you require to reproduce the issue, so you can start exploring about it. It also may appear as a template when generating a new issue:
+
+![github_template_issue](/appendix_git/resources/github_template_issue.png)
+
+### Collaborations with Pull Requests
+
+When we help others and collaborate in different repositories, we have to do it in a proper way, avoiding to overwrite the work of others with your work.
+
+The first rule is to not work in the **main** branch, so you create a branch, work on what you need and then search for the merge. However, there is a step you need to consider, and it is a **pull requiest**.
+
+This request is a merge proposal that can be reviewed, so you can ask the team for a code review and they will decide the fate of your changes (propose changes, ask for clarifications, deny the proposal, among other options).
+
+Let's begin by making changes and creating a new branch.
+
+~~~bash
+git checkout -b new_dev
+echo "For a future pull request!" >> README.md
+~~~
+
+Then, add the changes and generate the commit:
+
+~~~bash
+git branch
+git status
+git add README.md
+git commit -m "Changes to README for PR"
+~~~
+
+After you are done, make the push:
+
+~~~bash
+git push -u origin new_dev
+~~~
+
+Once you are done with the push, the log message will suggest you about the **PR** (Pull Request), then you can check the link provided or you can just go to your repo, and Github may suggest you the **PR**.
+
+![github_pull_request_demo](/appendix_git/resources/github_pull_request_demo.png)
+
+Here you can comment about the proposals of changes and once you are finish, you can clic the green button **create pull request**. Once it is created, you should see something like this:
+
+![github_new_pr](/appendix_git/resources/github_new_pr.png)
+
+Once in this place, you will have to chat with the developers to explain more about your proposals, they will review it and decide your fate, where once everything is fine they will allow you to merge the results, for example, like this:
+
+![github_merged_pr](/appendix_git/resources/github_merged_pr.png)
+
+Once you are done, you can delete the branch where you submitted the changes.
+
+## More collaboration tools in Github
+
+Let's explore about collaborative task and development tools provided by Github.
+
+### Github Projects
+
+It is a tool oriented to the planification and tracking while using Github, so you can organize which activities someone has to do in a repository.
+
+To get started with **Github Projects** go to your profile and go to the tab **Projects**.
+
+![github_tab_project](/appendix_git/resources/github_tab_project.png)
+
+You can create a new one and start exploring the templates to generate your projec, for example, **Kanban**, **Bug Tracker**, among others.
+
+![github_project_templates](/appendix_git/resources/github_project_templates.png)
+
+For now, we will focus on the **Team Planning** template, focused on working with others in order to achieve a project or certain task from a project in a cyclic way.
+
+![github_project_team_planning](/appendix_git/resources/github_project_team_planning.png)
+
+This template will enable the next options:
+
+- **Backlog:** Oriented to a board where you can add task and specify their status (to do, doing and done), while you also have the ability to check how others are going with their tasks. It contains all the history of the task development.
+
+![github_project_backlog](/appendix_git/resources/github_project_backlog.png)
+
+- **Team Capacity:** A panel to explore with your collaborators by adding tasks, reviewing responabilities or adding new members to the project.
+
+![github_project_team](/appendix_git/resources/github_project_team.png)
+
+- **Current Iteration:** To check the status of the current sprint and how the development is going.
+
+![github_project_current_it](/appendix_git/resources/github_project_current_it.png)
+
+- **Roadmap:** Shows a timelapse of the development and the activities of the project, so you can access further details.
+
+![github_project_roadmap](/appendix_git/resources/github_project_roadmap.png)
+
+- **My items:** A section focused on you, your task and issues, so you do not get lost exploring what others are doing, as you may only be a deveoper and not the team manager.
+
+![github_project_items](/appendix_git/resources/github_project_my_items.png)
+
+Most of this tabs when working on a company will be the focus of the **developer lead** or a related position. However, even when you are working alone, this can be an useful tool to develop by dividing task and stimating times.
+
+How is this possible? When selecting the tasks, you can generate Issues to the proper repositories where you have to work, which will allow you to develop focused on branches that come from these issues.
+
+### Automation and management of projects
+
+Let's explore how to automate your process by using Projects on Github.
+
+Move to your *Project* or create a new one:
+
+![github_planning_project](/appendix_git/resources/github_planning_project.png)
+
+And let's edit the settings and personalize it before we get started with the automations:
+
+![github_modifying_project](/appendix_git/resources/github_modifying_project.png)
+
+Now, go to the repository you want to work with, and move to the **Projects** tab:
+
+![github_repo_project](/appendix_git/resources/github_repo_project.png)
+
+Then, select the option **Link a project** and select the project you just modified:
+
+![github_link_project](/appendix_git/resources/github_link_project.png)
+
+And we are ready to start using task and activities form the project with the repository. So, let's create our first task:
+
+1. Create a new task in the proper category, by clicking on **New Item** and adding a name:
+
+    ![github_new_task](/appendix_git/resources/github_new_task.png)
+
+2. Add more information, as you can select a template to launch a issue to link to a repository. If you select blank, you can take advantage on the README to add info formatted as **Markdown**.
+
+    ![github_new_task_issue](/appendix_git/resources/github_new_task_issue.png)
+
+3. The issue should appear ready and you (or a collaborator) have now something new to work on.
+
+    ![github_new_task_prepared](/appendix_git/resources/github_new_task_prepared.png)
+
+Now, before fixing the issue, le't automate some work:
+
+1. Go to the **Workflow** of your project:
+
+    ![github_project_workflow](/appendix_git/resources/github_project_workflow.png)
+
+2. Go to the **Code Review Approved**:
+
+    ![github_project_code_review](/appendix_git/resources/github_project_code_review.png)
+
+3. Press the edit option, and change the value:
+
+    ![github_project_code_review_approved](/appendix_git/resources/gith_code_review_approved.png)
+
+4. Click save changes and now you are ready to move on.
+
+To solve an issue it is a good practice to create a new branch with a name that includes the developer name and the number of the issue, so everyone know who is in charge of the branch and what is its purpose. So, le't get to "code":
+
+1. Go to your task or the issue, read and understand the info before anything:
+
+    ![github_project_issue_to](/appendix_git/resources/github_project_issue_to.png)
+
+2. Go to the branches, and create a new one with your name and the number of the issue:
+
+    ![github_project_new_branch](/appendix_git/resources/github_project_new_branch.png)
+
+3. Develop and commit changes.
+
+4. After you are done with the changes, make a **PR** but in the information, add a **Closes #** with the number of the issue, so the review gets linked to the given issue.
+
+    ![github_project_pr_to_from_issue](/appendix_git/resources/github_project_pr_from_issue.png)
+
+5. Now, wait until the PR is approved, when you get the notification (and after some discussion), you can check that the **workflow** has been automatically updated.
+
+    ![github_project_pr_approved](/appendix_git/resources/github_project_pr_approved.png)
+
+    ![github_project_auto_workflow](/appendix_git/resources/github_project_auto_workflow.png)
+
+6. You are all done, and you can continue.
+
+### Markdown and formatting
+
+Have you heard of **README** files? Well, they are the first thing you see when you explore a repository and you even have one for your profile. This files are formattedd with **[Markdown](https://www.markdownguide.org/)** and it is easy to learn and implement.
+
+Go to your profile and create a repository with your username (it must be the same), and let's get hands on the topic. If you already have one, open and edit it.
+
+Some of the basis of Markdown are:
+
+- **Titles and subtitles:** They are made with the hierarchy of ```#```, ```##```,
+```###``` and ```####```, after them you add a space and then the title or content.
+
+- **Formats:** You can also use **bold** with ```**<text>**``` and *italic* with ```*<text>*```.
+
+- **Link:** You can add external resources [linked](https://www.markdownguide.org/) to a text with ```[text](url)```.
+
+- **Images:** You can also add images as ```![alt_text](url/path)```.
+
+- **Emojis:** Why not? :D You can use them by using ```:<official_emoji_name>:```.
+
+You can even take advantage of additional resources like:
+
+- **[Shields.io](https://shields.io/)**: Useful imports of images and badges for your READMEs.
+
+- **[Simple Icons](https://simpleicons.org)**: Icons from software, programming languages and companies.
+
+- **[Markdown and VS Code Integration](https://code.visualstudio.com/docs/languages/markdown): If you are curious on how to develop faster with previews.
+
+- **[MarkdownLint | VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint): For those hints you didn't know you require when using MD. Also to implement the MD rules more easily.
+
+### Using WIKIs
+
+Another important part of Github Repositories are the **WIKIs**, where you can add the documentation of your project in a professional and organized way. And... it supports *MarkDown*.
+
+![github_wiki](/appendix_git/resources/github_wiki_tab.png)
+
+So... let's create our first page, click the option presented in the image above and the next window should appear:
+
+![github_wiki_first](/appendix_git/resources/github_wiki_first.png)
+
+You can edit it and add the proper content, it even have a commmit option so you can also track changes of the wiki.
+
+![github_wiki_dev](/appendix_git/resources/github_wiki_dev.png)
+
+When you have a project, you should document what it is about, how to use, how to contribute and usage license. Remember, it is not only about the code.
+
+Also, divide it properly and be organized. If you require it, you can also create your own navigation bar to help other find information on your project.
+
+### GitHub Gist
+
+If it is only about one framgment or a single code, it doesn't require a repository as you can use a Github Gist. It will also allow the option to discuss about the fragment in a separeted way.
+
+To access, go to the [Gist Webpage](https://gist.github.com/).
+
+![github_gist_landing](/appendix_git/resources/github_gist_landing.png)
+
+As you see at the bottom right, you can create **secret** or **public** gist. So, start by adding a framgment or a code of the language you prefer, and then save it:
+
+![github_gitst_code](/appendix_git/resources/github_gitst_code.png)
+
+You can know share the link to the gist, participate in the discussion and check what to implement:
+
+![github_gist_disc](/appendix_git/resources/github_gist_disc.png)
+
+The **Gist** discussion can help you to decide which option is the best to implement in a repository or to ask for suggestions in certain fragments.
+
+You can even change and edit the gist in real time to apply the proposals or the results of the discussion. When you are ready, you can delete or close the **Gist**.
+
+Do not forget that Github and Gist have different domains, so do not get lost when exploring the web. However, form Github you can have a link access to your Gist:
+
+![github_gist_access](/appendix_git/resources/github_gist_access.png)
+
+### Github Pages
+
+Yeah! You can host web sites directly from a Github Repository. For more information check [Github Pages](https://pages.github.com/)
+
+Do not forget to check the link as it will introduce you with a brief tutorial to implement you own webpages, a brief resume is presented below:
+
+1. Create a new repository with the name following convention: ```<owner>.github.io```. Just remember that the pages would be public.
+
+2. Clone your repository locally and open it, you can use **VS code**.
+
+3. Add your web template or your web development, preferibly under the **docs** directory.
+
+4. Add and commit the changes.
+
+5. Push the changes to the online repository.
+
+6. In the Github repository, go to configuration and search for the **Pages** category.
+
+7. Once you are on the **Github Pages Set Up** Category
+
+    - **Build and deployment:** Deploy from branch.
+    - **Branch**: *main* (or a custom branch specified) / *docs* (or the directory with the web implementation). Then clic *Save*.
+
+8. After you save, it should display a message *"Github Pages source saved"*.
+
+9. Go to the *Code* section and then go back to the **Github Pages Set Up**.
+
+10. An option to go to your webpage should have appeared, and now you have your first web page hosted on *Github Pages*.
+
+## Github and Codespaces
+
+It refers to development environments hosted on the cloud. So, if you do not have your local workspace, you can create or use a **CodeSpace** to work with your projects from the Cloud.
+
+### SetUp and Development
+
+Go to your Github Profile and let's begin with the magic:
+
+1. Go the **Add** option and clic on **New codespace**.
+
+    ![github_codespace_new](/appendix_git/resources/github_codespace_new.png)
+
+2. Set up the repository you want to use, the branch, the region and the specifications, for now, as our project is small, with **2 cores** is more than enough.
+
+    ![github_codespace_create](/appendix_git/resources/github_created_codespace.png)
+
+3. Once you created it, you may see a VS Code online editor (well... a VS Code on the Cloud).
+
+    ![github_codespace_vs](/appendix_git/resources/github_codespace_vs.png)
+
+You are now ready to use the **Codespace** you just created, so let's make some changes:
+
+1. We are going to try a Python project, so check the version first:
+
+    ![github_codespace_pyver](/appendix_git/resources/github_codespace_pyver.png)
+
+2. Create a new directory where you are going to work:
+
+    ![github_codespace_newdir](/appendix_git/resources/github_codespace_newdir.png)
+
+3. Add content to the directory (in this case just a HelloWorld), it may ask you to install extension according the programming laguage of your project, as a local VS Code will do, but for now it is not necessary as the scope of the project is small.
+
+    ![github_codespace_pycode](/appendix_git/resources/github_codespace_pycode.png)
+
+4. You can use the GUI for control version of VS Code, and add/commit the changes:
+
+    ![github_codespace_gitgui](/appendix_git/resources/github_codespace_gitgui.png)
+
+5. Do not forget to sync (push) the changes.
+
+If you want to explore more about the **CodeSpaces**, you can go to:
+
+![github_codespaces_options](/appendix_git/resources/github_codespaces_options.png)
+
+There you can explore about your available *Codespaces* and search for templates for new ones:
+
+![github_codespaces_home](/appendix_git/resources/github_codespaces_home.png)
+
+Do not forget to close and delete those environmetns, as in case of free accounts you are only allowed to use them for 120 hours.
+
+![github_codespace_delete](/appendix_git/resources/github_codespace_delete.png)
+
+### Advanced settings on Codespaces
+
+Now, go to the [Codespaces](https://github.com/codespaces) section on Github and let's explore more options.
+
+At first, you can see there are many templates and they are specialized for different implementations or technologies.
+
+![github_codespaces_templates](/appendix_git/resources/github_codespaces_templates.png)
+
+Check the one you are interested on according to your project and the requirement, for example, in my case I am going to select the **DJango Template**.
+
+![github_codespace_django](/appendix_git/resources/github_codespace_django.png)
+
+As you may see when you open it, it will not only create the **Codespace** but also a domain URL to explore about the web project and it is public, even more it update the project changes in real time. However, if you want to end the project execution you just need to use **CTRL+C** on the active terminal.
+
+Now, drag your attention to the directory **.devcontainer**, it is the directory where the set ups of your codespace exists. What does it do? Wel... the **devcontainer.json** file set up a container, a Python container in this case, to work in a proper way.
+
+![github_codespace_devcontainer](/appendix_git/resources/github_codespace_devcontainer.png)
+
+VS Code will use this file to set up the ambient with all the requierements specified, even with VS Code extensions if they are present and specified in the file. (Remember that if you install a extension manually in a Codespace, it doesn't mean it will be permanent).
+
+Let's focus on the config file:
+
+![github_codespace_dev_content](/appendix_git/resources/github_codespace_dev_content.png)
+
+Some key aspects to mention are:
+
+- **image**: Refers to the base image that will be used to build the container.
+- **hostRequirement**: Contain parameters for hardware sepecifcations to run the container.
+  - **cpus**: Refers to the number of cores required.
+- **waitFor**: Wait flag in order to delay actions until the arg passed become true or the condition is accepted.
+- **updateContentCommand**: For dependecies and update commands
+- **postCreateCommand**: To execute after creation of the container.
+- **postAttachCommand**: To attach a server, web server in the case previously presented.
+- **customization**: To add custom elements to the container, mainly refered to VS Code and codespaces components.
+  - **codespaces**: For setting up the codespace.
+    - **openFiles**: To open a certain file on init or restart.
+  - **vscode**: Focused only on Visual Studio Code elements.
+    - **extensions**: To add custom extensions to download and enable on the environment.
+- **portAttributes**: Related with the set up of ports and their actions.
+- **forwardPorts**: Ports to expose.
+
+If you want to add VS Code extesions in a proper way, you can go to the extension marketplace, search the extesion of your interest, install it and then go to the config of the extesion, and clic the option *Add to devcontainer.json*
+
+![github_codespace_add_ext](/appendix_git/resources/github_codespace_add_ext.png)
+
+After this, you can check the *devcontainer.json* to check the installed extesions.
+
+![github_codespaces_vscode](/appendix_git/resources/github_codespaces_vscode.png)
+
+Another interesting feature is that you can open your *CodeSpaces* locally in VS Code. How? You just go the global options (3 lines) and check *Open in VS Code Desktop*. It will open a Pop Up, you have to accept and it will locally display you the message to install the **Github Codespaces** extesion, so install it to access to this functionality.
+
+You may need to refresh code, also if you have the app running on the web, make sure to close it before using it locally.
+
+### Pair programming and real-time collaboration
+
+VSCode and Codespaces allow an interesting feature, to collaborate in real time. In this case we can refer to it as a pair programming or sharing a session in a real time development on the same code.
+
+Go again to the **Extension** window in your VS Code and search for the **Live Share** extension, and installed it.
+
+When installing extensions check the category where you are installing it as it can be:
+
+- **Local:** Apply to the changes of your machine.
+- **Codespace (name):** Apply only to the given codespace and will sync with it in Github.
+- **WSL:(name)** In case you are working with Windows Subsystem for Linux, it wil install the requirements only there.
+- **Recommended:** A section that will provide you with recommendations according to your project structure and programming languages being used.
+
+Once you are installed the **LiveShare** extension, in the bar down, you can have a easy access to it. In my case it appears like shown below.
+
+![vscode_liveshare_att](/appendix_git/resources/vscode_liveshare_att.png)
+
+You can clic it and it will initialize, it will give you some options.
+
+![vscode_liveshare_inv](/appendix_git/resources/vscode_liveshare_inv.png)
+
+You can start by obtaining the invitation and send it to another collaborator.
+
+That collaborator should open the link, decide to work with local or web VS Code and start working together. It is recommended that the collaborator has an account and log the session using that account in order to be able to identify and prevent unkwowns to join the session.
+
+You can work together, and VS Code will help you to understand who is making changes and who wrote/modified parts.
+
+For example, here I am using another account to do, as it can be checked in the photo below:
+
+[vscode_two_collabs](/appendix_git/resources/vscode_two_collabs.png)
+
+Let's highlight something, when doing this it doesn't necessarily means that the one who is sharing session will take all the credit as you have the option to add a co-author to the commit. This will only work if the other collaborator logged with a valid Github account.
+
+Some final notes are:
+
+- You can use the chat provided by the extension to exchange information, but in my recommendation it is better to be online in a call/video call with the other devs, specially when making pair programming.
+
+- If you close the window or the codespace, the others connected with the extension will lose their access.
+
+- If you are working on a codespace, do not forget to close it when you are done.
+
+### Github Dev Editor
+
+Yes, there is also a way to edit your repositories on the web. It can be used with any repositories, and it is as easy as clicking the pen option as shown below.
+
+![github_dev_editor](/appendix_git/resources/github_dev_editor.png)
+
+I was joking... you may have already try this. It the base editor for Github. However, there is more.
+
+But... let's make it in a more professional way, once you are in the page of your repository press the **.** (dot) key and it will open a VS Code online editor.
+
+![github_web_editor](/appendix_git/resources/github_web_editor.png)
+
+This will only be a editor, you won't be able to run/execute code, as this isn't a **Codespace**. Still, you have access to the extensions, control version and edit tools.
+
+![github_web_editor_warn](/appendix_git/resources/github_web_editor_warn.png)
+
+If you click on the three lines options, you can access to the option **Go to repository** for a quick access.
+
+## Security and Good Practices
+
+### Managing secure access to private repositories
+
+You can use temporal keys or tokens to manage access to different levels in Github, for example, when you want someone to check out a private repository without adding him as a collaborator.
+
+Go to **Settings** and search for **Developer Settings**.
+
+![github_developer_settings](/appendix_git/resources/github_dev_settings.png)
+
+Here you can watch the next options:
+
+- **GitHub App:** To create applications that extend/integrate GitHub so you can access to the GitHub API.
+
+- **OAuth Apps:** Oriented to authentification apps linked with GitHub, in order to access to the GitHub API.
+
+- **Personal Access Token:** For managing keys for accessing, editing, modifying and managing repositories.
+
+Click on the last option as we will manage access of people in our teams, guest or even ourselves. There are two options:
+
+- **Tokens (Classic):** Once, inside check the option for generating a new token:
+
+  ![github_token_create](/appendix_git/resources/github_token_create.png)
+
+  You may need to log with credentials and even verify yourself with the 2FA. Once you have done, you may be able to modify the settings of the key.
+
+  ![github_token_options](/appendix_git/resources/github_token_options.png)
+
+  You can set up the next things:
+
+  - **Name:** Useful to know the purpose of the token, even you can add the name of the holder of it.
+  - **Expiration:** It is not recommended to add a non-expiration day, as it is insecure. Consider the proper time according the project.
+  - **Scopes:** It will allow to set up the access options and things the holder is able to do with the token. It can be *repo*, *workflow*, *write*, *delete*, *acctions*, admin* and so on. Be carefult with what you select.
+
+  Once you are done, check the **Create Token**.
+
+  It will display the token, so make sure to copy as it will be the only time you will be able to see it, then it will be gone forever.
+
+  The moment the token purpose is no longer required, delete it.
+
+  ![github_token_delete](/appendix_git/resources/github_token_delete.png)
+
+- **Fine-grained tokens:** Inside this category, clic the option *Generate new token*. Here there woulld be more options.
+
+  ![githuB_fine_grained_token](/appendix_git/resources/github_fine_grained_token.png)
+
+  We have again the *token name* and the *expiration*. But for this last one, there is no longer *No expiration* option. Also, there are the next option:
+
+  - **Description:** For additional info on the token.
+  - **Resource Owner:** Set up the holder or organization for the token.
+  - **Repository Access:** Oriented to *public repositories*, *all repositories* or *only selected respositories* (and provide the names of the repositories).
+  - **Permissions:** Configure repository and account permissions, there are a lot, be careful on what purposes to select.
+  - **Overview:** Check the available permissiones applied.
+
+  Once you are done, select **Create token** and it will appear, as mentioned previously, make sure to copy and save it, otherwise you will lose it.
+
+  The visualization of the *fine-grained* token is different as you can check the propietary, expircy and also the last time it was used. Also you may have the option to delete it, do it when it is required or when it has already expired.
+
+Now, how can I use it? You can share the token with the collaborator of interest, he/she should copy the URL the repository related with the token and clone it. Once it starts the process, it should provide the user and the password. However, the password for this case would be the token.
+
+Even with your credentials, you need a personal access token, as you have the 2FA active and the password (the user's password) will no longer work on the terminal CLI.
+
+You can even pass the token to automation codes to improve your workflow.
+
+### Dependencies and security with Dependabot
+
+You always work with dependencies, no matter if it Pythom or a web programming languages, so you need to manage them in a proper way, even to work with them in latest version to prevent security issues. So, **Dependabot** can be our favorite ally.
+
+To get stated, go to your repo and navigate to the **Settings** (or you can go the **Security** Tab).
+
+![github_security_tab](/appendix_git/resources/github_security_tab.png)
+
+Then, check the option **Dependabot** and you should see that it is disabled, and it is asking to got to the *Settings* tab.
+
+![github_dependabot_disabled](/appendix_git/resources/github_security_dependabot_disabled.png)
+
+So, we move on to the **Settings** tab, and search for the **Security** section and the **Code security** subsection.
+
+![github_dependabot_config](/appendix_git/resources/github_secuirty_dependabot_config.png)
+
+Here, enable the **Dependabot alerts** and the changes should be saved automatically. You can even enable the rest of alerts and notification of **Dependabot**.
+
+If you enable the option **Dependabot version updates**, it should send you to a .yaml file like this one:
+
+![github_dependabot_yaml](/appendix_git/resources/github_security_dependabot_yaml.png)
+
+Here you can configure the loop that calls *Dependabot* for version updates, for example, *daily* changes or according to your sprints. Once you save and commit the changes on the Github Editor, it should appear under the directory **.github**.
+
+Here you can proceed to interact with web development or even Python scripts, and add dependencies. You will require to create a package manifiest, so... make sure to copy the proper name of the dependencies you require, for example, add it via **DotNet** in *C#* Projects.
+
+Let's make a brief example with Python.
+
+1. Update the **dependabot.yaml**.
+
+    ~~~yaml
+    version: 2
+    updates:
+    - package-ecosystem: "pip"
+        directory: "/" # Location of requirements.txt
+        schedule:
+        interval: "weekly"
+    ~~~
+
+2. Add a **requirements.txt**, let's consider a old version of *requests* dependencies.
+
+    ~~~bash
+    echo "requests==2.28.1" > requirements.txt
+    ~~~
+
+3. Add, commit and push the changes into your GitHub repository.
+
+4. Check the **Security** tab alerts.
+
+    ![github_dependabot_example](/appendix_git/resources/github_dependabot_example.png)
+
+5. Select one and starat reading about it.
+
+    ![githuB_dependabot_alert](/appendix_git/resources/github_dependabot_alert1.png)
+
+6. Click the option to **Check security update**, which will lead you to a PR, here the dependabot has made some suggestion for fixing the issues, so review the PR.
+
+    ![github_dependabot_pr](/appendix_git/resources/github_dependabot_pr.png)
+
+7. Once you have reviewed and it is ready, merge the PR. It will also delete the branch where the changes come from.
+
+    ![github_dependabot_fix_pr](/appendix_git/resources/github_dependabot_fix_pr.png)
+
+Repeat this process for all the security updates, remember that the checking will be made automatically in the period you added on the **dependabot.yaml** file.
+
+### Setting up private repositories
+
+Before you being a repository, you should consider its scope... Would it be *public* or *private*?
+
+If you want too change the visibility of your repository, just go to settings and in the main page, scroll down until you check the options **Danger Zone**, there you will find these options.
+
+![github_danger_zone](/appendix_git/resources/github_danger_zone.png)
+
+The option of our interest is **Change visibility**, this will ask you for a confirmation and even may prompt you with a 2FA autentication.
+
+Remember, that if you change a repository to private, the only way to access them is by providing a certain key or token. Also, if a repository change of visibility and you have cloned it, for making further changes you will need to log in again with your Github account.
+
+Now, let's move on to an important file in your repository, the **.gitignore** file. The purpose of this file is to include files that are going to be ignored in the control version management, for example, with C++ our interest is with the **.cpp** files and not the **.out** files, so our file to ignore this would be:
+
+~~~gitignore
+*.out
+~~~
+
+You can manage the **.gitignore** by providing the puntual name of the elements to not consider or by using regex code, for example, **(*).out** truncates to all the results that end with this extension.
+
+However, you do not need to worry about manually implementing the *gitignore* files, as Github provides a lot of templates according many programming languages and technologies. You can find them at the moment you create a repository or by searching on [gitignore @ Github](https://github.com/github/gitignore)
+
+Why is it important to ignore files? Well... you do not need to upload logs or compilation files, as they can be generated with the rest of the code when working on them. Ensure to upload just what is required and avoid to upload files that may expose you on the network, for example, config files with passwords.
+
+### Security breaches prevention
+
+Do not forget that you cannot upload information that can affect the security of your project or the ones who are using it. This can include access key to APIs, databases or repositories. Then, let's learn how to mitigate this.
+
+Let's start with checking the security options. go to the **Settings** of your repository and search for **Code security and analysis**.
+
+![github_security_options](/appendix_git/resources/github_security_options.png)
+
+Note: This option may not appear if your repository is private. Some options are only available on public repositories that have accepted the [Github CodeQL Terms and Conditions](https://github.com/github/codeql-cli-binaries/blob/main/LICENSE.md) or are repositories for teams with **Github Code Security** enabled.
+
+Then, you can go the the **Code Scanning** option, and selecting the **CodeQL analysis**. Here select the default option.
+
+![github_secuirty_codeql](/appendix_git/resources/github_security_codeql.png)
+
+This will show you an inteface where you can set up the next options:
+
+- **Language:** The security depend on the technology you are developing with.
+- **Query suites**: Code scanning suites with various confidence code scanning results to test the security of your code.
+- **Scan events:** To consider when to check, for example, time intervals or based on actions (push/PR).
+
+By allowing this you can check for API access, sensitive data and other elements that may expose you to riks.
+
+If it detects something, it will notify you on the **Security** and it will give recommendations on what to do.
+
+## Management of repositories
+
+### Organizations and development
+
+There would be times where you develop with a team or you want to create a company that develops software, if this is the case, you will need to create a **Github Organization**.
+
+Go to your Github main page and select the option **+** and select the option **New organization**.
+
+![github_new_organization](/appendix_git/resources/github_new_organization.png)
+
+Once you click the option, it will ask you to select a plan. Read carefully the details. For now, we will move on with the free organization.
+
+![github_organization_plan](/appendix_git/resources/github_organization_plan.png)
+
+### Getting started with Github Actions
+
+You have already watched a little bit of Github Actions with the DependaBot, but let's explore further.
+
+The Github Actions are automated actions you can implement for reviewing, checking, updating or changing info based on workflows or conditions you set.
+
+Let's see this by implementing a auto update on our profile for the last commits we did, and we will be implementing the [recent-activity](https://github.com/Readme-Workflows/recent-activity) by ReadmeWorkflows.
+
+1. Go to your README profile add a section where you want to add your recent activity, and add the place holders for the acitivy as show below:
+
+    ~~~Markdown
+    ...
+
+    ## Recent activity
+
+    <!--RECENT_ACTIVITY:start-->
+
+    <!--RECENT_ACTIVITY:last_update-->
+    ...
+    ~~~
+
+2. Go to the section **Actions**, then select **New Workflow** and select the option **Simple workflow**.
+
+    ![github_action_workflow](/appendix_git/resources/github_action_workflow.png)
+
+3. Now, you should be in a file at the *.github/workflows* path, you can change the name but keep it in mind.
+
+4. Configrue the workflow provided
+
+    ~~~YAML
+    name: Update README
+
+    on:
+    schedule:
+        - cron: '0 */24 * * *' # Change the crontab for a certain time input
+    workflow_dispatch:
+
+    jobs:
+    build:
+        runs-on: ubuntu-latest
+        name: Update Profile README
+
+        steps:
+        - uses: actions/checkout@v2.3.4
+        - uses: Readme-Workflows/recent-activity@{version} # Update with the latests version
+            env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    ~~~
+
+5. Configure the recent activity file, by creating a *recent-activity.config.yaml* at the *.github* directory. A sample is listed below:
+
+    ~~~yaml
+    settings:
+        username: "Readme-Workflows" 
+        commit_msg: "⚡ Update README with the recent activity"
+        max_lines: 5 # Update here for lines to consider
+        readme_file: "./TEMPLATE.md" # Replace with README file name
+        disabled_events:
+            - "comments"
+        url_text: "{REPO}{ID}"
+        date:
+            timezone: "GMT+00:00"
+            text: "Last Updated: {DATE}"
+            format: "dddd, mmmm dS, yyyy, h:MM:ss TT"
+        commit_name: "readme-bot"
+        commit_email: "41898282+github-actions[bot]@users.noreply.github.com"
+        line_prefix: "{NUM}. "
+        ignored_repos:
+            - username/repo
+        # Modify reproduction messages
+        messages:
+            comments: "💬 Commented on {ID} in {REPO}"
+            push: "⬆️ Pushed {AMOUNT} commit(s) to {REPO}"
+            issue_opened: "❗️ Opened issue {ID} in {REPO}"
+            issue_closed: "✔️ Closed issue {ID} in {REPO}"
+            pr_opened: "💪 Opened PR {ID} in {REPO}"
+            pr_closed: "❌ Closed PR {ID} in {REPO}"
+            pr_merged: "🎉 Merged PR {ID} in {REPO}"
+            create_repo: "📔 Created new repository {REPO}"
+            fork_repo: "🔱 Forked {FORK} from {REPO}"
+            wiki_create: "📖 Created new wiki page {WIKI} in {REPO}"
+            added_member: "🤝 Became collaborator on {REPO}"
+            changes_approved: "👍 Approved {ID} in {REPO}"
+            changes_requested: "🔴 Requested changes in {ID} in {REPO}"
+            new_release: "✌️ Released {ID} in {REPO}"
+            new_star: "⭐ Starred {REPO}"
+    ~~~
+
+6. After saving and commtting, go to actions an run the workflow, check the logs in case of errors.
+
+    ![github_action_run](/appendix_git/resources/github_action_run.png)
+
+7. With the workflow running you should be able to see the initial updates, and more updates when the crontab resets the call.
+
+### Github Cli
+
+Yes... you can have a terminal to control all you require. For knowing more about this project, you can check [cli @ Github](https://github.com/cli/cli)
+
+For the installation, you can follow the official instructions, in my case, for a Debian-based system, it is:
+
+~~~bash
+(type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) \
+    && sudo mkdir -p -m 755 /etc/apt/keyrings \
+    && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && sudo mkdir -p -m 755 /etc/apt/sources.list.d \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \ 
+    && sudo apt install gh -y
+~~~
+
+After that you are done and ready to experiment, but if you aren't sure of the installation, you can use:
+
+~~~bash
+gh --version
+
+# gh version 2.78.0 (2025-08-21) # In my case
+~~~
+
+Then, let's start by the authentication login:
+
+~~~bash
+gh auth login
+~~~
+
+This will display a step-by-step login config on your terminal that you should complete in order to use Github Cli, some considerations to take are:
+
+- **Account type:** Github or Github Enterprise
+- **Preferred protocol:** HTTPS or SSH
+- **Credentials:** Shared with git or other option.
+- **How to authenticate:** Web protocol, token or key.
+
+After that you should be logged in:
+
+![github_cli_auth](/appendix_git/resources/github_cli_auth.png)
+
+Now, you have full access to your Github by using a terminal, for example, you can create a repository with:
+
+~~~bash
+gh repo create
+
+# It will display the config of creation type, name, description, visibility, README file options, .gitignore file options, among others inside the terminal.
+~~~
+
+But it doesn't end there, as you can even set up a repo in a faster way, for example:
+
+~~~bash
+gh repo create MiCliRepo --public --add-readme -d "Repo from CLI" --clone
+~~~
+
+Do not forget to check the documentation for more context on the params and args for this code.
+
+Let's explore something else, for example, creating issues:
+
+~~~bash
+gh issue create
+
+# It displays a issue interface for adding a name, description, body, metadata, among others. Also, do not forget to assign you or mention you if required.
+~~~
+
+## Change management on Github
+
+We have already checked up about the management of the repositories itself in the previous module. However, we can go further as we may need to implement changes coming from other branches or developments. So, let's explore about them.
+
+### Setting up a software project
+
+After you created you repository, it is a good practice to include a template on how to include Pull Requests, for example:
+
+~~~Markdown
+# Nice title
+
+Short description about the changes implemented in this PR
+
+## Changes included
+
+A comprehensive list on the changes implemented and the reason (why) behind the change.
+
+## Testing implemented
+
+How the changes were implemented and what is the validation made to them
+
+## Related tickets
+
+Others PRs and Issues considered
+
+## Checklist
+
+- [] I have followed the conventions on the repository
+- [] I have added unit testing for the changes
+- [] Every tests pass
+- [] I have docummented the chhanges
+
+## Additional comments
+
+What other information would you like to share?
+
+~~~
+
+You should add this template under the title **pull_request_template.md** on the **.github** directory of your repository.
+
+So when you work in another branche and you are ready to Pull Request the changes, you can review the template and start the process in a better way.
+
+![github_pr_template](/appendix_git/resources/github_pr_template.png)
+
+And you are ready to move on for the PR.
+
+### Branch and PR Management
+
+Let's implement a routine when you enter Github
+
+1. Check your repositories and notifications
+
+2. If you see a PR, read it and check the changes.
+
+3. If you have questions, use the discussion on the PR.
+
+4. Once you are ready, merge the PR.
+
+5. Delete the branch.
+
+But that is not the only one, as you may be collaborating on repositories and projects, so it is good to check the last changes, pull them if required and organize yourself before moving on.
+
+Now, suppose you want to pushed to a new branch and discovered that you need to merge the latest changes of another branch, for those cases, a *conflict* will appear.
+
+You can take advantage of the VS Code environment and pass the merging by considering the review of changes, merging and then pushing.
+
+### Releases for software development
+
+A release? Yeah... not stay only with the commits as you need to offer official and stable releases for your libraries. This is related with git tags but go further on the topic.
+
+![github_flask_api](/appendix_git/resources/github_flask_repo.png)
+
+AS you can check, in this **Flask** repository, there are many releases for certain versions, for example, they can use semantic versioning which stands for:
+
+~~~Markdown
+x.y.z
+
+**x**: Major version (important)
+**y**: Minor version (funcionality)
+**z**: Patch version (bugs)
+~~~
+
+In the case of Python, you can implement a release by using the *setuptools*, you can start by creating the file *setup.py*:
+
+~~~Python
+from setuptools import setup, find_packages
+
+setup(
+    name="git_example",
+    version="0.1.0",
+    packages=find_packages(),
+    description="Un oaquete de prueba en git",
+    author="DanielFLopez1620",
+    author_email="dfelipe.lopez@gmail.com",
+    url="https://github.com/DanielFLopez1620/git_example",
+)
+~~~
+
+Then, add a directory with the name of the package (or Github Repository) and create the *\_\_init\_\_.py* file.
+
+~~~bash
+- python_example
+| - python_example
+| | - __init__.py
+| - setup.py
+~~~
+
+And the content of the file should be the functionalities you can to include in your library.
+
+Finally, you execute it in a different way, to create the library:
+
+~~~bash
+python3 setup.py bdist_wheel sdist
+
+# It will create build, dist and <package_name>.egg-info directories.
+~~~
+
+Now, we are done with the Python part, so commit and push the changes to create the tag.
+
+1. In the respository main page, select the **Releases** options.
+
+2. Create a tag (version), match the version of your library (setup.py file)
+
+3. Create a release with the same name of the tag.
+
+4. Link the binaries of the repository (tar.gz and .whl)
+
+5. You are ready to release.
+
+If you want to use the binary with pip, you can copy the link to the *.whl file and then install it with pip.
+
+The image of reference is shown below:
+
+![github_releases](/appendix_git/resources/github_releases.png)
+
+## Additional resources
+
+- [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
+
+- [Git Docs | Git](https://git-scm.com/)
+
+- [Git Large File Storage | Git LFS ](https://git-lfs.com/)
+
+## Disclaimer
+
+This tutorial was based on the Platzi Course for [Git and Github](https://platzi.com/cursos/gitgithub/) by Amin Espinoza, as a complement for the learning process of this technology.
