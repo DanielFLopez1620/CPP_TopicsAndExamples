@@ -36,3 +36,6 @@
 # Adding folders related to other projects that are depedencies
 
 **/date
+
+# VS Code
+.vscode
