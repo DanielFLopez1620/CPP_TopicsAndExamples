@@ -1688,6 +1688,67 @@ x.y.z
 **z**: Patch version (bugs)
 ~~~
 
+In the case of Python, you can implement a release by using the *setuptools*, you can start by creating the file *setup.py*:
+
+~~~Python
+from setuptools import setup, find_packages
+
+setup(
+    name="git_example",
+    version="0.1.0",
+    packages=find_packages(),
+    description="Un oaquete de prueba en git",
+    author="DanielFLopez1620",
+    author_email="dfelipe.lopez@gmail.com",
+    url="https://github.com/DanielFLopez1620/git_example",
+)
+~~~
+
+Then, add a directory with the name of the package (or Github Repository) and create the *\_\_init\_\_.py* file.
+
+~~~bash
+- python_example
+| - python_example
+| | - __init__.py
+| - setup.py
+~~~
+
+And the content of the file should be the functionalities you can to include in your library.
+
+Finally, you execute it in a different way, to create the library:
+
+~~~bash
+python3 setup.py bdist_wheel sdist
+
+# It will create build, dist and <package_name>.egg-info directories.
+~~~
+
+Now, we are done with the Python part, so commit and push the changes to create the tag.
+
+1. In the respository main page, select the **Releases** options.
+
+2. Create a tag (version), match the version of your library (setup.py file)
+
+3. Create a release with the same name of the tag.
+
+4. Link the binaries of the repository (tar.gz and .whl)
+
+5. You are ready to release.
+
+If you want to use the binary with pip, you can copy the link to the *.whl file and then install it with pip.
+
+The image of reference is shown below:
+
+![github_releases](/appendix_git/resources/github_releases.png)
+
 ## Additional resources
 
 - [Git Cheat Sheet | Github Education](https://education.github.com/git-cheat-sheet-education.pdf)
+
+- [Git Docs | Git](https://git-scm.com/)
+
+- [Git Large File Storage | Git LFS ](https://git-lfs.com/)
+
+## Disclaimer
+
+This tutorial was based on the Platzi Course for [Git and Github](https://platzi.com/cursos/gitgithub/) by Amin Espinoza, as a complement for the learning process of this technology.
