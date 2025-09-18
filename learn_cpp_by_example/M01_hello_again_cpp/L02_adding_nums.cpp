@@ -7,9 +7,9 @@
 // ////////////////////////// MAIN FUNCTION ///////////////////////////////////
 
 /**
- *
+ * Program oriented to implement the sum of two values from different types
+ * by using std::plus from functional and comparing the type returned.
  */
-
 auto main() -> int
 {
     // Let's use std::plus and enforcing types to check basic operations
