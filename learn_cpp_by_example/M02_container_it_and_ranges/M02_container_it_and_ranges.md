@@ -38,9 +38,11 @@ Some key points to consider in this lesson are:
 
 - The basic definition of a vector consist of ```std::vector < <type> > name { <values> };```.
 
-- The initialization using curly braces is called **uniform initialization sintax**, this is recomended by ISO to avoid *narrowing* (potentially unsafe numeric conversions which may lead to data loss or unexpected behaviors.)
+- The initialization using curly braces is called **uniform initialization syntax**, this is recommended by ISO to avoid *narrowing* (potentially unsafe numeric conversions which may lead to data loss or unexpected behaviors.)
 
 - You can use *range-based for* loops, it is as simple as ```for( auto <element> : <container>)```, and this can be easily interpreted in a traditional way like ```for ( auto position = <container>.begin(), position != <container>.end(), ++position)``` and the proper usage of the iterator position to obtain the element as ```std::cout << *position << ' ';```.
+
+**NOTE:** As we introduced auto, we should talk of AAA (Almost Always Auto) which refers to "let the compiler deduce the type for you, unless there's a good reason not to" so you avoid redundancy, prevent mistakes (narrowing), create better with templates and lambdas, work consistently with modern APIs, guarantees initialization of variables, avoids implicit conversions, among others characteristics. Some exceptions you may consider include the usage of auto with *mutex*, *atomics* or types that have to be moveable, another exception include the multi-word forms.
 
 ## Useful resources
 
@@ -48,4 +50,4 @@ Some key points to consider in this lesson are:
 
 - [The Nightmare of Initialization in C++ | CPP Con 2018](https://youtu.be/7DTlWPgX6zs)
 
-- [Almost Always Auto | Sutter's Mill](https://herbsutter.com/2013/08/12/gotw-94-solution-aaa-style-almost-always-auto/)
+- [Almost Always Auto | Sutter's Mill](https://herbsutter.com/2013/08/12/gotw-94-solution-aaa-style-almSutter'sost-always-auto/)
