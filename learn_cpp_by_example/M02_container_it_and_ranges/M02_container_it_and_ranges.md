@@ -10,7 +10,7 @@ Containers are related to sequences or collection of elements, they can be *vect
 
 ### Create and display a vector
 
-For this lesson, check the code [L01_fill_container.cpp](/learn_cpp_by_example/M02_container_it_and_ranges/L01_fill_container.cpp).
+For this lesson, we will be moving on with the code [L01_fill_container.cpp](/learn_cpp_by_example/M02_container_it_and_ranges/L01_fill_container.cpp), where you can find the final version, as we are going to cover it progressively.
 
 ~~~C++
 #include <iostream>
@@ -86,7 +86,39 @@ To implement this in code, let's focus on single-responsibility functions:
 
   - To add elements to the end of a vector, you can use ```<vector>.push_back(<element>)``` or ```<vector>.emplace_back(<element>)```.
   - To add elements inside elsewhere, you can add ```<vector>.insert(<pos>, <value>)``` or ```<vector>.emplace(<pos>, <value>)```.
-  - If you are asking the difference of *insert* and *emplace*. The first one, require a pre-constructed object. The second one, constructs the object directly in the container's memory.
+  - If you are asking the difference of *insert* and *emplace*. The first one, require a pre-constructed object. The second one, constructs the object directly in the container's memory. Similarly, we have the case of *push\_back* and *emplace\_back*
+
+- **Generate triangle:**
+
+    ~~~C++
+    auto create_triangle(int rows)
+    {
+        std::vector<int> data;
+        std::vector<std::vector<int>> triangle;
+        for (int r = 0; r < rows; ++r)
+        {
+            data = get_next_row(data);
+            triangle.push_back(data);
+        }
+        return triangle;
+    }
+    ~~~
+
+  This implementation focuses on:
+
+  - Auto deduce the type of the return (in this case related with a vector of integer vectors).
+
+  - Use the previous function to generate the rows in a cyclic way.
+
+  - Append it to the triangle and go on.
+
+However, it is a do to stop here as this approach may be not efficient enough. Why? Simple, it is using copies when we create the ```data``` and then use the ```push_back```.
+
+So, let's apply what we learned previously and focus on the ```emplace_back``` and check the differences:
+
+- ```void push_back( const T& value)``` where an object is taken and makes a copy.
+
+. ```void push_back (T&& value)``` aimed to avoid copies because the signature ```&&``` indicates an rvalue.
 
 ## Useful resources
 

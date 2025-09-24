@@ -7,7 +7,11 @@
 // ////////////////////////// FUNCTION DEFINITIONS ///////////////////////////
 
 /**
- * 
+ * Calculate the next row of a pascal triangle based on the previous one
+ *
+ * @param previous_row Vector containing the elements of the previous row
+ *
+ * @return Next row of the pascal triangles
  */
 std::vector<int> get_next_row(const std::vector<int>& previous_row)
 {
@@ -25,16 +29,22 @@ std::vector<int> get_next_row(const std::vector<int>& previous_row)
 }
 
 /**
- * Function that aims to create a display-based triangle
+ * Function that aims to create a pascal triangle
+ *
+ * @param rows Intended nums of rows for the pascal triangle
+ *
+ * @return Vector containing the rows of the pascal triangle
  */
-void create_triangle()
+auto create_triangle(int rows)
 {
-    std::vector<int> data { 1 };
-    for (auto number : data)
+    std::vector<int> data;
+    std::vector<std::vector<int>> triangle;
+    for (int r = 0; r < rows; ++r)
     {
-        std::cout << number << ' ';
+        data = get_next_row(data);
+        triangle.push_back(data);
     }
-    std::cout << std::endl;
+    return triangle;
 }
 
 // //////////////////////////// MAIN FUNCTION /////////////////////////////////
