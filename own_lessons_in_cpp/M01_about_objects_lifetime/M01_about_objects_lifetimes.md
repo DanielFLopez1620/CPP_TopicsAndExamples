@@ -137,7 +137,7 @@ There are more considerations to consider when limit the scope, let's proceed wi
     }
     ~~~
 
-- Take advantage of *if* and *loop* scopes: 
+- Take advantage of *if* and *loop* scopes:
 
     ~~~C++
     if(auto it = map.find(key); it != map.end())
@@ -171,7 +171,7 @@ Then, make sure to follow RAII and keep in mind the compiler will do its work to
 
 ## Notes on Lvalues and Rvalues
 
-On one hand, **LValues** refers to something that has a name or address (so you can take a pointer (&) of it). On the other hand, **RValues** refers to something temporary, something that doesn't persist beyond the defintion.
+On one hand, **LValues** refers to something that has a name or address (so you can take a pointer (&) of it). On the other hand, **RValues** refers to something temporary, something that doesn't persist beyond the definition.
 
 ~~~C++
 int x = 16;
@@ -186,6 +186,101 @@ int&& rref = 20;
 Why does this matter? Easy, when programming you need to consider *copies* (can be expensive) and *moves* (can be cheap). So, keep this in mind when working with variables, classes and objects.
 
 ## Comparing ```std::move``` and ```std::forward```
+
+On the first side, ```std::move``` cast its argument into an **rvalue** reference (it is like stealing something after it isn't required anymore there). On the second side, ```std::forward``` is related with forwarding into templates so it is able to cast conditionally for **rvalue** or **lvalue**.
+
+```std::move``` is used to explicitly allow a move constructor or move assignment operator instead of a copy, or when returning large objects to avoid copies.
+
+~~~C++
+#include <iostream>
+#include <string>
+#include <vector>
+
+int main()
+{
+    std::string s = "String to move";
+    std::vector<std::string> v_str;
+
+    v_str.push_back(s);             // Copy
+    v_str.push_back(std::move(s));  // Move
+}
+~~~
+
+```std::forward``` is more related with templates and universal references (T&&) and it ensure you do not copy when requiring a move.
+
+~~~C++
+#include <iostream>
+#include <utility>
+
+void display(const std::string s)
+{
+    std::cout <<  "Lvalue overload: " << s << "\n";
+}
+
+void display(std::string&& s)
+{
+    std::cout << "Rvalue overload: " << s << "\n";
+}
+
+template <typename T>
+void wrapper(T&& arg)
+{
+    display(std::forward<T>(arg));
+}
+
+int main()
+{
+    std::string text = "Which one am I?";
+
+    wrapper(text);
+    wrapper("And this one?");
+}
+~~~
+
+As an additional clarification, keep in mind that:
+
+- ```T&``` is  a lvalue reference.
+- ```T&&``` is an rvalue reference.
+- ```const T&``` can be both.
+
+### Bad usages of ```std::move```
+
+Yeah, let's clarify this, on the next cases:
+
+- Moving something still required in other part:
+
+    ~~~C++
+    std::string s1 = "hi";
+    std::string s2 = std::move(s1);
+
+    std::cout << s1; // Unspecified
+    ~~~
+
+- Moving when it is cheaper to copy (mostly on trivial types)
+
+    ~~~C++
+    float num = 16;
+    float val = std::move(num); // Ineffective
+    ~~~
+
+- Moving too early or not considering the compiler, as you may elude the **RVO** (return value optimization) and may end up slowing the process down.
+
+    ~~~C++
+    std::string set_msg()
+    {
+        std::string msg = "Msg";
+        return std::move(msg);
+    }
+    ~~~
+
+- Forgetting ```std::move``` is just a cast, so do not try moving consts or related.
+
+    ~~~C++
+        std::string s1 = "not constant";
+        const std::string& cref = s1;
+        
+        std::string s2 = std::move(cref);
+    ~~~
 
 ## Useful Resources
 
