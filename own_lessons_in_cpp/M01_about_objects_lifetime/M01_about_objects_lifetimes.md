@@ -314,7 +314,86 @@ void function(Object&& obj);
 
 But... what about the returns? Are they linked to the function or what happens here? Let's consider some cases:
 
-- **Return by value:**
+- **Return by value:** It is the default choice, related with **RVO** and mandatory copy elision.
+
+~~~C++
+Obj function()
+{
+    Obj o;
+    return o;
+}
+~~~
+
+- **Return by reference:** Returns an existing value, so you must ensure the object outlives the reference and you should avoid exporting locals.
+
+~~~C++
+Obj& function(Obj% o)
+{
+    return o;
+}
+~~~
+
+- **Return by constant reference:** Similar to the return by reference one, but the function cannot modify the value.
+
+- **Return by rvalues:** Rare in practice and only seen in low-level library code, as in high level most of the temporaries are bound to values anyway.
+
+But, now... how is this related with the lifetime of an object? It will depend on how it is passed/returned:
+
+- **By value:** A new object is created (copy or move), the lifetime will be managed inside the callee.
+
+- **By reference:** No new object, just an alias so the lifetime is still managed by the caller.
+
+- **By constant reference:** Same as previous one, but just read-only.
+
+- **By rvalue reference:** Allow functions to mutate or steal a temporary, but lifetime is still with the caller.
+
+- **Return by value:** Mostly avoiding copies, to maintain it safe and efficient.
+
+- **Return by reference:** The caller just borrows the object's lifetime.
+
+So, still be careful when considering the object lifetime and do not forget about **RAII**.
+
+## Passing and returning in lambdas
+
+If we talk about functions, we cannot let aside the lambdas. So, let's learn more.
+
+Lambdas in this context can be understood as hidden objects, check the following example:
+
+~~~C++
+// Original lambda
+auto l = []{ std::cout <<"Lambda\n"; };
+
+// Interpreted expression
+struct UniqueName
+{
+    void operator()() const
+    {
+        std::cout << "Lambda\n";
+    }
+}
+~~~
+
+So, a **lambda expression** creates a temporary object, so the lifetime of the variables created inside are controlled similarly to functions and objects we have already checked on. But... what about captures?
+
+- **Capture by value [=] or [var]**: The lambda creates a copy when it is created, so it will leave as long as the lambda lives.
+
+~~~C++
+#include <iostream>
+#include <functional>
+
+int main()
+{
+    int y = 16;
+
+    auto value_lambda = [y](){ std::cout << "y = " << y << "\n"; }
+    y = 20;
+    value_lambda() // Prints 16
+
+    return 0,
+}
+~~~
+
+- **Capture by reference [&] or [&var]**:
 
 ## Notes on optimization
 
