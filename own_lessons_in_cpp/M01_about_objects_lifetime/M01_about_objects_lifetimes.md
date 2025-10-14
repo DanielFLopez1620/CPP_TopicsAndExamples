@@ -278,9 +278,57 @@ Yeah, let's clarify this, on the next cases:
     ~~~C++
         std::string s1 = "not constant";
         const std::string& cref = s1;
-        
+
         std::string s2 = std::move(cref);
     ~~~
+
+## Passing and returning in functions
+
+We have already talked about object lifetime, but.. what if you have to consider the object to be passed to a function?
+
+Let's review the passing values to functions.
+
+- **Pass by value:** Copies or moves the object, so the function has its own copy and modifications do not affect the caller.
+
+~~~C++
+void function(Object obj);
+~~~
+
+- **Pass by reference:** Passes an alias to the callers object (no copy, no move), so the lifetime is still linked to the caller.
+
+~~~C++
+void function(Object& onj);
+~~~
+
+- **Pass by const reference:** Recommended for large objects, do not implements copy and avoid moves. Then, it can bind to lvalues and rvalues.
+
+~~~C++
+void function(const Object& obj);
+~~~
+
+- **Pass by rvalue reference:** It gets a reference to a temporary object (or explicit cast, for example, **std::move**), often used in move constructors.
+
+~~~C++
+void function(Object&& obj);
+~~~
+
+But... what about the returns? Are they linked to the function or what happens here? Let's consider some cases:
+
+- **Return by value:**
+
+## Notes on optimization
+
+Have you heard of ```-O2``` or ```-O3```? No, do not worry, let's give some insights on optimization.
+
+You can pass optimization instructions to the compiler on **g++** and **clang++**, so it will act more or less aggressive. The options are:
+
+- ```-O0```: No optimization, oriented for debugging.
+- ```-O1```: Some optimization, but still debug-friendly.
+- ```-O2```: Standard that balances speed and compile time.
+- ```-O3```: Aggressive optimization, includes inlining, vectorization, loop unrolling.
+- ```-Ofast```: So aggressive that can ignore standards and floating point accuracy.
+
+For benchmarking, it is recommended to test ```-O2``` or ```-O3``` and for debugging, the first two should be fine.
 
 ## Useful Resources
 
