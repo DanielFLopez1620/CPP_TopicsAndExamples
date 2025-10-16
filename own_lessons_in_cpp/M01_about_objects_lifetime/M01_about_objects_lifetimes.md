@@ -393,7 +393,102 @@ int main()
 }
 ~~~
 
-- **Capture by reference [&] or [&var]**:
+- **Capture by reference [&] or [&var]**: It only stores a reference, in this cases do not try persistent actions like:
+
+~~~C++
+#include <iostream>
+#include <functional>
+
+std::function<void()> ref_lambda()
+{
+    int num = 16;
+    return [&](){ std::cout << "Num: " << num << "\n"; }
+}
+
+int main()
+{
+    auto not_recommended = ref_lambda();
+    not_recommended(); // Possible call problem
+    return 0;
+}
+~~~
+
+- **Mixed captures [=, &var] or [&,x]**: Which refers at where you mix captures by value and reference.
+
+For all these, keep in mind that:
+
+- If you store (copy) a variable in a lambda, the lifetime is tied to that object.
+- If you capture a value by reference, ensure that the variable lives at least as long as the lambda lives.
+- Be careful with copies as they tend to be more expensive.
+
+## Memory model and object lifetime
+
+Yeah, let's continue with more about memory an objects. When we talk about memory model, it includes when the object exists, how and when memory is created or destroyed, what operations are safe in multithreaded programs and what counts as *Undefined Behavior*(UB).
+
+In the case of the lifetime, it relates with:
+
+1. **Storage allocated:** Memory is reserved.
+2. **Construction begins:** Construct runs and the object is initialized.
+3. **Usage:** Whatever it has to do, happens.
+4. **Destruction:** Destructor runs and the lifetime ends.
+5. **Storage reclaimed:** Memory is released.
+
+Now, when integrating these two concepts, you should keep in mind that:
+
+- You must not access an object outside its lifetime.
+- Optimizers assume you never create UBs.
+- Be careful with happens-first relationships (like thread cases) to avoid race conditions or data races.
+
+Some problems you must avoid includes:
+
+- Reference to a destroyed variable (**dangling pointer**):
+
+    ~~~C++
+    int* ptr;
+    {
+        int num = 16;
+        ptr = &num;
+    }
+    std::cout << *ptr;
+    ~~~
+
+- Use a resource after it is freed:
+
+    ~~~C++
+    auto* ptr = new double(16.20)
+    delete ptr;
+    std::cout << *ptr;
+    ~~~
+
+- Accessing after destructor:
+
+    ~~~C++
+    class Obj
+    {
+        ~Obj() { std::cout <<"Object has been destroyed\n"; }
+    }
+
+    obj = Obj();
+    obj->~Obj();
+    std::cout << "Wait! What?\n";
+    obj->~Obj();
+    ~~~
+
+- Returning references to locals:
+
+    ~~~C++
+    double& bad_double()
+    {
+        int num = 16;
+        return num;
+    }
+    ~~~
+
+So, you have been warned, avoid these common errors when programming on C++.
+
+## Polymorphism types
+
+...
 
 ## Notes on optimization
 
@@ -408,6 +503,16 @@ You can pass optimization instructions to the compiler on **g++** and **clang++*
 - ```-Ofast```: So aggressive that can ignore standards and floating point accuracy.
 
 For benchmarking, it is recommended to test ```-O2``` or ```-O3``` and for debugging, the first two should be fine.
+
+## Rules of Thumb
+
+Keep in mind the next rules when programming:
+
+1. Think if the object is alive by now.
+2. Match allocation & deallocation
+3. Do not assume that memory existence is equal to object existance
+4. If applying multithreading, consider using atomic, mutex and barriers.
+5. Prefer RAII to handle object's lifetime.
 
 ## Useful Resources
 
