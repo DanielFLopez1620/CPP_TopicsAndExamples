@@ -488,7 +488,54 @@ So, you have been warned, avoid these common errors when programming on C++.
 
 ## Polymorphism types
 
-...
+Polymorphism refers to different forms a function can take in terms of param to do an action, like a common interface. There are two types:
+
+- **Compile-time polymorphism**: Which is implemented by function overloading, templates and **CRTP** (Curiously Recurring Template Pattern).
+
+- **Runtime polymorphism**: It is related with virtual functions and inheritance, with indirections.
+
+Let's focus on the second one, with an example of virtual functions:
+
+~~~C++
+#include <iostream>
+#include <memory>
+#include <vector>
+
+struct Vehicle
+{
+    virtual void sound() const { std::cout << "Pending sound!\n"; }
+    virtual ~Vehicle() = default;
+};
+
+struct Motorcycle : Vehicle
+{
+    void sound() const override { std::cout << "Beep!\n"; }
+}
+
+struct Car : Vehicle
+{
+    void sound() const override { std::cout << "BEEEP!\n"; }
+}
+
+int main()
+{
+    std::vector<std::unique_ptr<Vehicle>> collection;
+
+    collection.push_back(std::make_unique<Car>());
+    collection.push_back(std::make_unique<Motorcycle>());
+
+    for(const auto& c : collections)
+    {
+        collection->sound();
+    }
+
+    return 0;
+}
+~~~
+
+Then, this virtual implementations are due to inheritance, where the base pointer of type *Vehicle* will call the right function at runtime by considering a vtable, so yuo can store mixed objects in the same container.
+
+This can add some benefits like flexibility, indirection (small runtime lookup) and extensibility (Derived types), but you have to consider some disadvantages like memory impact and need for virtual destructors.
 
 ## Notes on optimization
 
@@ -517,3 +564,7 @@ Keep in mind the next rules when programming:
 ## Useful Resources
 
 - [Jason's Training Classes on C++ | Empty Create](https://articles.emptycrate.com/training.html#understanding-object-lifetime)
+
+- [Polymorphism in C++ |  Geek for geeks](https://www.geeksforgeeks.org/cpp/cpp-polymorphism/)
+
+- [Value categories (lvalues and rvalues) | Learn C++](https://www.learncpp.com/cpp-tutorial/value-categories-lvalues-and-rvalues/)
