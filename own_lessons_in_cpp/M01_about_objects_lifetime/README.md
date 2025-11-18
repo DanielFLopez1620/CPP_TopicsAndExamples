@@ -2,6 +2,15 @@
 
 This module aims to explore more about objects in C++ and deepen in the lifetime cycle of them.
 
+The full demo that summarizes the learnings of this section is [L01_about_objects.cpp](/own_lessons_in_cpp/M01_about_objects_lifetime/L01_about_objects.cpp). You can try it with:
+
+~~~bash
+g++ -std=c++20 L01_about_objects.cpp -o about_objects.out
+./about_objects.out
+~~~
+
+Now... let's get started with object lifetime!
+
 ## About RAII
 
 It is one of the fundaments in C++, it refers to **Resource Acquisition Is Initialization** which meaning applies on the context of a design principle where resources are tied to the lifetime of the objects. So:
@@ -514,7 +523,7 @@ struct Motorcycle : Vehicle
 
 struct Car : Vehicle
 {
-    void sound() const override { std::cout << "BEEEP!\n"; }
+    void sound() const override { std::cout << "BEEP!\n"; }
 }
 
 int main()
@@ -557,7 +566,7 @@ Keep in mind the next rules when programming:
 
 1. Think if the object is alive by now.
 2. Match allocation & deallocation
-3. Do not assume that memory existence is equal to object existance
+3. Do not assume that memory existence is equal to object existence
 4. If applying multithreading, consider using atomic, mutex and barriers.
 5. Prefer RAII to handle object's lifetime.
 
