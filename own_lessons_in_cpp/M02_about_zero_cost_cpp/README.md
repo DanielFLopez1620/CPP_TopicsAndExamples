@@ -44,7 +44,77 @@ Now, in the case of objects... what we should consider in terms of cost? Well, y
     }
     ~~~
 
+- **Easily inlinable statements:** Which means to implement small and trivial methods (for example, getters and setters of the object) avoiding virtual elements and pointer loads.
+
+    ~~~C++
+    class MyObject
+    {
+    public:
+        int getNum() const
+        {
+            return num;
+        }
+
+        int setNum(int num)
+        {
+            this->num = num;
+        }
+    private:
+        int num;
+    }
+    ~~~
+
+- **Implement *final*:** So you can allow de-virtualization when implementing polymorphic classes.
+
+    ~~~C++
+    class Son final : Father
+    {
+        void study() override {}
+    }
+    ~~~
+
+- **Avoid hidden allocations:** Which refers to keep in mind the next points:
+
+  - Avoid hidden ```new``` inside constructors.
+  - Do not use internal ```std::function``` without capturing.
+  - Be careful with strings that resize frequently.
+  - Prefer small buffers.
+  - Take advantages of ```std::array```
+  - Pre-reserve memory.
+
 ## Methods
+
+If we talk about objects, we need to continue with methods, for this you can consider the next cases to reduce the costs of your programs:
+
+- **```constexpr```and ```noexcept```:** Aiming to allow compile-time evaluation, inlining and const propagation.
+
+    ~~~C++
+    class Triangle
+    {
+    public:
+        constexpr double  Area() const noexcept
+        {
+            return ((this->a*this->b)/2)
+        }
+    private:
+        double a, b;
+    };
+    ~~~
+
+- **Templates and inline methods:** This can reduce the cost and for trivial types, it means zero overhead.
+
+    ~~~C++
+    template<typename T>
+    struct InterfaceGetter
+    {
+        T element;
+        T get() const { return element; }
+    }
+    ~~~
+
+- **Avoid type erasure unless required:** This means that some erasure abstractions like ```std::any```, ```std::function``` can add dynamic allocations or indirections, so you can instead use error codes, enums, concepts, auto returns or templates.
+
+- **References or pointers, not copies:**
 
 ## Delegating constructors and destructors
 
