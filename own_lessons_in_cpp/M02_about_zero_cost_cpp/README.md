@@ -114,9 +114,64 @@ If we talk about objects, we need to continue with methods, for this you can con
 
 - **Avoid type erasure unless required:** This means that some erasure abstractions like ```std::any```, ```std::function``` can add dynamic allocations or indirections, so you can instead use error codes, enums, concepts, auto returns or templates.
 
-- **References or pointers, not copies:**
+- **References or pointers, not copies:** Yeah, as you heard, avoid copies, mostly on non-trivial types.
+
+~~~C++
+void my_func(const CustomType c); // No copy
+void my_func(CustomType c); // Copy
+~~~
+
+- **Be explicit when moves are required:** It is better as in zero-cost code you relay on the compiler knowing what are you intending.
+
+~~~C++
+auto var = std::move(another_var); // avoid copy
+~~~
 
 ## Delegating constructors and destructors
+
+In zero-cost we aim to eliminate repeated code and avoid unnecessary items that may add load to our execution. In the context of constructors and destructors, you may want to simplify them and add delegations.
+
+This can be achieved on the context:
+
+~~~C++
+struct Vehicle
+{
+    int seats, wheels;
+
+    Vehicle() : Vehicle(2, 2) {}
+    Vehicle(int s, int w) : seats{s}, wheels{w}
+}
+~~~
+
+Now, let's consider the next items when delegating:
+
+- All cleanups should be in the destructor, so you allow it to be deterministic, inlined and even optimized when unused.
+
+- Empty destructors are implicitly ```noexcept``` and optimizable, so if you can do it, make them default:
+
+    ~~~C++
+    struct Element
+    {
+        ~Element() = default;
+    }
+    ~~~
+
+- Aim for member-initializer lists, not inside assignments:
+
+    ~~~C++
+    // No!
+    struct Object()
+    {
+        var = 16;
+    }
+
+    // Yes!
+    Object : var(16);
+    ~~~
+
+- Do not add high workload on construction/destruction elements. Make them trivial or very simple.
+
+- Delegate instead of duplicate.
 
 ## Lambdas with/without captures
 
